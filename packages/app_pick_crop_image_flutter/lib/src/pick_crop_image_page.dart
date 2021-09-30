@@ -88,11 +88,11 @@ class _PickImageCropPageState extends State<PickImageCropPage> {
   }
 
   void popBytes(Uint8List bytes) {
-    var mimeType = options.encoding.mimeType;
+    var encoding = options.encoding;
     if (mounted) {
       // devPrint('converted to ${bytes.length} $mimeType');
       Navigator.pop(
-          context, PickCropImageResult(bytes: bytes, mimeType: mimeType));
+          context, PickCropImageResult(bytes: bytes, encoding: encoding));
     }
   }
 

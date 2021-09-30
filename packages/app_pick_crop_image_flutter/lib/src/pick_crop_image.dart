@@ -18,6 +18,9 @@ abstract class PickCropImageSource {}
 /// Pick from the gallery.
 class PickCropImageSourceGallery implements PickCropImageSource {
   const PickCropImageSourceGallery();
+
+  @override
+  String toString() => 'ImageSourceGallery()';
 }
 
 /// Pick from the camera.
@@ -26,6 +29,9 @@ class PickCropImageSourceCamera implements PickCropImageSource {
 
   const PickCropImageSourceCamera(
       {this.preferredCameraDevice = CameraDevice.rear});
+
+  @override
+  String toString() => 'ImageSourceCamera($preferredCameraDevice)';
 }
 
 /// Pick from the camera.
@@ -103,9 +109,9 @@ class PickCropImageOptions extends PickCropBaseImageOptions {
 class PickCropImageResult {
   /// The image data
   final Uint8List bytes;
-  final String mimeType;
+  final ImageEncoding encoding;
 
-  PickCropImageResult({required this.bytes, required this.mimeType});
+  PickCropImageResult({required this.bytes, required this.encoding});
 
   @override
   String toString() {

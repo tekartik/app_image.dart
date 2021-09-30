@@ -43,6 +43,7 @@ Future<TkPickedFile?> pickImage({
 }) async {
   var file = await _picker.pickImage(
       source: source, preferredCameraDevice: preferredCameraDevice);
+
   if (file == null) {
     return null;
   }
