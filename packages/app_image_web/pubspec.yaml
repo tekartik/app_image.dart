@@ -1,0 +1,29 @@
+name: tekartik_app_image_web
+description: Web image manipulation
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: '>=2.14.2 <3.0.0'
+
+dependencies:
+  tekartik_app_http:
+    git:
+      url: git://github.com/tekartik/app_common_utils.dart
+      ref: null_safety
+      path: app_http
+    version: '>=0.1.0'
+  tekartik_app_image:
+    git:
+      url: git://github.com/tekartik/app_image.dart
+      path: packages/app_image
+      ref: null_safety
+    version: '>=0.1.0'
+
+dev_dependencies:
+  lints: ^1.0.0
+  test: ^1.16.0
+
+dependency_overrides:
+  tekartik_app_image:
+    path: ../app_image

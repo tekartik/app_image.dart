@@ -1,0 +1,39 @@
+// ignore_for_file: unsafe_html, avoid_web_libraries_in_flutter
+
+import 'dart:html' as html;
+import 'dart:typed_data';
+
+import 'package:image_picker/image_picker.dart';
+import 'package:tekartik_app_pick_crop_image_flutter/src/pick_image_web.dart';
+
+import 'pick_crop_image.dart';
+import 'resize_web.dart';
+
+Future<Uint8List> resizeTo(Uint8List bytes,
+        {required PickCropConvertImageOptions options}) =>
+    webResizeTo(bytes, options: options);
+
+void saveImageFile(
+    {required Uint8List bytes, required mimeType, required String filename}) {
+// prepare
+  final blob = html.Blob([bytes]);
+  final url = html.Url.createObjectUrlFromBlob(blob);
+  final anchor = html.document.createElement('a') as html.AnchorElement
+    ..href = url
+    ..style.display = 'none'
+    ..download = filename;
+  html.document.body!.children.add(anchor);
+
+// download
+  anchor.click();
+
+// cleanup
+  html.document.body!.children.remove(anchor);
+  html.Url.revokeObjectUrl(url);
+}
+
+Future<XFile?> pickImage({
+  required ImageSource source,
+  CameraDevice preferredCameraDevice = CameraDevice.rear,
+}) =>
+    pickImageWeb(source: source, preferredCameraDevice: preferredCameraDevice);
