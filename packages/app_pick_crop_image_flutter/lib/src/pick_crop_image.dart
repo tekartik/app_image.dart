@@ -23,12 +23,27 @@ class PickCropImageSourceGallery implements PickCropImageSource {
   String toString() => 'ImageSourceGallery()';
 }
 
+/// Which camera to use when picking images/videos while source is `ImageSource.camera`.
+///
+/// Not every device supports both of the positions.
+enum SourceCameraDevice {
+  /// Use the rear camera.
+  ///
+  /// In most of the cases, it is the default configuration.
+  rear,
+
+  /// Use the front camera.
+  ///
+  /// Supported on all iPhones/iPads and some Android devices.
+  front,
+}
+
 /// Pick from the camera.
 class PickCropImageSourceCamera implements PickCropImageSource {
-  final CameraDevice preferredCameraDevice;
+  final SourceCameraDevice preferredCameraDevice;
 
   const PickCropImageSourceCamera(
-      {this.preferredCameraDevice = CameraDevice.rear});
+      {this.preferredCameraDevice = SourceCameraDevice.rear});
 
   @override
   String toString() => 'ImageSourceCamera($preferredCameraDevice)';
@@ -130,15 +145,18 @@ Future<PickCropImageResult?> pickCropImage(BuildContext context,
   TkPickedFile? file;
   if (source is PickCropImageSourceCamera ||
       source is PickCropImageSourceGallery) {
+    var camera = (source is PickCropImageSourceCamera
+            ? source
+            : const PickCropImageSourceCamera())
+        .preferredCameraDevice;
     // On IOS we need to pick directly!
     file = await pickImage(
         source: source is PickCropImageSourceCamera
             ? ImageSource.camera
             : ImageSource.gallery,
-        preferredCameraDevice: (source is PickCropImageSourceCamera
-                ? source
-                : const PickCropImageSourceCamera())
-            .preferredCameraDevice);
+        preferredCameraDevice: camera == SourceCameraDevice.front
+            ? CameraDevice.front
+            : CameraDevice.rear);
   }
   var result = await Navigator.of(context).push(MaterialPageRoute(builder: (_) {
     return PickImageCropPage(

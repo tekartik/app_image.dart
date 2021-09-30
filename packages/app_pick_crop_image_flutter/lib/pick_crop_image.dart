@@ -1,4 +1,4 @@
-export 'package:image_picker/image_picker.dart' show ImageSource, CameraDevice;
+//export 'package:image_picker/image_picker.dart' show ImageSource, CameraDevice;
 export 'package:tekartik_app_image/app_image.dart'
     show
         ImageEncodingPng,
@@ -17,6 +17,7 @@ export 'src/pick_crop_image.dart'
         pickCropImage,
         PickCropImageSource,
         PickCropImageSourceGallery,
+        SourceCameraDevice,
         PickCropImageSourceCamera,
         PickCropImageSourceMemory;
 export 'src/platform.dart' show saveImageFile;
