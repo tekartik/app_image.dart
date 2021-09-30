@@ -3,8 +3,11 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tekartik_app_image/app_image.dart';
+import 'package:tekartik_app_image/app_image_resize.dart';
+import 'package:tekartik_app_pick_crop_image_flutter/src/platform.dart';
 
 import 'pick_crop_image_page.dart';
+import 'picked_file.dart';
 
 const mimeTypePng = 'image/png';
 const mimeTypeJpg = 'image/jpeg';
@@ -74,7 +77,7 @@ class PickCropConvertImageOptions extends PickCropBaseImageOptions {
             encoding: encoding);
 
   /// Crop rectangle on original image
-  final Rect? cropRect;
+  final CropRect? cropRect;
 }
 
 /// Pick crop image options.
@@ -110,11 +113,30 @@ class PickCropImageResult {
   }
 }
 
-/// Return the image selected on success
+/// Return the image selected on success.
+///
+/// On the web, you can only trigger this on a user action
+/// And this might never returns if the user cancel during pick.
 Future<PickCropImageResult?> pickCropImage(BuildContext context,
     {PickCropImageOptions? options}) async {
+  options ??= PickCropImageOptions();
+  var source = options.source;
+  TkPickedFile? file;
+  if (source is PickCropImageSourceCamera ||
+      source is PickCropImageSourceGallery) {
+    // On IOS we need to pick directly!
+    file = await pickImage(
+        source: source is PickCropImageSourceCamera
+            ? ImageSource.camera
+            : ImageSource.gallery,
+        preferredCameraDevice: (source is PickCropImageSourceCamera
+                ? source
+                : const PickCropImageSourceCamera())
+            .preferredCameraDevice);
+  }
   var result = await Navigator.of(context).push(MaterialPageRoute(builder: (_) {
     return PickImageCropPage(
+      file: file,
       options: options ?? PickCropImageOptions(),
     );
   }));

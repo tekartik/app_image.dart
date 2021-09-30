@@ -20,6 +20,13 @@ dependencies:
       path: packages/app_image_web
       ref: null_safety
     version: '>=0.1.0'
+  tekartik_app_platform:
+    git:
+      url: git://github.com/tekartik/app_flutter_utils.dart
+      ref: null_safety
+      path: app_platform
+    version: '>=0.1.0'
+  file_picker:
 
 dev_dependencies:
   flutter_test:

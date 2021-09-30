@@ -23,6 +23,12 @@ Future<Uint8List> imageResizeTo(
 }) async {
   var image = decodeImage(bytes)!;
 
+  // Crop
+  var cropRect = options.cropRect;
+  if (cropRect != null) {
+    image = copyCrop(image, cropRect.left.round(), cropRect.top.round(),
+        cropRect.width.round(), cropRect.height.round());
+  }
   // Resize the image to a 120x? thumbnail (maintaining the aspect ratio).
   image = copyResize(image, width: options.width, height: options.height);
 

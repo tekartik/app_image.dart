@@ -19,3 +19,4 @@ export 'src/pick_crop_image.dart'
         PickCropImageSourceGallery,
         PickCropImageSourceCamera,
         PickCropImageSourceMemory;
+export 'src/platform.dart' show saveImageFile;

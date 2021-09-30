@@ -17,20 +17,16 @@ Future<XFile?> pickImageWeb({
   late StreamSubscription onFocusSubscription;
   try {
     var completer = Completer<XFile?>();
-    devPrint('#1');
 
     void _complete(XFile? file) {
-      devPrint('#3 $file');
       onFocusSubscription.cancel();
       if (!completer.isCompleted) {
-        devPrint('Completing');
         completer.complete(file);
       }
     }
 
     // First one wins
     onFocusSubscription = html.window.onFocus.listen((e) {
-      devPrint('#4 onFocus');
       // If we get the focus back, return null
       // it means no files were selected
       _complete(null);

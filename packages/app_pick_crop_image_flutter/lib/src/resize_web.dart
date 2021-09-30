@@ -16,11 +16,11 @@ Future<Uint8List> webResizeTo(
     var resizeOptions = web.ResizeOptions(
         width: options.width,
         height: options.height,
+        cropRect: options.cropRect,
         encoding: options.encoding);
     var resizedBytes = await web.resizeTo(bytes, options: resizeOptions);
     return resizedBytes;
   } catch (e) {
-    print('Error web resize $e, trying standard resize');
     return imageResizeTo(bytes, options: options);
   }
 }

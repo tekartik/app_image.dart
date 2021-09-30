@@ -1,16 +1,18 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/src/platform.dart';
 
 import 'crop_image_page.dart';
 import 'import.dart';
 import 'pick_crop_image.dart';
+import 'picked_file.dart';
 
 class PickImageCropPage extends StatefulWidget {
+  final TkPickedFile? file;
   final PickCropImageOptions options;
-  const PickImageCropPage({Key? key, required this.options}) : super(key: key);
+  const PickImageCropPage({Key? key, required this.options, required this.file})
+      : super(key: key);
 
   @override
   _PickImageCropPageState createState() => _PickImageCropPageState();
@@ -18,6 +20,7 @@ class PickImageCropPage extends StatefulWidget {
 
 class _PickImageCropPageState extends State<PickImageCropPage> {
   PickCropImageOptions get options => widget.options;
+  TkPickedFile? get file => widget.file;
   @override
   void initState() {
     sleep(0).then((_) async {
@@ -30,27 +33,14 @@ class _PickImageCropPageState extends State<PickImageCropPage> {
           if (source is PickCropImageSourceMemory) {
             bytes = source.bytes;
           } else {
-            devPrint('Pick image');
-
-            var file = await pickImage(
-                source: source is PickCropImageSourceCamera
-                    ? ImageSource.camera
-                    : ImageSource.gallery,
-                //maxWidth: 1024,
-                //maxHeight: 1024,
-
-                preferredCameraDevice: (source is PickCropImageSourceCamera
-                        ? source
-                        : const PickCropImageSourceCamera())
-                    .preferredCameraDevice);
-            devPrint('Pick image $file');
             if (file != null) {
               if (mounted) {
-                bytes = await file.readAsBytes();
+                bytes = await file!.readAsBytes();
               }
             }
           }
         } catch (e) {
+          // ignore: avoid_print
           print('pick error $e');
         }
         if (bytes == null) {
@@ -68,10 +58,8 @@ class _PickImageCropPageState extends State<PickImageCropPage> {
                   options: options,
                 );
               }));
-              devPrint('Crop result: $result');
               if (mounted) {
                 if (result is CropImagePageResult) {
-                  devPrint('converting to ${options.width}/${options.height}');
                   var convertOptions = PickCropConvertImageOptions(
                       cropRect: result.cropRect!,
                       encoding: options.encoding,
@@ -84,6 +72,7 @@ class _PickImageCropPageState extends State<PickImageCropPage> {
                 }
               }
             } catch (e) {
+              // ignore: avoid_print
               print('crop error $e');
             }
             if (resultBytes == null) {
@@ -101,7 +90,7 @@ class _PickImageCropPageState extends State<PickImageCropPage> {
   void popBytes(Uint8List bytes) {
     var mimeType = options.encoding.mimeType;
     if (mounted) {
-      devPrint('converted to ${bytes.length} $mimeType');
+      // devPrint('converted to ${bytes.length} $mimeType');
       Navigator.pop(
           context, PickCropImageResult(bytes: bytes, mimeType: mimeType));
     }

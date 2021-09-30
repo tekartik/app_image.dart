@@ -23,6 +23,9 @@ class ImageEncodingJpg implements ImageEncoding {
 
   @override
   String get mimeType => mimeTypeJpg;
+
+  @override
+  String toString() => 'Jpg($quality)';
 }
 
 /// Png encoding
@@ -34,4 +37,7 @@ class ImageEncodingPng implements ImageEncoding {
 
   @override
   String get mimeType => mimeTypePng;
+
+  @override
+  String toString() => 'Png';
 }
