@@ -70,6 +70,7 @@ class _PickImageCropPageState extends State<PickImageCropPage> {
 
                   imageData = await resizeTo(bytes, options: convertOptions);
                   popImageData(imageData);
+                  return;
                 }
               }
             } catch (e) {

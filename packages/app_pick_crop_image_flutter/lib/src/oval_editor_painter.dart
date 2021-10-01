@@ -1,5 +1,6 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:tekartik_app_pick_crop_image_flutter/src/platform.dart';
 
 class OvalEditorCropLayerPainter extends EditorCropLayerPainter {
   const OvalEditorCropLayerPainter();
@@ -25,12 +26,23 @@ class OvalEditorCropLayerPainter extends EditorCropLayerPainter {
     final cropRect = painter.cropRect;
     final maskColor = painter.maskColor;
     canvas.saveLayer(rect, Paint());
-    canvas.drawRect(
-        rect,
-        Paint()
-          ..style = PaintingStyle.fill
-          ..color = maskColor);
-    canvas.drawOval(cropRect, Paint()..blendMode = BlendMode.clear);
+
+    if (isCanvasKit) {
+      canvas.drawRect(
+          rect,
+          Paint()
+            ..style = PaintingStyle.fill
+            ..color = maskColor);
+      canvas.drawOval(cropRect, Paint()..blendMode = BlendMode.clear);
+    } else {
+      canvas.drawOval(
+          cropRect,
+          Paint()
+            ..color = maskColor
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 5
+            ..color = maskColor); //..blendMode = BlendMode.clear);
+    }
     canvas.restore();
   }
 

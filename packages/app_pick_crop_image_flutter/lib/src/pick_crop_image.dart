@@ -118,7 +118,7 @@ class PickCropImageOptions extends PickCropBaseImageOptions {
       int? height,
       ImageEncoding encoding = const ImageEncodingPng(),
       double? aspectRatio,
-      this.ovalCropMask = true,
+      this.ovalCropMask = false,
       this.source = const PickCropImageSourceGallery()})
       : super(
             width: width,
