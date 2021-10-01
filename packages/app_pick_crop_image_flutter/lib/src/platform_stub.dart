@@ -25,3 +25,6 @@ Future<TkPickedFile?> pickImage({
 
 /// Read a file.
 Future<Uint8List> readFile(String path) => throw UnsupportedError('io only');
+
+// ignore: prefer_const_declarations
+final isCanvasKit = true;

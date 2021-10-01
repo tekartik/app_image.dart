@@ -68,3 +68,6 @@ Future<void> saveImageFile(
 }
 
 Future<Uint8List> readFile(String path) => File(path).readAsBytes();
+
+// ignore: prefer_const_declarations
+final isCanvasKit = true;

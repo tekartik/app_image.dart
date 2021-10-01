@@ -1,6 +1,6 @@
 name: tekartik_app_image_web
 description: Web image manipulation
-version: 0.0.1
+version: 0.1.0
 publish_to: none
 
 environment:

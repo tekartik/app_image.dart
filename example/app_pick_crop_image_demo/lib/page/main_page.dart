@@ -257,12 +257,15 @@ class _MainPageState extends State<MainPage> {
     print('imageSource: $imageSource');
     var width = _saveWidth();
     var height = _saveHeight();
-    var cropOvalMask = _ovalCropMask.value;
-    print('width $width, height $height, cropOvalMask $cropOvalMask');
+    var ovalCropMask = _ovalCropMask.value;
+    print('width $width, height $height, cropOvalMask $ovalCropMask');
 
     var result = await pickCropImage(context,
         options: PickCropImageOptions(
-            width: width, height: height, source: imageSource));
+            width: width,
+            height: height,
+            source: imageSource,
+            ovalCropMask: ovalCropMask));
     print('result: $result');
     if (result != null) {
       _result.value = result;

@@ -24,7 +24,7 @@ class _PickImageCropPageState extends State<PickImageCropPage> {
   TkPickedFile? get file => widget.file;
   @override
   void initState() {
-    sleep(0).then((_) async {
+    sleep(100).then((_) async {
       if (mounted) {
         var source = options.source;
         Uint8List? bytes;
@@ -70,6 +70,7 @@ class _PickImageCropPageState extends State<PickImageCropPage> {
 
                   imageData = await resizeTo(bytes, options: convertOptions);
                   popImageData(imageData);
+                  return;
                 }
               }
             } catch (e) {
@@ -97,6 +98,12 @@ class _PickImageCropPageState extends State<PickImageCropPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    return Scaffold(
+        body: Center(
+            child: Icon(
+      Icons.hourglass_empty_outlined,
+      size: 32,
+      color: Colors.grey.shade300,
+    )));
   }
 }

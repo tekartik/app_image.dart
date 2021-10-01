@@ -1,6 +1,6 @@
 // ignore_for_file: unsafe_html, avoid_web_libraries_in_flutter
-
 import 'dart:html' as html;
+import 'dart:js' as js;
 import 'dart:typed_data';
 
 import 'package:image_picker/image_picker.dart';
@@ -59,3 +59,5 @@ Future<XFile?> pickImageExp({
 
 /// Read a file.
 Future<Uint8List> readFile(String path) => throw UnsupportedError('io only');
+
+final isCanvasKit = js.context['flutterCanvasKit'] != null;
