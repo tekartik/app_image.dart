@@ -151,12 +151,24 @@ Future<ImageData?> pickCropImage(BuildContext context,
             ? CameraDevice.front
             : CameraDevice.rear);
   }
+  /*
   var result = await Navigator.of(context).push(MaterialPageRoute(builder: (_) {
     return PickImageCropPage(
       file: file,
       options: options ?? PickCropImageOptions(),
     );
   }));
+
+   */
+  // Remove the animation
+  var result = await Navigator.of(context).push(PageRouteBuilder(
+    pageBuilder: (context, animation1, animation2) => PickImageCropPage(
+      file: file,
+      options: options ?? PickCropImageOptions(),
+    ),
+    transitionDuration: Duration.zero,
+  ));
+
   if (result is ImageData) {
     return result;
   }
