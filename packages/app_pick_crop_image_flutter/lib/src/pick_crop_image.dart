@@ -54,6 +54,9 @@ class PickCropImageSourceMemory implements PickCropImageSource {
   final Uint8List bytes;
 
   const PickCropImageSourceMemory({required this.bytes});
+
+  @override
+  String toString() => 'ImageSourceMemory()';
 }
 
 /// Pick crop image options.
@@ -107,11 +110,15 @@ class PickCropImageOptions extends PickCropBaseImageOptions {
   /// Image source (default to gallery)
   final PickCropImageSource source;
 
+  /// Round selection
+  final bool ovalCropMask;
+
   PickCropImageOptions(
       {int? width,
       int? height,
       ImageEncoding encoding = const ImageEncodingPng(),
       double? aspectRatio,
+      this.ovalCropMask = true,
       this.source = const PickCropImageSourceGallery()})
       : super(
             width: width,
@@ -120,25 +127,11 @@ class PickCropImageOptions extends PickCropBaseImageOptions {
             encoding: encoding);
 }
 
-/// Result.
-class PickCropImageResult {
-  /// The image data
-  final Uint8List bytes;
-  final ImageEncoding encoding;
-
-  PickCropImageResult({required this.bytes, required this.encoding});
-
-  @override
-  String toString() {
-    return {'size': bytes.length}.toString();
-  }
-}
-
 /// Return the image selected on success.
 ///
 /// On the web, you can only trigger this on a user action
 /// And this might never returns if the user cancel during pick.
-Future<PickCropImageResult?> pickCropImage(BuildContext context,
+Future<ImageData?> pickCropImage(BuildContext context,
     {PickCropImageOptions? options}) async {
   options ??= PickCropImageOptions();
   var source = options.source;
@@ -164,7 +157,7 @@ Future<PickCropImageResult?> pickCropImage(BuildContext context,
       options: options ?? PickCropImageOptions(),
     );
   }));
-  if (result is PickCropImageResult) {
+  if (result is ImageData) {
     return result;
   }
   return null;

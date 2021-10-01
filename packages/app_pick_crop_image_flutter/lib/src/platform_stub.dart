@@ -1,11 +1,12 @@
 import 'dart:typed_data';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:tekartik_app_image/app_image.dart';
 
 import 'pick_crop_image.dart';
 import 'picked_file.dart';
 
-Future<Uint8List> resizeTo(Uint8List bytes,
+Future<ImageData> resizeTo(Uint8List bytes,
         {required PickCropConvertImageOptions options}) =>
     throw UnsupportedError('Web or io supported');
 

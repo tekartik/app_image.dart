@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:tekartik_app_image/app_image.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/src/platform.dart';
 
 import 'crop_image_page.dart';
@@ -49,7 +50,7 @@ class _PickImageCropPageState extends State<PickImageCropPage> {
           }
         } else {
           if (mounted) {
-            Uint8List? resultBytes;
+            ImageData? imageData;
             try {
               var result = await Navigator.of(context)
                   .push(MaterialPageRoute(builder: (_) {
@@ -67,15 +68,15 @@ class _PickImageCropPageState extends State<PickImageCropPage> {
                       height: options.height,
                       aspectRatio: options.aspectRatio);
 
-                  resultBytes = await resizeTo(bytes, options: convertOptions);
-                  popBytes(resultBytes);
+                  imageData = await resizeTo(bytes, options: convertOptions);
+                  popImageData(imageData);
                 }
               }
             } catch (e) {
               // ignore: avoid_print
               print('crop error $e');
             }
-            if (resultBytes == null) {
+            if (imageData == null) {
               if (mounted) {
                 Navigator.pop(context);
               }
@@ -87,12 +88,10 @@ class _PickImageCropPageState extends State<PickImageCropPage> {
     super.initState();
   }
 
-  void popBytes(Uint8List bytes) {
-    var encoding = options.encoding;
+  void popImageData(ImageData imageData) {
     if (mounted) {
       // devPrint('converted to ${bytes.length} $mimeType');
-      Navigator.pop(
-          context, PickCropImageResult(bytes: bytes, encoding: encoding));
+      Navigator.pop(context, imageData);
     }
   }
 

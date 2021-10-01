@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:tekartik_app_image/app_image_resize.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/src/pick_crop_image.dart';
 
+import 'oval_editor_painter.dart';
+
 class CropImagePageResult {
   final CropRect? cropRect;
 
@@ -26,6 +28,10 @@ class CropImagePage extends StatefulWidget {
 
 class _CropImagePageState extends State<CropImagePage> {
   final editorKey = GlobalKey<ExtendedImageEditorState>();
+  final _cropLayerPainter = const OvalEditorCropLayerPainter();
+
+  PickCropImageOptions get options => widget.options;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,6 +47,21 @@ class _CropImagePageState extends State<CropImagePage> {
                 mode: ExtendedImageMode.editor,
                 extendedImageEditorKey: editorKey,
                 initEditorConfigHandler: (state) {
+                  if (options.ovalCropMask) {
+                    return EditorConfig(
+                        maxScale: 8.0,
+                        cropRectPadding: const EdgeInsets.all(20.0),
+                        hitTestSize: 20.0,
+                        initCropRectType: InitCropRectType.imageRect,
+                        cropAspectRatio: widget.options.aspectRatio?.toDouble(),
+
+                        //EASY BABY!!!!!!
+                        cropLayerPainter: _cropLayerPainter,
+                        editActionDetailsIsChanged:
+                            (EditActionDetails? details) {
+                          // print(details?.totalScale);
+                        });
+                  }
                   return EditorConfig(
                       maxScale: 8.0,
                       //cropRectPadding: const EdgeInsets.all(20.0),

@@ -17,7 +17,7 @@ Uint8List resizeToPngSync(Uint8List bytes, int width, int height) {
   return asUint8List(encodePng(image));
 }
 
-Future<Uint8List> imageResizeTo(
+Future<ImageData> imageResizeTo(
   Uint8List bytes, {
   required PickCropConvertImageOptions options,
 }) async {
@@ -29,13 +29,22 @@ Future<Uint8List> imageResizeTo(
     image = copyCrop(image, cropRect.left.round(), cropRect.top.round(),
         cropRect.width.round(), cropRect.height.round());
   }
-  // Resize the image to a 120x? thumbnail (maintaining the aspect ratio).
-  image = copyResize(image, width: options.width, height: options.height);
+  var dstWidth = options.width ?? cropRect?.width.round() ?? image.width;
+  var dstHeight = options.height ?? cropRect?.height.round() ?? image.height;
+
+  // Resize the image
+  image = copyResize(image, width: dstWidth, height: dstHeight);
 
   var encoding = options.encoding;
+  late Uint8List imageBytes;
   if (encoding is ImageEncodingJpg) {
-    return asUint8List(encodeJpg(image, quality: encoding.quality));
+    imageBytes = asUint8List(encodeJpg(image, quality: encoding.quality));
   } else {
-    return asUint8List(encodePng(image));
+    imageBytes = asUint8List(encodePng(image));
   }
+  return ImageData(
+      bytes: imageBytes,
+      encoding: encoding,
+      width: dstWidth,
+      height: dstHeight);
 }

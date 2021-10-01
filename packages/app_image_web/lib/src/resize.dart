@@ -30,7 +30,7 @@ Future<html.CanvasElement> _loadImage(String url) {
   return result.future;
 }
 
-Future<Uint8List> resizeTo(
+Future<ImageData> resizeTo(
   Uint8List bytes, {
   required ResizeOptions options,
 }) async {
@@ -63,5 +63,8 @@ Future<Uint8List> resizeTo(
   }
   var url = html.Url.createObjectUrl(blob);
   var client = httpClientFactory.newClient();
-  return await httpClientReadBytes(client, httpMethodGet, Uri.parse(url));
+  var readBytes =
+      await httpClientReadBytes(client, httpMethodGet, Uri.parse(url));
+  return ImageData(
+      bytes: readBytes, width: dstWidth, height: dstHeight, encoding: encoding);
 }

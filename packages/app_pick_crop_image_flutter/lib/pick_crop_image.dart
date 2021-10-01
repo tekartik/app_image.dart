@@ -7,13 +7,13 @@ export 'package:tekartik_app_image/app_image.dart'
         mimeTypeJpg,
         mimeTypePng,
         extensionJpg,
-        extensionPng;
+        extensionPng,
+        ImageData;
 
 export 'src/pick_crop_image.dart'
     show
         PickCropImageOptions,
         PickCropConvertImageOptions,
-        PickCropImageResult,
         pickCropImage,
         PickCropImageSource,
         PickCropImageSourceGallery,
