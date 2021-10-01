@@ -262,7 +262,10 @@ class _MainPageState extends State<MainPage> {
 
     var result = await pickCropImage(context,
         options: PickCropImageOptions(
-            width: width, height: height, source: imageSource, ovalCropMask: ovalCropMask));
+            width: width,
+            height: height,
+            source: imageSource,
+            ovalCropMask: ovalCropMask));
     print('result: $result');
     if (result != null) {
       _result.value = result;
