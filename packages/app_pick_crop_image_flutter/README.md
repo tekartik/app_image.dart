@@ -21,6 +21,7 @@ dependencies:
 ## Example
 
 See [Demo app](../../example/app_pick_crop_image_demo)
+
 ## Usage
 
 Needed import
