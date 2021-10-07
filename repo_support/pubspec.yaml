@@ -8,6 +8,11 @@ environment:
 
 dependencies:
   process_run: '>=0.10.0'
+  tekartik_common_utils:
+    git:
+      url: git://github.com/tekartik/common_utils.dart
+      ref: null_safety
+    version: '>=0.13.2'
 
 dev_dependencies:
   test: '>=1.0.0'
