@@ -23,7 +23,7 @@ dependencies:
 dev_dependencies:
   lints: ^1.0.0
   test: ^1.16.0
-
+  image:
 dependency_overrides:
   tekartik_app_image:
     path: ../app_image

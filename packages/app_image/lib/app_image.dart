@@ -6,3 +6,5 @@ export 'src/constant.dart'
 export 'src/encoding.dart'
     show ImageEncoding, ImageEncodingJpg, ImageEncodingPng;
 export 'src/image_result.dart' show ImageData;
+export 'src/image_source.dart'
+    show ImageSourceData, ImageSourceAsyncData, ImageSource;
