@@ -54,13 +54,9 @@ class _CropImagePageState extends State<CropImagePage> {
                         hitTestSize: 20.0,
                         initCropRectType: InitCropRectType.imageRect,
                         cropAspectRatio: widget.options.aspectRatio?.toDouble(),
-
-                        //EASY BABY!!!!!!
                         cropLayerPainter: _cropLayerPainter,
                         editActionDetailsIsChanged:
-                            (EditActionDetails? details) {
-                          // print(details?.totalScale);
-                        });
+                            (EditActionDetails? details) {});
                   }
                   return EditorConfig(
                       maxScale: 8.0,
