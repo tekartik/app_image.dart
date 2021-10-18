@@ -2,27 +2,40 @@ import 'dart:typed_data';
 
 import 'package:tekartik_app_image/app_image.dart';
 
-/// Result.
-class ImageData {
-  /// The image data
-  final Uint8List bytes;
+/// Image meta
+class ImageMeta {
+  /// The image meta
   final int width;
   final int height;
   final ImageEncoding encoding;
 
-  ImageData(
-      {required this.bytes,
-      required this.encoding,
-      required this.width,
-      required this.height});
+  ImageMeta(
+      {required this.encoding, required this.width, required this.height});
+
+  Map toDebugMap() {
+    return {'width': width, 'height': height, 'encoding': encoding};
+  }
 
   @override
   String toString() {
-    return {
-      'width': width,
-      'height': height,
-      'size': bytes.length,
-      'encoding': encoding
-    }.toString();
+    return toDebugMap().toString();
+  }
+}
+
+/// Result.
+class ImageData extends ImageMeta {
+  /// The image data
+  final Uint8List bytes;
+
+  ImageData(
+      {required this.bytes,
+      required ImageEncoding encoding,
+      required int width,
+      required int height})
+      : super(encoding: encoding, width: width, height: height);
+
+  @override
+  Map toDebugMap() {
+    return super.toDebugMap()..['sizeInBytes'] = bytes.length;
   }
 }

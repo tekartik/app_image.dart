@@ -6,13 +6,15 @@ abstract class ImageEncoding {
   String get extension;
 }
 
+const imageEncodingJpgQualityUnknown = -1;
+
 /// Jpeg encoding
 class ImageEncodingJpg implements ImageEncoding {
   /// From 0 to 100
   final int quality;
 
   ImageEncodingJpg({required this.quality}) {
-    if (quality < 0 || quality > 100) {
+    if (quality < -1 || quality > 100) {
       throw ArgumentError(
           'Invalid quality $quality value. Must be between 0 and 100');
     }
@@ -25,7 +27,8 @@ class ImageEncodingJpg implements ImageEncoding {
   String get mimeType => mimeTypeJpg;
 
   @override
-  String toString() => 'Jpg($quality)';
+  String toString() =>
+      'Jpg${quality == imageEncodingJpgQualityUnknown ? '' : '($quality)'}';
 }
 
 /// Png encoding
