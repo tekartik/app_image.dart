@@ -12,9 +12,9 @@ In pubspec.yaml
 dependencies:
   tekartik_app_pick_crop_image_flutter:
     git:
-      url: git://github.com/tekartik/app_image.dart
+      url: https://github.com/tekartik/app_image.dart
       path: packages/app_pick_crop_image_flutter
-      ref: null_safety
+      ref: dart2_3
     version: '>=0.1.0'
 ```
 

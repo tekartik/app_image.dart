@@ -16,14 +16,14 @@ dependencies:
   image:
   tekartik_app_image_web:
     git:
-      url: git://github.com/tekartik/app_image.dart
+      url: https://github.com/tekartik/app_image.dart
       path: packages/app_image_web
-      ref: null_safety
+      ref: dart2_3
     version: '>=0.1.0'
   tekartik_app_platform:
     git:
-      url: git://github.com/tekartik/app_flutter_utils.dart
-      ref: null_safety
+      url: https://github.com/tekartik/app_flutter_utils.dart
+      ref: dart2_3
       path: app_platform
     version: '>=0.1.0'
   file_picker:
@@ -33,8 +33,8 @@ dev_dependencies:
     sdk: flutter
   tekartik_lints_flutter:
     git:
-      url: git://github.com/tekartik/common_flutter.dart
-      ref: null_safety
+      url: https://github.com/tekartik/common_flutter.dart
+      ref: dart2_3
       path: packages/lints_flutter
     version: '>=0.1.0'
 

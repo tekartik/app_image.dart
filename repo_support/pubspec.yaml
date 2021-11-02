@@ -10,8 +10,8 @@ dependencies:
   process_run: '>=0.10.0'
   tekartik_common_utils:
     git:
-      url: git://github.com/tekartik/common_utils.dart
-      ref: null_safety
+      url: https://github.com/tekartik/common_utils.dart
+      ref: dart2_3
     version: '>=0.13.2'
 
 dev_dependencies:
