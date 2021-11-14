@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:image_picker/image_picker.dart' as image_picker;
 import 'package:tekartik_app_image/app_image.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/src/utils.dart';
 import 'package:tekartik_app_platform/app_platform.dart';
@@ -28,11 +28,12 @@ Future<ImageData> resizeTo(Uint8List bytes,
   return compute<_In, ImageData>(_resizeTo, _In(bytes, options));
 }
 
-final _picker = ImagePicker();
+final _picker = image_picker.ImagePicker();
 
 Future<TkPickedFile?> pickImage({
-  required ImageSource source,
-  CameraDevice preferredCameraDevice = CameraDevice.rear,
+  required image_picker.ImageSource source,
+  image_picker.CameraDevice preferredCameraDevice =
+      image_picker.CameraDevice.rear,
 }) async {
   // Tested on linux only
   if ((platformContext.io?.isLinux ?? false) ||

@@ -9,10 +9,11 @@ environment:
 dependencies:
   tekartik_common_utils:
     git:
-      url: git://github.com/tekartik/common_utils.dart
-      ref: null_safety
-    version: '>=0.13.1'
-
+      url: https://github.com/tekartik/common_utils.dart
+      ref: dart2_3
+    version: '>=0.13.2'
+  image:
 dev_dependencies:
   lints: ^1.0.0
   test: ^1.16.0
+  process_run:

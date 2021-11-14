@@ -1,10 +1,13 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart' as image_picker;
 import 'package:tekartik_app_image/app_image.dart';
 import 'package:tekartik_app_image/app_image_resize.dart';
+import 'package:tekartik_app_pick_crop_image_flutter/pick_crop_image.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/src/platform.dart';
+import 'package:tekartik_common_utils/byte_data_utils.dart';
 
 import 'pick_crop_image_page.dart';
 import 'picked_file.dart';
@@ -13,7 +16,7 @@ const mimeTypePng = 'image/png';
 const mimeTypeJpg = 'image/jpeg';
 
 /// Image source.
-abstract class PickCropImageSource {}
+abstract class PickCropImageSource implements ImageSource {}
 
 /// Pick from the gallery.
 class PickCropImageSourceGallery implements PickCropImageSource {
@@ -49,14 +52,34 @@ class PickCropImageSourceCamera implements PickCropImageSource {
   String toString() => 'ImageSourceCamera($preferredCameraDevice)';
 }
 
-/// Pick from the camera.
-class PickCropImageSourceMemory implements PickCropImageSource {
+/// Memory source.
+class PickCropImageSourceMemory
+    implements PickCropImageSource, ImageSourceAsyncData, ImageSourceData {
+  @override
   final Uint8List bytes;
 
   const PickCropImageSourceMemory({required this.bytes});
 
   @override
   String toString() => 'ImageSourceMemory()';
+
+  @override
+  Future<Uint8List> getBytes() async => bytes;
+}
+
+/// Asset source.
+class ImageSourceAsset implements PickCropImageSource, ImageSourceAsyncData {
+  final String name;
+
+  ImageSourceAsset({required this.name});
+
+  @override
+  String toString() => 'ImageSourceAsset($name)';
+
+  Uint8List? _bytes;
+  @override
+  Future<Uint8List> getBytes() async =>
+      _bytes ??= byteDataToUint8List(await rootBundle.load(name));
 }
 
 /// Pick crop image options.
@@ -113,12 +136,16 @@ class PickCropImageOptions extends PickCropBaseImageOptions {
   /// Round selection
   final bool ovalCropMask;
 
+  /// Auto crop the image (fit, center)
+  final bool autoCrop;
+
   PickCropImageOptions(
       {int? width,
       int? height,
       ImageEncoding encoding = const ImageEncodingPng(),
       double? aspectRatio,
       this.ovalCropMask = false,
+      this.autoCrop = false,
       this.source = const PickCropImageSourceGallery()})
       : super(
             width: width,
@@ -132,7 +159,16 @@ class PickCropImageOptions extends PickCropBaseImageOptions {
 /// On the web, you can only trigger this on a user action
 /// And this might never returns if the user cancel during pick.
 Future<ImageData?> pickCropImage(BuildContext context,
-    {PickCropImageOptions? options}) async {
+        {PickCropImageOptions? options}) =>
+    pickCropImageInternal(context, options: options);
+
+/// Return the image selected on success.
+///
+/// On the web, you can only trigger this on a user action
+/// And this might never returns if the user cancel during pick.
+Future<ImageData?> pickCropImageInternal(BuildContext context,
+    {PickCropImageOptions? options,
+    ConvertPickCropResultCallback? callback}) async {
   options ??= PickCropImageOptions();
   var source = options.source;
   TkPickedFile? file;
@@ -145,11 +181,11 @@ Future<ImageData?> pickCropImage(BuildContext context,
     // On IOS we need to pick directly!
     file = await pickImage(
         source: source is PickCropImageSourceCamera
-            ? ImageSource.camera
-            : ImageSource.gallery,
+            ? image_picker.ImageSource.camera
+            : image_picker.ImageSource.gallery,
         preferredCameraDevice: camera == SourceCameraDevice.front
-            ? CameraDevice.front
-            : CameraDevice.rear);
+            ? image_picker.CameraDevice.front
+            : image_picker.CameraDevice.rear);
   }
   /*
   var result = await Navigator.of(context).push(MaterialPageRoute(builder: (_) {
@@ -163,6 +199,7 @@ Future<ImageData?> pickCropImage(BuildContext context,
   // Remove the animation
   var result = await Navigator.of(context).push(PageRouteBuilder(
     pageBuilder: (context, animation1, animation2) => PickImageCropPage(
+      callback: callback,
       file: file,
       options: options ?? PickCropImageOptions(),
     ),

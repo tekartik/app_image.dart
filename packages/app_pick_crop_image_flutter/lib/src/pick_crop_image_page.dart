@@ -1,8 +1,11 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:image/image.dart';
 import 'package:tekartik_app_image/app_image.dart';
+import 'package:tekartik_app_image/app_image_resize.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/src/platform.dart';
+import 'package:tekartik_common_utils/size/size.dart' as size;
 
 import 'crop_image_page.dart';
 import 'import.dart';
@@ -12,11 +15,40 @@ import 'picked_file.dart';
 class PickImageCropPage extends StatefulWidget {
   final TkPickedFile? file;
   final PickCropImageOptions options;
-  const PickImageCropPage({Key? key, required this.options, required this.file})
+  final ConvertPickCropResultCallback? callback;
+  const PickImageCropPage(
+      {Key? key, required this.options, required this.file, this.callback})
       : super(key: key);
 
   @override
   _PickImageCropPageState createState() => _PickImageCropPageState();
+}
+
+class ConvertPickCropResultParam {
+  final ImageSourceData imageSource;
+  final PickCropImageOptions options;
+  final CropRect cropRect;
+
+  ConvertPickCropResultParam(
+      {required this.imageSource,
+      required this.options,
+      required this.cropRect});
+}
+
+typedef ConvertPickCropResultCallback = Future<ImageData> Function(
+    ConvertPickCropResultParam param);
+
+Future<ImageData> _callbackDefault(ConvertPickCropResultParam param) async {
+  var convertOptions = PickCropConvertImageOptions(
+      cropRect: param.cropRect,
+      encoding: param.options.encoding,
+      width: param.options.width,
+      height: param.options.height,
+      aspectRatio: param.options.aspectRatio);
+
+  var imageData =
+      await resizeTo(param.imageSource.bytes, options: convertOptions);
+  return imageData;
 }
 
 class _PickImageCropPageState extends State<PickImageCropPage> {
@@ -31,8 +63,8 @@ class _PickImageCropPageState extends State<PickImageCropPage> {
 
         // First step, pick image
         try {
-          if (source is PickCropImageSourceMemory) {
-            bytes = source.bytes;
+          if (source is ImageSourceAsyncData) {
+            bytes = await (source as ImageSourceAsyncData).getBytes();
           } else {
             if (file != null) {
               if (mounted) {
@@ -52,33 +84,52 @@ class _PickImageCropPageState extends State<PickImageCropPage> {
           if (mounted) {
             ImageData? imageData;
             try {
-              var result = await Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) {
-                return CropImagePage(
-                  bytes: bytes!,
-                  options: options,
-                );
-              }));
-              if (mounted) {
-                if (result is CropImagePageResult) {
-                  var convertOptions = PickCropConvertImageOptions(
-                      cropRect: result.cropRect!,
-                      encoding: options.encoding,
-                      width: options.width,
-                      height: options.height,
-                      aspectRatio: options.aspectRatio);
+              var callback = widget.callback ?? _callbackDefault;
 
-                  imageData = await resizeTo(bytes, options: convertOptions);
-                  popImageData(imageData);
-                  return;
+              if (options.autoCrop) {
+                var image = decodeImage(bytes)!;
+                if (options.aspectRatio != null) {
+                  var cropRect = size.sizeDoubleCenteredRectWithRatio(
+                      size.Size<double>(
+                          image.width.toDouble(), image.height.toDouble()),
+                      options.aspectRatio!);
+
+                  imageData = await callback(ConvertPickCropResultParam(
+                      imageSource: ImageSourceData(bytes),
+                      options: options,
+                      cropRect: cropRect));
+                } else {
+                  imageData = await callback(ConvertPickCropResultParam(
+                      imageSource: ImageSourceData(bytes),
+                      options: options,
+                      cropRect: CropRect.fromLTWH(0, 0, image.width.toDouble(),
+                          image.height.toDouble())));
+                }
+              } else {
+                var result = await Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) {
+                  return CropImagePage(
+                    bytes: bytes!,
+                    options: options,
+                  );
+                }));
+                if (mounted) {
+                  if (result is CropImagePageResult) {
+                    imageData = await callback(ConvertPickCropResultParam(
+                        imageSource: ImageSourceData(bytes),
+                        options: options,
+                        cropRect: result.cropRect));
+                  }
                 }
               }
             } catch (e) {
               // ignore: avoid_print
               print('crop error $e');
             }
-            if (imageData == null) {
-              if (mounted) {
+            if (mounted) {
+              if (imageData != null) {
+                popImageData(imageData);
+              } else {
                 Navigator.pop(context);
               }
             }

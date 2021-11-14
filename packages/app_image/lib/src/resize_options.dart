@@ -1,17 +1,8 @@
 import 'package:tekartik_app_image/app_image.dart';
+import 'package:tekartik_common_utils/size/size.dart' show Rect;
 
 /// Crop rectangle
-class CropRect {
-  final num top;
-  final num left;
-  final num width;
-  final num height;
-
-  CropRect.fromLTWH(this.left, this.top, this.width, this.height);
-
-  @override
-  String toString() => 'Rect.LTWH($left,$top,$width,$height)';
-}
+typedef CropRect = Rect<double>;
 
 /// Resize options.
 class ResizeOptions {

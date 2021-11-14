@@ -8,7 +8,7 @@ import 'package:tekartik_app_pick_crop_image_flutter/src/pick_crop_image.dart';
 import 'oval_editor_painter.dart';
 
 class CropImagePageResult {
-  final CropRect? cropRect;
+  final CropRect cropRect;
 
   CropImagePageResult({required this.cropRect});
 
@@ -54,13 +54,9 @@ class _CropImagePageState extends State<CropImagePage> {
                         hitTestSize: 20.0,
                         initCropRectType: InitCropRectType.imageRect,
                         cropAspectRatio: widget.options.aspectRatio?.toDouble(),
-
-                        //EASY BABY!!!!!!
                         cropLayerPainter: _cropLayerPainter,
                         editActionDetailsIsChanged:
-                            (EditActionDetails? details) {
-                          // print(details?.totalScale);
-                        });
+                            (EditActionDetails? details) {});
                   }
                   return EditorConfig(
                       maxScale: 8.0,
@@ -85,10 +81,8 @@ class _CropImagePageState extends State<CropImagePage> {
           onPressed: () {
             final cropRect = editorKey.currentState!.getCropRect();
             Navigator.of(context).pop(CropImagePageResult(
-                cropRect: cropRect == null
-                    ? null
-                    : CropRect.fromLTWH(cropRect.left, cropRect.top,
-                        cropRect.width, cropRect.height)));
+                cropRect: CropRect.fromLTWH(cropRect!.left, cropRect.top,
+                    cropRect.width, cropRect.height)));
           },
           child: const Icon(Icons.check)),
     );

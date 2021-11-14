@@ -1,4 +1,2 @@
-# Defines a default set of lint rules enforced for
-# projects at Google. For details and rationale,
-# see https://github.com/dart-lang/pedantic#enabled-lints.
-include: package:pedantic/analysis_options.yaml
+# tekartik lints over google lints
+include: package:tekartik_lints/recommended.yaml

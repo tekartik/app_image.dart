@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:image_picker/image_picker.dart';
+import 'package:image_picker/image_picker.dart' as image_picker;
 import 'package:tekartik_app_image/app_image.dart';
 
 import 'pick_crop_image.dart';
@@ -18,8 +18,9 @@ Future<void> saveImageFile(
     throw UnsupportedError('Web or io supported');
 
 Future<TkPickedFile?> pickImage({
-  required ImageSource source,
-  CameraDevice preferredCameraDevice = CameraDevice.rear,
+  required image_picker.ImageSource source,
+  image_picker.CameraDevice preferredCameraDevice =
+      image_picker.CameraDevice.rear,
 }) =>
     throw UnsupportedError('Web or io supported');
 
