@@ -47,7 +47,7 @@ Future<ImageData> _callbackDefault(ConvertPickCropResultParam param) async {
       aspectRatio: param.options.aspectRatio);
 
   var imageData =
-      await resizeTo(param.imageSource.bytes, options: convertOptions);
+      await pickCropResizeTo(param.imageSource.bytes, options: convertOptions);
   return imageData;
 }
 

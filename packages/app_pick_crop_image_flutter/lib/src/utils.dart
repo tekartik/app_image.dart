@@ -17,6 +17,7 @@ Uint8List resizeToPngSync(Uint8List bytes, int width, int height) {
   return asUint8List(encodePng(image));
 }
 
+@Deprecated('Old')
 Future<ImageData> imageResizeTo(
   Uint8List bytes, {
   required PickCropConvertImageOptions options,

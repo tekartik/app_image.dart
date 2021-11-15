@@ -2,31 +2,10 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart' as image_picker;
-import 'package:tekartik_app_image/app_image.dart';
-import 'package:tekartik_app_pick_crop_image_flutter/src/utils.dart';
 import 'package:tekartik_app_platform/app_platform.dart';
 
-import 'pick_crop_image.dart';
 import 'picked_file.dart';
-
-class _In {
-  final Uint8List bytes;
-
-  final PickCropConvertImageOptions options;
-
-  _In(this.bytes, this.options);
-}
-
-Future<ImageData> _resizeTo(_In data) async {
-  return imageResizeTo(data.bytes, options: data.options);
-}
-
-Future<ImageData> resizeTo(Uint8List bytes,
-    {required PickCropConvertImageOptions options}) async {
-  return compute<_In, ImageData>(_resizeTo, _In(bytes, options));
-}
 
 final _picker = image_picker.ImagePicker();
 
