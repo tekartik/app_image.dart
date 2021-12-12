@@ -4,16 +4,8 @@ import 'dart:js' as js;
 import 'dart:typed_data';
 
 import 'package:image_picker/image_picker.dart';
-import 'package:tekartik_app_pick_crop_image_flutter/pick_crop_image.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/src/pick_image_web.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/src/picked_file.dart';
-
-import 'pick_crop_image.dart';
-import 'resize_web.dart';
-
-Future<ImageData> resizeTo(Uint8List bytes,
-        {required PickCropConvertImageOptions options}) =>
-    webResizeTo(bytes, options: options);
 
 Future<void> saveImageFile(
     {required Uint8List bytes,

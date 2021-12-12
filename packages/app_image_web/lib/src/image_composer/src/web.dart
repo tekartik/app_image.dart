@@ -7,26 +7,53 @@ import 'package:tekartik_common_utils/size/size.dart';
 
 var debugComposeImage = false; // devWarning(true);
 Future<ImageData> composeImage(ImageComposerData data) async {
-  var canvas = OffscreenCanvas(data.width, data.height);
+  var width = data.width;
+  var height = data.height;
+  OffscreenCanvas? canvas;
+  late Rect<double> _fullImageDestination;
+  void initCanvas() {
+    canvas = OffscreenCanvas(width!, height!);
+    _fullImageDestination =
+        Rect<double>.fromLTWH(0, 0, width.toDouble(), height.toDouble());
+  }
+
+  if (width != null && height != null) {
+    initCanvas();
+  }
+
   var encoding = data.encoding;
 
-  var _fullImageDestination = Rect<double>.fromLTWH(
-      0, 0, data.width.toDouble(), data.height.toDouble());
   for (var layer in data.layers) {
     var layerCanvas =
         await OffscreenCanvas.fromBytes(await layer.getSourceBytes());
     var src = layer.sourceCropRect;
+
+    var ratio = src?.size.ratio ?? (layerCanvas.width / layerCanvas.height);
+    if (canvas == null) {
+      if (width != null) {
+        height = (width / ratio).round();
+      } else if (height != null) {
+        width = (height * ratio).round();
+      } else {
+        width = src?.width.round() ?? layerCanvas.width;
+        height = src?.height.round() ?? layerCanvas.height;
+      }
+      initCanvas();
+    }
     var dst = layer.destination ?? _fullImageDestination;
     if (debugComposeImage) {
       print(
           '/web_compose (${layerCanvas.width}x${layerCanvas.width}) $src -> $dst');
     }
-    canvas.drawImageToRect(layerCanvas, dst, sourceRect: src);
+    canvas!.drawImageToRect(layerCanvas, dst, sourceRect: src);
   }
-  var blob = await canvas.toBlob(data.encoding);
+  if (canvas == null) {
+    throw ArgumentError('Missing size information or layer');
+  }
+  var blob = await canvas!.toBlob(data.encoding);
   var bytes = await blobToBytes(blob);
   return ImageData(
-      bytes: bytes, encoding: encoding, width: data.width, height: data.height);
+      bytes: bytes, encoding: encoding, width: width!, height: height!);
 
   /*
   var image = Image(data.width, data.height);

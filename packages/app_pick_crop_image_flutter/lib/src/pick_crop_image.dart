@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart' as image_picker;
 import 'package:tekartik_app_image/app_image.dart';
 import 'package:tekartik_app_image/app_image_resize.dart';
-import 'package:tekartik_app_pick_crop_image_flutter/pick_crop_image.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/src/platform.dart';
 import 'package:tekartik_common_utils/byte_data_utils.dart';
 

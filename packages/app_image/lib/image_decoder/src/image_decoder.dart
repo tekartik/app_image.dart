@@ -2,9 +2,7 @@ import 'dart:typed_data';
 
 import 'package:image/image.dart';
 import 'package:tekartik_app_image/app_image.dart';
-import 'package:tekartik_app_image/src/encoding.dart';
 import 'package:tekartik_app_image/src/image_bytes_utils.dart';
-import 'package:tekartik_app_image/src/image_result.dart';
 
 ImageEncoding getImageEncodingFromBytes(Uint8List bytes) {
   late ImageEncoding encoding;
