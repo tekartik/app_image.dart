@@ -35,6 +35,7 @@ Future<TkPickedFile?> pickImage({
     }
     return TkPickedFileImage(file);
   }
+  return null;
 }
 
 Future<void> saveImageFile(
