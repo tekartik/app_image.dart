@@ -8,6 +8,7 @@ import 'dart:typed_data';
 
 import 'package:tekartik_app_image/app_image.dart';
 import 'package:tekartik_app_image_web/src/import.dart';
+// ignore: depend_on_referenced_packages
 import 'package:tekartik_common_utils/size/size.dart';
 
 /// {@template offscreen_canvas}

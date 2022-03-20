@@ -3,6 +3,7 @@ import 'package:tekartik_app_image_web/src/blob_utils.dart';
 import 'package:tekartik_app_image_web/src/image_composer/image_composer.dart';
 import 'package:tekartik_app_image_web/src/import.dart';
 import 'package:tekartik_app_image_web/src/offscreen_canvas/src/offscreen_canvas.dart';
+// ignore: depend_on_referenced_packages
 import 'package:tekartik_common_utils/size/size.dart';
 
 var debugComposeImage = false; // devWarning(true);
@@ -10,10 +11,10 @@ Future<ImageData> composeImage(ImageComposerData data) async {
   var width = data.width;
   var height = data.height;
   OffscreenCanvas? canvas;
-  late Rect<double> _fullImageDestination;
+  late Rect<double> fullImageDestination;
   void initCanvas() {
     canvas = OffscreenCanvas(width!, height!);
-    _fullImageDestination =
+    fullImageDestination =
         Rect<double>.fromLTWH(0, 0, width.toDouble(), height.toDouble());
   }
 
@@ -40,7 +41,7 @@ Future<ImageData> composeImage(ImageComposerData data) async {
       }
       initCanvas();
     }
-    var dst = layer.destination ?? _fullImageDestination;
+    var dst = layer.destination ?? fullImageDestination;
     if (debugComposeImage) {
       print(
           '/web_compose (${layerCanvas.width}x${layerCanvas.width}) $src -> $dst');

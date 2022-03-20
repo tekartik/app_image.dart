@@ -42,14 +42,14 @@ Future<ImageData> composeImage(ImageComposerData data) async {
   var width = data.width;
   var height = data.height;
   Image? image;
-  late Rect<double> _fullImageDestination;
+  late Rect<double> fullImageDestination;
   void _initImage() {
     image = Image(width!, height!);
 
-    _fullImageDestination =
+    fullImageDestination =
         Rect<double>.fromLTWH(0, 0, width.toDouble(), height.toDouble());
     if (debugComposeImage) {
-      print('/compose $_fullImageDestination');
+      print('/compose $fullImageDestination');
     }
   }
 
@@ -72,7 +72,7 @@ Future<ImageData> composeImage(ImageComposerData data) async {
       _initImage();
     }
 
-    var dst = layer.destination ?? _fullImageDestination;
+    var dst = layer.destination ?? fullImageDestination;
     if (debugComposeImage) {
       print('/compose (${layerImage.width}x${layerImage.width}) $src -> $dst');
     }
