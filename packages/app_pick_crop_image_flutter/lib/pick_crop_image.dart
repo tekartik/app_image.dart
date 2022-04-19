@@ -1,5 +1,5 @@
 //export 'package:image_picker/image_picker.dart' show ImageSource, CameraDevice;
-export 'package:tekartik_app_image/app_image.dart'
+export 'src/import_image.dart'
     show
         ImageEncodingPng,
         ImageEncodingJpg,
@@ -9,7 +9,6 @@ export 'package:tekartik_app_image/app_image.dart'
         extensionJpg,
         extensionPng,
         ImageData;
-
 export 'src/pick_crop_image.dart'
     show
         PickCropImageOptions,

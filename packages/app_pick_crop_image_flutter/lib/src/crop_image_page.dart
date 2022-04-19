@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:tekartik_app_image/app_image_resize.dart';
+import 'package:tekartik_app_image_web/app_image_web.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/src/pick_crop_image.dart';
 
 import 'oval_editor_painter.dart';
@@ -23,6 +23,7 @@ class CropImagePage extends StatefulWidget {
       : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _CropImagePageState createState() => _CropImagePageState();
 }
 

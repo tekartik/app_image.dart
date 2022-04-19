@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/pick_crop_image.dart';
-import 'package:tekartik_common_utils/byte_data_utils.dart';
 import 'package:tekartik_pick_crop_image_demo/main.dart';
+import 'package:tekartik_pick_crop_image_demo/src/import.dart';
 import 'package:tekartik_pick_crop_image_demo/view/body_container.dart';
 import 'package:tekartik_pick_crop_image_demo/view/body_padding.dart';
 
@@ -260,6 +260,7 @@ class _MainPageState extends State<MainPage> {
     var ovalCropMask = _ovalCropMask.value;
     print('width $width, height $height, cropOvalMask $ovalCropMask');
 
+    // ignore: use_build_context_synchronously
     var result = await pickCropImage(context,
         options: PickCropImageOptions(
             width: width,
