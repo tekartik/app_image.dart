@@ -2,13 +2,12 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image/image.dart';
-import 'package:tekartik_app_image/app_image.dart';
-import 'package:tekartik_app_image/app_image_resize.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/src/platform.dart';
-import 'package:tekartik_common_utils/size/size.dart' as size;
 
 import 'crop_image_page.dart';
+import 'import.dart' as size;
 import 'import.dart';
+import 'import_image.dart';
 import 'pick_crop_image.dart';
 import 'picked_file.dart';
 
@@ -16,11 +15,13 @@ class PickImageCropPage extends StatefulWidget {
   final TkPickedFile? file;
   final PickCropImageOptions options;
   final ConvertPickCropResultCallback? callback;
+
   const PickImageCropPage(
       {Key? key, required this.options, required this.file, this.callback})
       : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _PickImageCropPageState createState() => _PickImageCropPageState();
 }
 
@@ -53,7 +54,9 @@ Future<ImageData> _callbackDefault(ConvertPickCropResultParam param) async {
 
 class _PickImageCropPageState extends State<PickImageCropPage> {
   PickCropImageOptions get options => widget.options;
+
   TkPickedFile? get file => widget.file;
+
   @override
   void initState() {
     sleep(100).then((_) async {

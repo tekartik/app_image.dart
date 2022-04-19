@@ -3,7 +3,8 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/src/platform.dart';
-import 'package:tekartik_common_utils/byte_utils.dart';
+
+import 'import.dart';
 
 /// Picked file result.
 abstract class TkPickedFile {

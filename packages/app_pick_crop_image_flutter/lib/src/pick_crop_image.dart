@@ -3,11 +3,10 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart' as image_picker;
-import 'package:tekartik_app_image/app_image.dart';
-import 'package:tekartik_app_image/app_image_resize.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/src/platform.dart';
-import 'package:tekartik_common_utils/byte_data_utils.dart';
 
+import 'import.dart';
+import 'import_image.dart';
 import 'pick_crop_image_page.dart';
 import 'picked_file.dart';
 
@@ -196,6 +195,7 @@ Future<ImageData?> pickCropImageInternal(BuildContext context,
 
    */
   // Remove the animation
+  // ignore: use_build_context_synchronously
   var result = await Navigator.of(context).push(PageRouteBuilder(
     pageBuilder: (context, animation1, animation2) => PickImageCropPage(
       callback: callback,
