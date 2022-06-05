@@ -43,7 +43,7 @@ Future<ImageData> composeImage(ImageComposerData data) async {
   var height = data.height;
   Image? image;
   late Rect<double> fullImageDestination;
-  void _initImage() {
+  void initImage() {
     image = Image(width!, height!);
 
     fullImageDestination =
@@ -54,7 +54,7 @@ Future<ImageData> composeImage(ImageComposerData data) async {
   }
 
   if (width != null && height != null) {
-    _initImage();
+    initImage();
   }
   for (var layer in data.layers) {
     var layerImage = decodeImage(await layer.getSourceBytes())!;
@@ -69,7 +69,7 @@ Future<ImageData> composeImage(ImageComposerData data) async {
         width = src?.width.round() ?? layerImage.width;
         height = src?.height.round() ?? layerImage.height;
       }
-      _initImage();
+      initImage();
     }
 
     var dst = layer.destination ?? fullImageDestination;
