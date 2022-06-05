@@ -18,7 +18,7 @@ Future<XFile?> pickImageWeb({
   try {
     var completer = Completer<XFile?>();
 
-    void _complete(XFile? file) {
+    void complete(XFile? file) {
       onFocusSubscription.cancel();
       if (!completer.isCompleted) {
         completer.complete(file);
@@ -29,13 +29,13 @@ Future<XFile?> pickImageWeb({
     onFocusSubscription = html.window.onFocus.listen((e) {
       // If we get the focus back, return null
       // it means no files were selected
-      _complete(null);
+      complete(null);
     });
     // ignore: unawaited_futures
     _picker
         .pickImage(source: source, preferredCameraDevice: preferredCameraDevice)
         .then((file) {
-      _complete(file);
+      complete(file);
     });
 
     return await completer.future;
