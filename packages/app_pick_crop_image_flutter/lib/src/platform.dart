@@ -1,6 +1,4 @@
 // ignore: implementation_imports
-import 'dart:typed_data';
-
 import 'package:flutter/foundation.dart';
 import 'package:tekartik_app_image_web/app_image_web.dart';
 // ignore: implementation_imports
