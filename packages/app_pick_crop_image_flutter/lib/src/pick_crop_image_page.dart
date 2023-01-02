@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:image/image.dart';
+import 'package:image/image.dart' as impl;
 import 'package:tekartik_app_pick_crop_image_flutter/src/platform.dart';
 
 import 'crop_image_page.dart';
@@ -90,7 +90,7 @@ class _PickImageCropPageState extends State<PickImageCropPage> {
               var callback = widget.callback ?? _callbackDefault;
 
               if (options.autoCrop) {
-                var image = decodeImage(bytes)!;
+                var image = impl.decodeImage(bytes)!;
                 if (options.aspectRatio != null) {
                   var cropRect = size.sizeDoubleCenteredRectWithRatio(
                       size.Size<double>(

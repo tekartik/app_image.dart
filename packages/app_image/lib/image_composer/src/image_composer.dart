@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:image/image.dart';
+import 'package:image/image.dart' as impl;
 import 'package:tekartik_app_image/app_image.dart';
 import 'package:tekartik_common_utils/byte_utils.dart';
 import 'package:tekartik_common_utils/common_utils_import.dart';
@@ -41,10 +41,10 @@ class ImageLayerData {
 Future<ImageData> composeImage(ImageComposerData data) async {
   var width = data.width;
   var height = data.height;
-  Image? image;
+  impl.Image? image;
   late Rect<double> fullImageDestination;
   void initImage() {
-    image = Image(width!, height!);
+    image = impl.Image(width: width!, height: height!);
 
     fullImageDestination =
         Rect<double>.fromLTWH(0, 0, width.toDouble(), height.toDouble());
@@ -57,7 +57,7 @@ Future<ImageData> composeImage(ImageComposerData data) async {
     initImage();
   }
   for (var layer in data.layers) {
-    var layerImage = decodeImage(await layer.getSourceBytes())!;
+    var layerImage = impl.decodeImage(await layer.getSourceBytes())!;
     var src = layer.sourceCropRect;
     var ratio = src?.size.ratio ?? (layerImage.width / layerImage.height);
     if (image == null) {
@@ -76,7 +76,7 @@ Future<ImageData> composeImage(ImageComposerData data) async {
     if (debugComposeImage) {
       print('/compose (${layerImage.width}x${layerImage.width}) $src -> $dst');
     }
-    drawImage(
+    impl.compositeImage(
       image!,
       layerImage,
       srcX: src?.left.toInt(),
@@ -97,9 +97,10 @@ Future<ImageData> composeImage(ImageComposerData data) async {
     var encoding = data.encoding;
     late Uint8List imageBytes;
     if (encoding is ImageEncodingJpg) {
-      imageBytes = asUint8List(encodeJpg(image!, quality: encoding.quality));
+      imageBytes =
+          asUint8List(impl.encodeJpg(image!, quality: encoding.quality));
     } else {
-      imageBytes = asUint8List(encodePng(image!));
+      imageBytes = asUint8List(impl.encodePng(image!));
     }
     return ImageData(
         bytes: imageBytes, encoding: encoding, width: width!, height: height!);
