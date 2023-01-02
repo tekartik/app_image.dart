@@ -1,10 +1,10 @@
 name: tekartik_app_image
 description: Image definition and constants
-version: 0.1.0
+version: 0.2.0
 publish_to: none
 
 environment:
-  sdk: '>=2.14.2 <3.0.0'
+  sdk: '>=2.18.0 <3.0.0'
 
 dependencies:
   tekartik_common_utils:
@@ -12,7 +12,7 @@ dependencies:
       url: https://github.com/tekartik/common_utils.dart
       ref: dart2_3
     version: '>=0.13.2'
-  image:
+  image: '>=4.0.0'
   collection:
 dev_dependencies:
   lints: ^1.0.0
