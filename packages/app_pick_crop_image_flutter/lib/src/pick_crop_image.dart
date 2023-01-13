@@ -194,7 +194,7 @@ Future<ImageData?> pickCropImageInternal(BuildContext context,
    */
   // Remove the animation
   // ignore: use_build_context_synchronously
-  var result = await Navigator.of(context).push(PageRouteBuilder(
+  var result = await Navigator.of(context).push<Object?>(PageRouteBuilder(
     pageBuilder: (context, animation1, animation2) => PickImageCropPage(
       callback: callback,
       file: file,
