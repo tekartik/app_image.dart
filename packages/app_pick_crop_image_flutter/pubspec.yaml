@@ -5,7 +5,7 @@ homepage:
 publish_to: none
 
 environment:
-  sdk: '>=2.18.0 <4.0.0'
+  sdk: '>=3.0.0 <4.0.0'
   flutter: ">=3.3.0-0"
 
 dependencies:
@@ -18,12 +18,12 @@ dependencies:
     git:
       url: https://github.com/tekartik/app_image.dart
       path: packages/app_image_web
-      ref: dart2_3
+      ref: dart3a
     version: '>=0.1.0'
   tekartik_app_platform:
     git:
       url: https://github.com/tekartik/app_flutter_utils.dart
-      ref: dart2_3
+      ref: dart3a
       path: app_platform
     version: '>=0.1.0'
   file_picker: '>=4.6.1'
@@ -34,7 +34,7 @@ dev_dependencies:
   tekartik_lints_flutter:
     git:
       url: https://github.com/tekartik/common_flutter.dart
-      ref: dart2_3
+      ref: dart3a
       path: packages/lints_flutter
     version: '>=0.1.0'
 
