@@ -6,7 +6,7 @@ import 'package:tekartik_common_utils/byte_utils.dart';
 import 'package:tekartik_common_utils/common_utils_import.dart';
 import 'package:tekartik_common_utils/size/size.dart';
 
-var debugComposeImage = false; //devWarning(true);
+var debugComposeImage = false; // devWarning(true);
 
 class ImageComposerData {
   final List<ImageLayerData> layers;
@@ -44,7 +44,12 @@ Future<ImageData> composeImage(ImageComposerData data) async {
   impl.Image? image;
   late Rect<double> fullImageDestination;
   void initImage() {
-    image = impl.Image(width: width!, height: height!);
+    image = impl.Image(
+      width: width!,
+      height: height!,
+      numChannels: 4, // 4 needed for transparency
+      //    backgroundColor: devWarning(impl.ColorUint32.rgba(255, 0, 0, 255))
+    );
 
     fullImageDestination =
         Rect<double>.fromLTWH(0, 0, width.toDouble(), height.toDouble());
@@ -76,6 +81,7 @@ Future<ImageData> composeImage(ImageComposerData data) async {
     if (debugComposeImage) {
       print('/compose (${layerImage.width}x${layerImage.width}) $src -> $dst');
     }
+
     impl.compositeImage(
       image!,
       layerImage,
@@ -87,6 +93,7 @@ Future<ImageData> composeImage(ImageComposerData data) async {
       dstY: dst.top.toInt(),
       dstW: dst.width.toInt(),
       dstH: dst.height.toInt(),
+      //blend: impl.BlendMode.direct,
     );
   }
 
