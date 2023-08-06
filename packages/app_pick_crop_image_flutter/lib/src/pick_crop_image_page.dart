@@ -110,7 +110,7 @@ class _PickImageCropPageState extends State<PickImageCropPage> {
                 }
               } else {
                 var result = await Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) {
+                    .push<Object?>(MaterialPageRoute(builder: (_) {
                   return CropImagePage(
                     bytes: bytes!,
                     options: options,

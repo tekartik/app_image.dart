@@ -13,7 +13,7 @@ import 'package:collection/collection.dart';
 
 bool _startsWith(Uint8List bytes, List<int> start) {
   return bytes.length >= start.length &&
-      const ListEquality().equals(bytes.sublist(0, start.length), start);
+      const ListEquality<int>().equals(bytes.sublist(0, start.length), start);
 }
 
 /// Dirty check
