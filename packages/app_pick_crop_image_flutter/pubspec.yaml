@@ -11,7 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  image_picker: ^0.8.2
+  image_picker: ^1.0.4
   extended_image:
   image:
   tekartik_app_image_web:
