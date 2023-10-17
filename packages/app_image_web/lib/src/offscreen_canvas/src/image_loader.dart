@@ -8,10 +8,8 @@ final bool _supportsDecode = js_util.getProperty<Object?>(
         'decode') !=
     null;
 
-/// {@template html_image}
 /// Dart wrapper around an [html.ImageElement] and the element's
 /// width and height.
-/// {@endtemplate}
 class HtmlImage {
   /// {@macro html_image}
   const HtmlImage(this.imageElement, this.width, this.height);
@@ -26,17 +24,15 @@ class HtmlImage {
   final int height;
 }
 
-/// {@macro html_image_loader}
 /// Loads an [HtmlImage] given the `src` of the image.
-/// {@endtemplate}
 class HtmlImageLoader {
-  /// {@macro html_image_loader}
+  /// Ctor.
   const HtmlImageLoader(this.src);
 
   /// The image `src`.
   final String src;
 
-  /// {@macro html_image_loader}
+  /// Load an image.
   Future<HtmlImage> loadImage() async {
     final completer = Completer<HtmlImage>();
     if (_supportsDecode) {
