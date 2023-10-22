@@ -19,8 +19,7 @@ class CropImagePageResult {
 class CropImagePage extends StatefulWidget {
   final Uint8List bytes;
   final PickCropImageOptions options;
-  const CropImagePage({Key? key, required this.bytes, required this.options})
-      : super(key: key);
+  const CropImagePage({super.key, required this.bytes, required this.options});
 
   @override
   // ignore: library_private_types_in_public_api

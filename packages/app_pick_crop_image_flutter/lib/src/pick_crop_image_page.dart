@@ -17,8 +17,7 @@ class PickImageCropPage extends StatefulWidget {
   final ConvertPickCropResultCallback? callback;
 
   const PickImageCropPage(
-      {Key? key, required this.options, required this.file, this.callback})
-      : super(key: key);
+      {super.key, required this.options, required this.file, this.callback});
 
   @override
   // ignore: library_private_types_in_public_api

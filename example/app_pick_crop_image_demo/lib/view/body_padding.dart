@@ -6,7 +6,7 @@ const horizontalTilePadding = EdgeInsets.symmetric(horizontal: 16);
 class BodyHPadding extends StatelessWidget {
   final Widget? child;
 
-  const BodyHPadding({Key? key, this.child}) : super(key: key);
+  const BodyHPadding({super.key, this.child});
   @override
   Widget build(BuildContext context) {
     return Padding(

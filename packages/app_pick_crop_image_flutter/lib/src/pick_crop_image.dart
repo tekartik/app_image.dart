@@ -109,15 +109,10 @@ class PickCropBaseImageOptions {
 class PickCropConvertImageOptions extends PickCropBaseImageOptions {
   PickCropConvertImageOptions(
       {this.cropRect,
-      int? width,
-      int? height,
-      ImageEncoding encoding = const ImageEncodingPng(),
-      num? aspectRatio})
-      : super(
-            width: width,
-            height: height,
-            aspectRatio: aspectRatio,
-            encoding: encoding);
+      super.width,
+      super.height,
+      super.encoding,
+      super.aspectRatio});
 
   /// Crop rectangle on original image
   final CropRect? cropRect;
@@ -136,18 +131,13 @@ class PickCropImageOptions extends PickCropBaseImageOptions {
   final bool autoCrop;
 
   PickCropImageOptions(
-      {int? width,
-      int? height,
-      ImageEncoding encoding = const ImageEncodingPng(),
-      double? aspectRatio,
+      {super.width,
+      super.height,
+      super.encoding,
+      double? super.aspectRatio,
       this.ovalCropMask = false,
       this.autoCrop = false,
-      this.source = const PickCropImageSourceGallery()})
-      : super(
-            width: width,
-            height: height,
-            aspectRatio: aspectRatio,
-            encoding: encoding);
+      this.source = const PickCropImageSourceGallery()});
 }
 
 /// Return the image selected on success.

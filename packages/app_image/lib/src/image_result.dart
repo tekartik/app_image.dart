@@ -29,10 +29,9 @@ class ImageData extends ImageMeta {
 
   ImageData(
       {required this.bytes,
-      required ImageEncoding encoding,
-      required int width,
-      required int height})
-      : super(encoding: encoding, width: width, height: height);
+      required super.encoding,
+      required super.width,
+      required super.height});
 
   @override
   Map toDebugMap() {

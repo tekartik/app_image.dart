@@ -11,7 +11,7 @@ Future<void> main() async {
 }
 
 class PickCropDemoApp extends StatelessWidget {
-  const PickCropDemoApp({Key? key}) : super(key: key);
+  const PickCropDemoApp({super.key});
 
   // This widget is the root of your application.
   @override

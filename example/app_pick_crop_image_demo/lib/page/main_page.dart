@@ -8,7 +8,7 @@ import 'package:tekartik_pick_crop_image_demo/view/body_container.dart';
 import 'package:tekartik_pick_crop_image_demo/view/body_padding.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+  const MainPage({super.key});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
