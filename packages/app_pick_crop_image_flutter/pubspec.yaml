@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   image_picker: '>=1.0.2'
-  extended_image:
+  extended_image: 8.2.0
   image:
   tekartik_app_image_web:
     git:
