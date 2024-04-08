@@ -1,12 +1,15 @@
 import 'dart:async';
-import 'dart:html' as html;
-import 'dart:js_util' as js_util;
+import 'dart:js_interop';
 
+import 'package:web/web.dart' as web;
+
+const bool _supportsDecode = true;
+/*
 final bool _supportsDecode = js_util.getProperty<Object?>(
         js_util.getProperty(js_util.getProperty(html.window, 'Image') as Object,
             'prototype') as Object,
         'decode') !=
-    null;
+    null;*/
 
 /// Dart wrapper around an [html.ImageElement] and the element's
 /// width and height.
@@ -15,7 +18,7 @@ class HtmlImage {
   const HtmlImage(this.imageElement, this.width, this.height);
 
   /// The image element.
-  final html.ImageElement imageElement;
+  final web.HTMLImageElement imageElement;
 
   /// The width of the [imageElement].
   final int width;
@@ -37,9 +40,10 @@ class HtmlImageLoader {
     final completer = Completer<HtmlImage>();
     if (_supportsDecode) {
       // ignore: unsafe_html
-      final imgElement = html.ImageElement()..src = src;
-      js_util.setProperty(imgElement, 'decoding', 'async');
-      unawaited(imgElement.decode().then((dynamic _) {
+      final imgElement = web.HTMLImageElement()..src = src;
+      imgElement.decoding = 'async';
+
+      unawaited(imgElement.decode().toDart.then((dynamic _) {
         var naturalWidth = imgElement.naturalWidth;
         var naturalHeight = imgElement.naturalHeight;
         // Workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=700533.
@@ -67,19 +71,19 @@ class HtmlImageLoader {
   }
 
   void _decodeUsingOnLoad(Completer completer) {
-    StreamSubscription<html.Event>? loadSubscription;
-    late StreamSubscription<html.Event> errorSubscription;
-    final imgElement = html.ImageElement();
+    StreamSubscription<web.Event>? loadSubscription;
+    late StreamSubscription<web.Event> errorSubscription;
+    final imgElement = web.HTMLImageElement();
     // If the browser doesn't support asynchronous decoding of an image,
     // then use the `onload` event to decide when it's ready to paint to the
     // DOM. Unfortunately, this will cause the image to be decoded synchronously
     // on the main thread, and may cause dropped framed.
-    errorSubscription = imgElement.onError.listen((html.Event event) {
+    errorSubscription = imgElement.onError.listen((web.Event event) {
       loadSubscription?.cancel();
       errorSubscription.cancel();
       completer.completeError(event);
     });
-    loadSubscription = imgElement.onLoad.listen((html.Event event) {
+    loadSubscription = imgElement.onLoad.listen((web.Event event) {
       loadSubscription!.cancel();
       errorSubscription.cancel();
       final image = HtmlImage(

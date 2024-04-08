@@ -5,14 +5,16 @@ homepage:
 publish_to: none
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>=3.3.0 <4.0.0'
   flutter: ">=3.3.0-0"
 
 dependencies:
   flutter:
     sdk: flutter
   image_picker: '>=1.0.2'
-  extended_image:
+  extended_image: '>=8.2.0'
+  extended_image_library: '>=4.0.2'
+  web: '>=0.4.1'
   image:
   tekartik_app_image_web:
     git:
@@ -43,6 +45,8 @@ dependency_overrides:
     path: ../app_image_web
   tekartik_app_image:
     path: ../app_image
+  # Tmp extended image library issue
+  web: '>=0.5.1'
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
