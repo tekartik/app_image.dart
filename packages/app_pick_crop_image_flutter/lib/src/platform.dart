@@ -6,7 +6,7 @@ import 'package:tekartik_app_image_web/src/resize.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/pick_crop_image.dart';
 
 export 'platform_stub.dart'
-    if (dart.library.html) 'platform_web.dart'
+    if (dart.library.js_interop) 'platform_web.dart'
     if (dart.library.io) 'platform_io.dart';
 
 ResizeOptions _resizeOptions(PickCropConvertImageOptions pickCropImageOptions) {

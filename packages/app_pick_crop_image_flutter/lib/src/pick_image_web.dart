@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:html' as html; // ignore: avoid_web_libraries_in_flutter
 
 import 'package:image_picker/image_picker.dart';
+import 'package:web/web.dart' as web;
 
 import 'import.dart';
 
@@ -26,7 +26,8 @@ Future<XFile?> pickImageWeb({
     }
 
     // First one wins
-    onFocusSubscription = html.window.onFocus.listen((e) {
+    onFocusSubscription =
+        web.EventStreamProviders.focusEvent.forTarget(web.window).listen((e) {
       // If we get the focus back, return null
       // it means no files were selected
       complete(null);

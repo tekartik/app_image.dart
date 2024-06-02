@@ -1,17 +1,19 @@
-import 'dart:html' as html;
+import 'dart:js_interop';
 import 'dart:typed_data';
 
-import 'package:js/js_util.dart' as js_util;
+//import 'package:js/js_util.dart' as js_util;
 import 'package:tekartik_app_image_web/src/import.dart';
+import 'package:web/web.dart' as web;
 
 /// Convert a blog a list of bytes
-Future<Uint8List> blobToBytesUsingFileReader(html.Blob value) async {
+Future<Uint8List> blobToBytesUsingFileReader(web.Blob value) async {
   var completer = Completer<ByteBuffer>();
-  final fileReader = html.FileReader();
-  fileReader.onLoad.listen((event) {
-    completer.complete(js_util.getProperty(
-            js_util.getProperty(event, 'target') as Object, 'result')
-        as ByteBuffer);
+  final fileReader = web.FileReader();
+  web.EventStreamProviders.loadEvent
+      .forTarget(fileReader)
+      .listen((web.Event event) {
+    var result = fileReader.result as JSArrayBuffer;
+    completer.complete(result.toDart);
   });
   fileReader.readAsArrayBuffer(value);
 
@@ -19,7 +21,7 @@ Future<Uint8List> blobToBytesUsingFileReader(html.Blob value) async {
   return Uint8List.view(byteBuffer);
 }
 
-Future<Uint8List> blobToBytes(html.Blob value) async {
+Future<Uint8List> blobToBytes(web.Blob value) async {
   try {
     return await blobToBytesUsingArrayBuffer(value);
   } catch (_) {
@@ -28,16 +30,6 @@ Future<Uint8List> blobToBytes(html.Blob value) async {
 }
 
 /// Convert a blog a list of bytes
-Future<Uint8List> blobToBytesUsingArrayBuffer(html.Blob value) async {
-  var completer = Completer<ByteBuffer>();
-  final fileReader = html.FileReader();
-  fileReader.onLoad.listen((event) {
-    completer.complete(js_util.getProperty(
-            js_util.getProperty(event, 'target') as Object, 'result')
-        as ByteBuffer);
-  });
-  fileReader.readAsArrayBuffer(value);
-
-  var byteBuffer = await completer.future;
-  return Uint8List.view(byteBuffer);
+Future<Uint8List> blobToBytesUsingArrayBuffer(web.Blob value) async {
+  return Uint8List.view((await value.arrayBuffer().toDart).toDart);
 }

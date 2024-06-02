@@ -6,7 +6,7 @@ import 'package:tekartik_app_image_web/src/offscreen_canvas/src/offscreen_canvas
 // ignore: depend_on_referenced_packages
 import 'package:tekartik_common_utils/size/size.dart';
 
-var debugComposeImage = false; // devWarning(true);
+var debugComposeImageWeb = false; // devWarning(true);
 Future<ImageData> composeImage(ImageComposerData data) async {
   var width = data.width;
   var height = data.height;
@@ -42,7 +42,7 @@ Future<ImageData> composeImage(ImageComposerData data) async {
       initCanvas();
     }
     var dst = layer.destination ?? fullImageDestination;
-    if (debugComposeImage) {
+    if (debugComposeImageWeb) {
       print(
           '/web_compose (${layerCanvas.width}x${layerCanvas.width}) $src -> $dst');
     }

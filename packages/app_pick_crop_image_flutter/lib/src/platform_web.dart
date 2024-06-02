@@ -1,31 +1,33 @@
 // ignore_for_file: unsafe_html, avoid_web_libraries_in_flutter
-import 'dart:html' as html;
-import 'dart:js' as js;
+import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
 import 'dart:typed_data';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/src/pick_image_web.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/src/picked_file.dart';
+import 'package:web/web.dart' as web;
 
 Future<void> saveImageFile(
     {required Uint8List bytes,
     required mimeType,
     required String filename}) async {
 // prepare
-  final blob = html.Blob([bytes]);
-  final url = html.Url.createObjectUrlFromBlob(blob);
-  final anchor = html.document.createElement('a') as html.AnchorElement
+  final blob = web.Blob([bytes.toJS].toJS);
+  final url = web.URL.createObjectURL(blob);
+  final anchor = web.document.createElement('a') as web.HTMLAnchorElement
     ..href = url
     ..style.display = 'none'
     ..download = filename;
-  html.document.body!.children.add(anchor);
+  web.document.body!.children.add(anchor);
 
 // download
   anchor.click();
 
 // cleanup
-  html.document.body!.children.remove(anchor);
-  html.Url.revokeObjectUrl(url);
+  anchor.remove();
+
+  web.URL.revokeObjectURL(url);
 }
 
 final _picker = ImagePicker();
@@ -52,4 +54,4 @@ Future<XFile?> pickImageExp({
 /// Read a file.
 Future<Uint8List> readFile(String path) => throw UnsupportedError('io only');
 
-final isCanvasKit = js.context['flutterCanvasKit'] != null;
+final isCanvasKit = globalContext.has('flutterCanvasKit');
