@@ -1,7 +1,6 @@
 import 'dart:js_interop';
 import 'dart:typed_data';
 
-//import 'package:js/js_util.dart' as js_util;
 import 'package:tekartik_app_image_web/src/import.dart';
 import 'package:web/web.dart' as web;
 
