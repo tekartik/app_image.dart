@@ -26,5 +26,6 @@ dev_dependencies:
   test: '>=1.16.0'
   image:
 dependency_overrides:
+  web: '>=1.0.0'
   tekartik_app_image:
     path: ../app_image

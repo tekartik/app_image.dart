@@ -19,3 +19,5 @@ dev_dependencies:
   test: '>=1.16.0'
   process_run:
   path:
+dependency_overrides:
+  web: '>=1.0.0'

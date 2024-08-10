@@ -90,7 +90,7 @@ class OffscreenCanvas {
         web.EventStreamProviders.loadEvent
             .forTarget(fileReader)
             .listen((web.Event event) {
-          completer.complete(fileReader.result as String);
+          completer.complete((fileReader.result as JSString).toDart);
         });
         fileReader.readAsDataURL(value);
       });

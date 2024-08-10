@@ -45,8 +45,7 @@ dependency_overrides:
     path: ../app_image_web
   tekartik_app_image:
     path: ../app_image
-  # Tmp extended image library issue
-  web: '>=0.5.1'
+  web: '>=1.0.0'
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
