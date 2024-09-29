@@ -1,5 +1,5 @@
 // No export for now, only use internally
-library tekartik_app_image_web;
+library;
 
 export 'package:tekartik_app_image/app_image_resize.dart';
 

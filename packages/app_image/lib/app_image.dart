@@ -1,5 +1,5 @@
 /// App image information
-library tekartik_app_image;
+library;
 
 export 'src/constant.dart'
     show mimeTypeJpg, mimeTypePng, extensionPng, extensionJpg;
