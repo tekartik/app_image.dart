@@ -7,6 +7,12 @@ import 'package:tekartik_common_utils/common_utils_import.dart';
 import 'package:tekartik_common_utils/size/size.dart';
 
 var debugComposeImage = false; // devWarning(true);
+void log(Object? message) {
+  if (debugComposeImage) {
+    // ignore: avoid_print
+    print(message);
+  }
+}
 
 class ImageComposerData {
   final List<ImageLayerData> layers;
@@ -54,7 +60,7 @@ Future<ImageData> composeImage(ImageComposerData data) async {
     fullImageDestination =
         Rect<double>.fromLTWH(0, 0, width.toDouble(), height.toDouble());
     if (debugComposeImage) {
-      print('/compose $fullImageDestination');
+      log('/compose $fullImageDestination');
     }
   }
 
@@ -79,7 +85,7 @@ Future<ImageData> composeImage(ImageComposerData data) async {
 
     var dst = layer.destination ?? fullImageDestination;
     if (debugComposeImage) {
-      print('/compose (${layerImage.width}x${layerImage.width}) $src -> $dst');
+      log('/compose (${layerImage.width}x${layerImage.width}) $src -> $dst');
     }
 
     impl.compositeImage(

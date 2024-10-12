@@ -254,11 +254,11 @@ class _MainPageState extends State<MainPage> {
       imageSource = const PickCropImageSourceGallery();
     }
 
-    print('imageSource: $imageSource');
+    // print('imageSource: $imageSource');
     var width = _saveWidth();
     var height = _saveHeight();
     var ovalCropMask = _ovalCropMask.value;
-    print('width $width, height $height, cropOvalMask $ovalCropMask');
+    // print('width $width, height $height, cropOvalMask $ovalCropMask');
 
     // ignore: use_build_context_synchronously
     var result = await pickCropImage(context,
@@ -267,7 +267,7 @@ class _MainPageState extends State<MainPage> {
             height: height,
             source: imageSource,
             ovalCropMask: ovalCropMask));
-    print('result: $result');
+    // print('result: $result');
     if (result != null) {
       _result.value = result;
     }
@@ -282,7 +282,7 @@ class _MainPageState extends State<MainPage> {
             child: ExpansionPanelList(
               expansionCallback: (int index, bool isExpanded) {
                 var list = List<bool>.from(_isOpenPanels.value);
-                list[index] = !isExpanded;
+                list[index] = isExpanded;
                 _isOpenPanels.value = list;
               },
               children: [

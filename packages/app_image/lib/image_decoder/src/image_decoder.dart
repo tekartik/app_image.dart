@@ -9,7 +9,7 @@ ImageEncoding getImageEncodingFromBytes(Uint8List bytes) {
   if (isJpg(bytes)) {
     encoding = ImageEncodingJpg(quality: imageEncodingJpgQualityUnknown);
   } else if (isPng(bytes)) {
-    encoding = ImageEncodingPng();
+    encoding = const ImageEncodingPng();
   } else {
     throw UnsupportedError('Unsupported image type');
   }

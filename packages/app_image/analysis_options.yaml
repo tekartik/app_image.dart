@@ -1,2 +1,6 @@
 # tekartik lints over google lints
-include: package:tekartik_lints/strict.yaml
+include: package:tekartik_lints/package.yaml
+
+linter:
+  rules:
+    public_member_api_docs: false

@@ -25,7 +25,7 @@ void main() {
 
     test('blobToBytes png', () async {
       var canvas = OffscreenCanvas(1, 1);
-      var blob = await canvas.toBlob(ImageEncodingPng());
+      var blob = await canvas.toBlob(const ImageEncodingPng());
       var bytes = await blobToBytes(blob);
       expect(isJpg(bytes), isFalse);
       expect(isPng(bytes), isTrue);

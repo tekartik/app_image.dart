@@ -43,6 +43,7 @@ Future<ImageData> composeImage(ImageComposerData data) async {
     }
     var dst = layer.destination ?? fullImageDestination;
     if (debugComposeImageWeb) {
+      // ignore: avoid_print
       print(
           '/web_compose (${layerCanvas.width}x${layerCanvas.width}) $src -> $dst');
     }

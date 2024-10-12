@@ -4,8 +4,8 @@ import 'package:test/test.dart';
 void main() {
   group('encoding', () {
     test('png', () {
-      expect(ImageEncodingPng().mimeType, 'image/png');
-      expect(ImageEncodingPng().extension, '.png');
+      expect(const ImageEncodingPng().mimeType, 'image/png');
+      expect(const ImageEncodingPng().extension, '.png');
     });
     test('jpg', () {
       expect(ImageEncodingJpg(quality: 75).mimeType, 'image/jpeg');
