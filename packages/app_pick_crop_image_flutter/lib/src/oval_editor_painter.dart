@@ -23,8 +23,7 @@ class OvalEditorCropLayerPainter extends EditorCropLayerPainter {
 
   @override
   void paintMask(
-      Canvas canvas, Size size, ExtendedImageCropLayerPainter painter) {
-    final rect = Offset.zero & size;
+      Canvas canvas, Rect rect, ExtendedImageCropLayerPainter painter) {
     var cropRect = painter.cropRect;
     final maskColor = painter.maskColor;
     canvas.saveLayer(rect, Paint());
@@ -38,8 +37,8 @@ class OvalEditorCropLayerPainter extends EditorCropLayerPainter {
       canvas.drawOval(cropRect, Paint()..blendMode = BlendMode.clear);
     } else {
       // Special trick make the rect as big as the image to fill it
-      var dW = size.width - cropRect.width;
-      var dH = size.height - cropRect.height;
+      var dW = rect.width - cropRect.width;
+      var dH = rect.height - cropRect.height;
 
       var strokeWidth = max(dW, dH) *
           1.5; // square root of 2 should be sufficient but that's ok...
