@@ -6,7 +6,9 @@ import 'package:tekartik_common_utils/byte_utils.dart';
 import 'package:tekartik_common_utils/common_utils_import.dart';
 import 'package:tekartik_common_utils/size/size.dart';
 
+/// Debug only
 var debugComposeImage = false; // devWarning(true);
+/// Log
 void log(Object? message) {
   if (debugComposeImage) {
     // ignore: avoid_print
@@ -14,7 +16,9 @@ void log(Object? message) {
   }
 }
 
+/// Compose image data
 class ImageComposerData {
+  /// Image layers
   final List<ImageLayerData> layers;
 
   /// If null, get from the first layer
@@ -22,8 +26,11 @@ class ImageComposerData {
 
   /// If null, get from the first layer
   final int? height;
+
+  /// Image encoding
   final ImageEncoding encoding;
 
+  /// Compose image data
   ImageComposerData(
       {required this.layers,
       required this.width,
@@ -31,19 +38,29 @@ class ImageComposerData {
       required this.encoding});
 }
 
+/// Image layer data
 class ImageLayerData {
+  /// Source image
   final ImageSource source;
+
+  /// Source crop rect
   final Rect<double>? sourceCropRect;
+
+  /// Destination rect
   final Rect<double>? destination;
+
+  /// Get source bytes
   Future<Uint8List> getSourceBytes() =>
       (source as ImageSourceAsyncData).getBytes();
 
+  /// Image layer data
   ImageLayerData(
       {required this.source, this.sourceCropRect, this.destination}) {
     assert(source is ImageSourceAsyncData); // Only supported type
   }
 }
 
+/// Compose image
 Future<ImageData> composeImage(ImageComposerData data) async {
   var width = data.width;
   var height = data.height;

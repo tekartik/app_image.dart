@@ -6,11 +6,19 @@ typedef CropRect = Rect<double>;
 
 /// Resize options.
 class ResizeOptions {
+  /// Width
   final int? width;
+
+  /// Height
   final int? height;
+
+  /// Crop rectangle
   final CropRect? cropRect;
+
+  /// Encoding
   final ImageEncoding encoding;
 
+  /// Resize options
   ResizeOptions(
       {required this.width,
       required this.height,

@@ -9,3 +9,9 @@ const mimeTypeJpg = 'image/jpeg';
 
 /// JPEG extension
 const extensionJpg = '.jpg';
+
+/// WebP mime type
+const mimeTypeWebp = 'image/webp';
+
+/// WebP extension
+const extensionWebp = '.webp';

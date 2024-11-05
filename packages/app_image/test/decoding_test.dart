@@ -21,5 +21,13 @@ void main() {
       expect(meta.width, 1);
       expect(meta.height, 1);
     });
+    test('getImageEncodingFromBytes webp', () async {
+      var bytes = await File(join('data', 'white_1x1.webp')).readAsBytes();
+      var encoding = getImageEncodingFromBytes(bytes);
+
+      expect(encoding, isA<ImageEncodingWebp>());
+      expect(encoding.mimeType, 'image/webp');
+      expect(encoding.extension, '.webp');
+    });
   });
 }

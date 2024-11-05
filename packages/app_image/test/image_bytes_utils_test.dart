@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:path/path.dart';
-import 'package:tekartik_app_image/src/image_bytes_utils.dart';
+import 'package:tekartik_app_image/app_image_bytes_utils.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -15,13 +15,19 @@ void main() {
       expect(isJpg(bytes), isFalse);
       expect(isPng(bytes), isTrue);
     });
-    test('file isPng/isJpg', () async {
+    test('file isPng/isJpg/isWebp', () async {
       var bytes = await File(join('data', 'white_1x1.jpg')).readAsBytes();
       expect(isJpg(bytes), isTrue);
       expect(isPng(bytes), isFalse);
+      expect(isWebp(bytes), isFalse);
       bytes = await File(join('data', 'white_1x1.png')).readAsBytes();
       expect(isJpg(bytes), isFalse);
       expect(isPng(bytes), isTrue);
+      expect(isWebp(bytes), isFalse);
+      bytes = await File(join('data', 'white_1x1.webp')).readAsBytes();
+      expect(isJpg(bytes), isFalse);
+      expect(isPng(bytes), isFalse);
+      expect(isWebp(bytes), isTrue);
     });
   });
 }

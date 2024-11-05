@@ -21,3 +21,29 @@ bool isJpg(Uint8List bytes) => _startsWith(bytes, [255, 216, 255]);
 
 /// Dirty check
 bool isPng(Uint8List bytes) => _startsWith(bytes, [137, 80, 78]);
+
+// WebP File Header
+//
+//  0                   1                   2                   3
+//  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+// |      'R'      |      'I'      |      'F'      |      'F'      |
+// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+// |                           File Size                           |
+// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+// |      'W'      |      'E'      |      'B'      |      'P'      |
+// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+// 'RIFF': 32 bits
+// The ASCII characters 'R', 'I', 'F', 'F'.
+// File Size: 32 bits (uint32)
+// The size of the file in bytes, starting at offset 8. The maximum value of this field is 2^32 minus 10 bytes and thus the size of the whole file is at most 4 GiB minus 2 bytes.
+// 'WEBP': 32 bits
+// The ASCII characters 'W', 'E', 'B', 'P'.
+/// Dirty check
+bool isWebp(Uint8List bytes) =>
+    _startsWith(bytes, [0x52, 0x49, 0x46, 0x46]) &&
+    bytes.length >= 12 &&
+    bytes[8] == 0x57 &&
+    bytes[9] == 0x45 &&
+    bytes[10] == 0x42 &&
+    bytes[11] == 0x50;
