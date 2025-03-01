@@ -3,32 +3,28 @@
 version: 2
 
 enable-beta-ecosystems: true
+
 updates:
   - package-ecosystem: "pub"
     directory: "example/app_pick_crop_image_demo"
     schedule:
       interval: "monthly"
-
   - package-ecosystem: "pub"
     directory: "packages/app_image"
     schedule:
       interval: "monthly"
-
   - package-ecosystem: "pub"
     directory: "packages/app_image_web"
     schedule:
       interval: "monthly"
-
   - package-ecosystem: "pub"
     directory: "packages/app_pick_crop_image_flutter"
     schedule:
       interval: "monthly"
-
   - package-ecosystem: "pub"
     directory: "repo_support"
     schedule:
       interval: "monthly"
-
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

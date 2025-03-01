@@ -4,7 +4,7 @@ version: 0.2.0
 publish_to: none
 
 environment:
-  sdk: ^3.5.0
+  sdk: ^3.6.0
 
 dependencies:
   tekartik_common_utils:
@@ -14,8 +14,8 @@ dependencies:
     version: '>=0.13.2'
   image: '>=4.0.0'
   collection: ">=1.18.0"
-  dev_build: ">=1.1.0+2"
-  path:
+  dev_build: ">=1.1.2"
+  path: ">=1.9.0"
 
 dev_dependencies:
   lints: ">=5.0.0"
