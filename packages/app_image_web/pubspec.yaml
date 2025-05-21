@@ -29,7 +29,4 @@ dev_dependencies:
   lints: ">=5.0.0"
   test: ">=1.24.0"
   image:
-dependency_overrides:
-  web: '>=1.0.0'
-  tekartik_app_image:
-    path: ../app_image
+resolution: workspace

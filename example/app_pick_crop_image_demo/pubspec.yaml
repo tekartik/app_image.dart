@@ -53,14 +53,6 @@ dev_dependencies:
       path: packages/lints_flutter
     version: '>=0.1.0'
   dev_build: ">=1.1.2"
-dependency_overrides:
-  tekartik_app_pick_crop_image_flutter:
-    path: ../../packages/app_pick_crop_image_flutter
-  tekartik_app_image_web:
-    path: ../../packages/app_image_web
-  tekartik_app_image:
-    path: ../../packages/app_image
-  web: '>=0.5.1'
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -74,6 +66,7 @@ flutter:
 
   assets:
     - assets/img/
+resolution: workspace
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -6,6 +6,16 @@ const _defaultWidth = 256;
 const _defaultHeight = 256;
 var _defaultEncoding = ImageEncodingJpg(quality: 50);
 
+/// Create a color from a 32-bit unsigned integer
+img.Color colorFromUint32(int color) {
+  final a = (color >> 24) & 0xFF;
+  final r = (color >> 16) & 0xFF;
+  final g = (color >> 8) & 0xFF;
+  final b = color & 0xFF;
+
+  return img.ColorRgba8(r, g, b, a);
+}
+
 /// Default to a 256x256 image
 Future<ImageData> generatePlaceholderImage({
   ImageEncoding? encoding,
@@ -27,7 +37,7 @@ Future<ImageData> generatePlaceholderImage({
       y1: 0,
       x2: width,
       y2: height,
-      color: img.ConstColorUint8.data(color),
+      color: colorFromUint32(color),
     );
   }
   var data = await imageEncode(image, encoding: encoding);

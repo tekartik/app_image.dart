@@ -19,5 +19,6 @@ dev_dependencies:
   dev_build: ">=1.1.2"
 
 dependency_overrides:
+resolution: workspace
 #  tekartik_build_utils:
 #    path: ../../../tekartik/build_utils.dart
