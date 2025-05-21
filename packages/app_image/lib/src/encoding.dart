@@ -21,7 +21,8 @@ class ImageEncodingJpg implements ImageEncoding {
   ImageEncodingJpg({required this.quality}) {
     if (quality < -1 || quality > 100) {
       throw ArgumentError(
-          'Invalid quality $quality value. Must be between 0 and 100');
+        'Invalid quality $quality value. Must be between 0 and 100',
+      );
     }
   }
 

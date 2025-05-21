@@ -21,10 +21,7 @@ class OffscreenCanvas {
     var result = Completer<OffscreenCanvas>();
     var image = web.HTMLImageElement();
     image.onLoad.listen((_) {
-      var canvas = OffscreenCanvas(
-        image.naturalWidth,
-        image.naturalHeight,
-      );
+      var canvas = OffscreenCanvas(image.naturalWidth, image.naturalHeight);
       canvas._canvasElement!.context2D.drawImage(image, 0, 0);
       result.complete(canvas);
     });
@@ -47,9 +44,10 @@ class OffscreenCanvas {
       // OffscreenCanvas.supported) {
       _offScreenCanvas = web.OffscreenCanvas(width, height);
     } else {
-      _canvasElement = web.HTMLCanvasElement()
-        ..width = width
-        ..height = height;
+      _canvasElement =
+          web.HTMLCanvasElement()
+            ..width = width
+            ..height = height;
       _canvasElement!.className = 'gl-canvas';
       final cssWidth = width / web.window.devicePixelRatio;
       final cssHeight = height / web.window.devicePixelRatio;
@@ -87,9 +85,9 @@ class OffscreenCanvas {
     if (_offScreenCanvas != null) {
       _offScreenCanvas!.convertToBlob().toDart.then((web.Blob value) {
         final fileReader = web.FileReader();
-        web.EventStreamProviders.loadEvent
-            .forTarget(fileReader)
-            .listen((web.Event event) {
+        web.EventStreamProviders.loadEvent.forTarget(fileReader).listen((
+          web.Event event,
+        ) {
           completer.complete((fileReader.result as JSString).toDart);
         });
         fileReader.readAsDataURL(value);
@@ -101,7 +99,10 @@ class OffscreenCanvas {
   }
 
   Future<web.Blob> canvasToBlob(
-      web.HTMLCanvasElement canvas, String mimeType, int? quality) {
+    web.HTMLCanvasElement canvas,
+    String mimeType,
+    int? quality,
+  ) {
     var completer = Completer<web.Blob>();
     void callback(web.Blob blob) {
       completer.complete(blob);
@@ -131,7 +132,10 @@ class OffscreenCanvas {
     } else {
       if (encoding is ImageEncodingJpg) {
         return await canvasToBlob(
-            _canvasElement!, encoding.mimeType, encoding.quality.round());
+          _canvasElement!,
+          encoding.mimeType,
+          encoding.quality.round(),
+        );
       } else if (encoding is ImageEncodingPng) {
         return await canvasToBlob(_canvasElement!, encoding.mimeType, null);
       } else {
@@ -140,32 +144,41 @@ class OffscreenCanvas {
     }
   }
 
-  void drawImageToRect(OffscreenCanvas offscreenCanvas, Rect<double> destRect,
-      {Rect<double>? sourceRect}) {
+  void drawImageToRect(
+    OffscreenCanvas offscreenCanvas,
+    Rect<double> destRect, {
+    Rect<double>? sourceRect,
+  }) {
     if (_canvasElement != null) {
       if (sourceRect != null) {
         _canvasElement!.context2D.drawImage(
-            offscreenCanvas._canvasElement!,
-            sourceRect.left,
-            sourceRect.top,
-            sourceRect.width,
-            sourceRect.height,
-            destRect.left,
-            destRect.top,
-            destRect.width,
-            destRect.height);
+          offscreenCanvas._canvasElement!,
+          sourceRect.left,
+          sourceRect.top,
+          sourceRect.width,
+          sourceRect.height,
+          destRect.left,
+          destRect.top,
+          destRect.width,
+          destRect.height,
+        );
       } else {
-        _canvasElement!.context2D.drawImage(offscreenCanvas._canvasElement!,
-            destRect.left, destRect.top, destRect.width, destRect.height);
+        _canvasElement!.context2D.drawImage(
+          offscreenCanvas._canvasElement!,
+          destRect.left,
+          destRect.top,
+          destRect.width,
+          destRect.height,
+        );
       }
     }
   }
 
   /// One of 2 is set below
   web.OffscreenCanvasRenderingContext2D?
-      get offscreenCanvasRenderingContext2D =>
-          _offScreenCanvas?.getContext('2d')
-              as web.OffscreenCanvasRenderingContext2D;
+  get offscreenCanvasRenderingContext2D =>
+      _offScreenCanvas?.getContext('2d')
+          as web.OffscreenCanvasRenderingContext2D;
 
   /// One of 2 is set below
   web.CanvasRenderingContext2D? get canvasRenderingContext2D =>
@@ -173,9 +186,11 @@ class OffscreenCanvas {
 
   /// Returns CanvasRenderContext2D or OffscreenCanvasRenderingContext2D to
   /// paint into.
-  Object? getContext2d() => _context ??= (_offScreenCanvas != null
-      ? _offScreenCanvas!.getContext('2d')
-      : _canvasElement!.getContext('2d'));
+  Object? getContext2d() =>
+      _context ??=
+          (_offScreenCanvas != null
+              ? _offScreenCanvas!.getContext('2d')
+              : _canvasElement!.getContext('2d'));
 
   /// Proxy to `canvas.getContext('2d').save()`.
   void save() {
@@ -242,8 +257,9 @@ class OffscreenCanvas {
   /// !Warning API still in experimental status, feature detect before using.
   web.ImageBitmap? transferToImageBitmap() {
     if (offscreenCanvasRenderingContext2D != null) {
-      return offscreenCanvasRenderingContext2D!
-          .callMethod('transferToImageBitmap'.toJS);
+      return offscreenCanvasRenderingContext2D!.callMethod(
+        'transferToImageBitmap'.toJS,
+      );
     } else {
       return canvasRenderingContext2D!.callMethod('transferToImageBitmap'.toJS);
     }

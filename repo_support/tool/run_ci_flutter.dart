@@ -9,9 +9,7 @@ Future main() async {
   ]) {
     await packageRunCi(join('..', 'packages', dir));
   }
-  for (var dir in [
-    'app_pick_crop_image_demo',
-  ]) {
+  for (var dir in ['app_pick_crop_image_demo']) {
     await packageRunCi(join('..', 'example', dir));
   }
 }

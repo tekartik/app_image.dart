@@ -9,19 +9,19 @@ Future<ImageData> universalResizeTo(
   required ResizeOptions options,
 }) async {
   var data = ImageComposerData(
-      width: options.width,
-      height: options.height,
-      encoding: options.encoding,
-      layers: [
-        ImageLayerData(
-            source: ImageSource.bytes(bytes), sourceCropRect: options.cropRect),
-      ]);
+    width: options.width,
+    height: options.height,
+    encoding: options.encoding,
+    layers: [
+      ImageLayerData(
+        source: ImageSource.bytes(bytes),
+        sourceCropRect: options.cropRect,
+      ),
+    ],
+  );
   var result = await composeImage(data);
   return result;
 }
 
-Future<ImageData> resizeTo(
-  Uint8List bytes, {
-  required ResizeOptions options,
-}) =>
+Future<ImageData> resizeTo(Uint8List bytes, {required ResizeOptions options}) =>
     universalResizeTo(bytes, options: options);

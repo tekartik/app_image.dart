@@ -29,7 +29,9 @@ Future<TkPickedFile?> pickImage({
     }
   } else {
     var file = await _picker.pickImage(
-        source: source, preferredCameraDevice: preferredCameraDevice);
+      source: source,
+      preferredCameraDevice: preferredCameraDevice,
+    );
     if (file == null) {
       return null;
     }
@@ -38,10 +40,11 @@ Future<TkPickedFile?> pickImage({
   return null;
 }
 
-Future<void> saveImageFile(
-    {required Uint8List bytes,
-    required mimeType,
-    required String filename}) async {
+Future<void> saveImageFile({
+  required Uint8List bytes,
+  required mimeType,
+  required String filename,
+}) async {
   var path = await FilePicker.platform.saveFile(fileName: filename);
   if (path != null) {
     await File(path).writeAsBytes(bytes);

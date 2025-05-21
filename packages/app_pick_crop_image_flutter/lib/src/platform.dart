@@ -11,10 +11,11 @@ export 'platform_stub.dart'
 
 ResizeOptions _resizeOptions(PickCropConvertImageOptions pickCropImageOptions) {
   return ResizeOptions(
-      width: pickCropImageOptions.width,
-      height: pickCropImageOptions.height,
-      encoding: pickCropImageOptions.encoding,
-      cropRect: pickCropImageOptions.cropRect);
+    width: pickCropImageOptions.width,
+    height: pickCropImageOptions.height,
+    encoding: pickCropImageOptions.encoding,
+    cropRect: pickCropImageOptions.cropRect,
+  );
 }
 
 class _In {
@@ -29,8 +30,12 @@ Future<ImageData> _resizeTo(_In data) async {
   return universalResizeTo(data.bytes, options: data.options);
 }
 
-Future<ImageData> pickCropResizeTo(Uint8List bytes,
-    {required PickCropConvertImageOptions options}) async {
+Future<ImageData> pickCropResizeTo(
+  Uint8List bytes, {
+  required PickCropConvertImageOptions options,
+}) async {
   return compute<_In, ImageData>(
-      _resizeTo, _In(bytes, _resizeOptions(options)));
+    _resizeTo,
+    _In(bytes, _resizeOptions(options)),
+  );
 }

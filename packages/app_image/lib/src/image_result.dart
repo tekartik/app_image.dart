@@ -14,8 +14,11 @@ class ImageMeta {
   final ImageEncoding encoding;
 
   /// Image meta
-  ImageMeta(
-      {required this.encoding, required this.width, required this.height});
+  ImageMeta({
+    required this.encoding,
+    required this.width,
+    required this.height,
+  });
 
   /// Debug map
   Map toDebugMap() {
@@ -34,11 +37,12 @@ class ImageData extends ImageMeta {
   final Uint8List bytes;
 
   /// Image data
-  ImageData(
-      {required this.bytes,
-      required super.encoding,
-      required super.width,
-      required super.height});
+  ImageData({
+    required this.bytes,
+    required super.encoding,
+    required super.width,
+    required super.height,
+  });
 
   @override
   Map toDebugMap() {

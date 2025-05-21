@@ -546,5 +546,5 @@ final Uint8List bytes = Uint8List.fromList([
   0xae,
   0x42,
   0x60,
-  0x82
+  0x82,
 ]);

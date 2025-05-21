@@ -8,23 +8,25 @@ import 'package:tekartik_app_pick_crop_image_flutter/src/pick_image_web.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/src/picked_file.dart';
 import 'package:web/web.dart' as web;
 
-Future<void> saveImageFile(
-    {required Uint8List bytes,
-    required mimeType,
-    required String filename}) async {
-// prepare
+Future<void> saveImageFile({
+  required Uint8List bytes,
+  required mimeType,
+  required String filename,
+}) async {
+  // prepare
   final blob = web.Blob([bytes.toJS].toJS);
   final url = web.URL.createObjectURL(blob);
-  final anchor = web.document.createElement('a') as web.HTMLAnchorElement
-    ..href = url
-    ..style.display = 'none'
-    ..download = filename;
+  final anchor =
+      web.document.createElement('a') as web.HTMLAnchorElement
+        ..href = url
+        ..style.display = 'none'
+        ..download = filename;
   web.document.body!.children.add(anchor);
 
-// download
+  // download
   anchor.click();
 
-// cleanup
+  // cleanup
   anchor.remove();
 
   web.URL.revokeObjectURL(url);
@@ -37,7 +39,9 @@ Future<TkPickedFile?> pickImage({
   CameraDevice preferredCameraDevice = CameraDevice.rear,
 }) async {
   var file = await _picker.pickImage(
-      source: source, preferredCameraDevice: preferredCameraDevice);
+    source: source,
+    preferredCameraDevice: preferredCameraDevice,
+  );
 
   if (file == null) {
     return null;

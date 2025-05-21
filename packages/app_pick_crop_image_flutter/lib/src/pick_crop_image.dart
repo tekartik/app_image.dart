@@ -41,8 +41,9 @@ enum SourceCameraDevice {
 class PickCropImageSourceCamera implements PickCropImageSource {
   final SourceCameraDevice preferredCameraDevice;
 
-  const PickCropImageSourceCamera(
-      {this.preferredCameraDevice = SourceCameraDevice.rear});
+  const PickCropImageSourceCamera({
+    this.preferredCameraDevice = SourceCameraDevice.rear,
+  });
 
   @override
   String toString() => 'ImageSourceCamera($preferredCameraDevice)';
@@ -93,11 +94,12 @@ class PickCropBaseImageOptions {
   num? get aspectRatio => _aspectRatio;
   num? _aspectRatio;
 
-  PickCropBaseImageOptions(
-      {this.encoding = const ImageEncodingPng(),
-      this.width,
-      this.height,
-      num? aspectRatio}) {
+  PickCropBaseImageOptions({
+    this.encoding = const ImageEncodingPng(),
+    this.width,
+    this.height,
+    num? aspectRatio,
+  }) {
     if (width != null && height != null) {
       _aspectRatio = width! / height!;
     }
@@ -107,12 +109,13 @@ class PickCropBaseImageOptions {
 
 /// Pick crop image options.
 class PickCropConvertImageOptions extends PickCropBaseImageOptions {
-  PickCropConvertImageOptions(
-      {this.cropRect,
-      super.width,
-      super.height,
-      super.encoding,
-      super.aspectRatio});
+  PickCropConvertImageOptions({
+    this.cropRect,
+    super.width,
+    super.height,
+    super.encoding,
+    super.aspectRatio,
+  });
 
   /// Crop rectangle on original image
   final CropRect? cropRect;
@@ -130,48 +133,56 @@ class PickCropImageOptions extends PickCropBaseImageOptions {
   /// Auto crop the image (fit, center)
   final bool autoCrop;
 
-  PickCropImageOptions(
-      {super.width,
-      super.height,
-      super.encoding,
-      double? super.aspectRatio,
-      this.ovalCropMask = false,
-      this.autoCrop = false,
-      this.source = const PickCropImageSourceGallery()});
+  PickCropImageOptions({
+    super.width,
+    super.height,
+    super.encoding,
+    double? super.aspectRatio,
+    this.ovalCropMask = false,
+    this.autoCrop = false,
+    this.source = const PickCropImageSourceGallery(),
+  });
 }
 
 /// Return the image selected on success.
 ///
 /// On the web, you can only trigger this on a user action
 /// And this might never returns if the user cancel during pick.
-Future<ImageData?> pickCropImage(BuildContext context,
-        {PickCropImageOptions? options}) =>
-    pickCropImageInternal(context, options: options);
+Future<ImageData?> pickCropImage(
+  BuildContext context, {
+  PickCropImageOptions? options,
+}) => pickCropImageInternal(context, options: options);
 
 /// Return the image selected on success.
 ///
 /// On the web, you can only trigger this on a user action
 /// And this might never returns if the user cancel during pick.
-Future<ImageData?> pickCropImageInternal(BuildContext context,
-    {PickCropImageOptions? options,
-    ConvertPickCropResultCallback? callback}) async {
+Future<ImageData?> pickCropImageInternal(
+  BuildContext context, {
+  PickCropImageOptions? options,
+  ConvertPickCropResultCallback? callback,
+}) async {
   options ??= PickCropImageOptions();
   var source = options.source;
   TkPickedFile? file;
   if (source is PickCropImageSourceCamera ||
       source is PickCropImageSourceGallery) {
-    var camera = (source is PickCropImageSourceCamera
-            ? source
-            : const PickCropImageSourceCamera())
-        .preferredCameraDevice;
+    var camera =
+        (source is PickCropImageSourceCamera
+                ? source
+                : const PickCropImageSourceCamera())
+            .preferredCameraDevice;
     // On IOS we need to pick directly!
     file = await pickImage(
-        source: source is PickCropImageSourceCamera
-            ? image_picker.ImageSource.camera
-            : image_picker.ImageSource.gallery,
-        preferredCameraDevice: camera == SourceCameraDevice.front
-            ? image_picker.CameraDevice.front
-            : image_picker.CameraDevice.rear);
+      source:
+          source is PickCropImageSourceCamera
+              ? image_picker.ImageSource.camera
+              : image_picker.ImageSource.gallery,
+      preferredCameraDevice:
+          camera == SourceCameraDevice.front
+              ? image_picker.CameraDevice.front
+              : image_picker.CameraDevice.rear,
+    );
   }
   /*
   var result = await Navigator.of(context).push(MaterialPageRoute(builder: (_) {
@@ -184,14 +195,17 @@ Future<ImageData?> pickCropImageInternal(BuildContext context,
    */
   // Remove the animation
   // ignore: use_build_context_synchronously
-  var result = await Navigator.of(context).push<Object?>(PageRouteBuilder(
-    pageBuilder: (context, animation1, animation2) => PickImageCropPage(
-      callback: callback,
-      file: file,
-      options: options ?? PickCropImageOptions(),
+  var result = await Navigator.of(context).push<Object?>(
+    PageRouteBuilder(
+      pageBuilder:
+          (context, animation1, animation2) => PickImageCropPage(
+            callback: callback,
+            file: file,
+            options: options ?? PickCropImageOptions(),
+          ),
+      transitionDuration: Duration.zero,
     ),
-    transitionDuration: Duration.zero,
-  ));
+  );
 
   if (result is ImageData) {
     return result;

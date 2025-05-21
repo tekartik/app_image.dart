@@ -9,9 +9,6 @@ class BodyHPadding extends StatelessWidget {
   const BodyHPadding({super.key, this.child});
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: horizontalTilePadding,
-      child: child,
-    );
+    return Padding(padding: horizontalTilePadding, child: child);
   }
 }

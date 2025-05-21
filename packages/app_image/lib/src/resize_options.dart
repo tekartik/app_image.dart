@@ -19,11 +19,12 @@ class ResizeOptions {
   final ImageEncoding encoding;
 
   /// Resize options
-  ResizeOptions(
-      {required this.width,
-      required this.height,
-      this.cropRect,
-      this.encoding = const ImageEncodingPng()});
+  ResizeOptions({
+    required this.width,
+    required this.height,
+    this.cropRect,
+    this.encoding = const ImageEncodingPng(),
+  });
 
   @override
   String toString() {
@@ -31,7 +32,7 @@ class ResizeOptions {
       if (width != null) 'width': width,
       if (height != null) 'height': height,
       if (cropRect != null) 'cropRect': cropRect,
-      'encoding': encoding
+      'encoding': encoding,
     }.toString();
   }
 }

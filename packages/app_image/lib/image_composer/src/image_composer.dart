@@ -31,11 +31,12 @@ class ImageComposerData {
   final ImageEncoding encoding;
 
   /// Compose image data
-  ImageComposerData(
-      {required this.layers,
-      required this.width,
-      required this.height,
-      required this.encoding});
+  ImageComposerData({
+    required this.layers,
+    required this.width,
+    required this.height,
+    required this.encoding,
+  });
 }
 
 /// Image layer data
@@ -54,8 +55,11 @@ class ImageLayerData {
       (source as ImageSourceAsyncData).getBytes();
 
   /// Image layer data
-  ImageLayerData(
-      {required this.source, this.sourceCropRect, this.destination}) {
+  ImageLayerData({
+    required this.source,
+    this.sourceCropRect,
+    this.destination,
+  }) {
     assert(source is ImageSourceAsyncData); // Only supported type
   }
 }
@@ -74,8 +78,12 @@ Future<ImageData> composeImage(ImageComposerData data) async {
       //    backgroundColor: devWarning(impl.ColorUint32.rgba(255, 0, 0, 255))
     );
 
-    fullImageDestination =
-        Rect<double>.fromLTWH(0, 0, width.toDouble(), height.toDouble());
+    fullImageDestination = Rect<double>.fromLTWH(
+      0,
+      0,
+      width.toDouble(),
+      height.toDouble(),
+    );
     if (debugComposeImage) {
       log('/compose $fullImageDestination');
     }
@@ -122,17 +130,23 @@ Future<ImageData> composeImage(ImageComposerData data) async {
 
   if (image == null) {
     throw ArgumentError(
-        'Missing some parameters layer or size to find the best image size');
+      'Missing some parameters layer or size to find the best image size',
+    );
   } else {
     var encoding = data.encoding;
     late Uint8List imageBytes;
     if (encoding is ImageEncodingJpg) {
-      imageBytes =
-          asUint8List(impl.encodeJpg(image!, quality: encoding.quality));
+      imageBytes = asUint8List(
+        impl.encodeJpg(image!, quality: encoding.quality),
+      );
     } else {
       imageBytes = asUint8List(impl.encodePng(image!));
     }
     return ImageData(
-        bytes: imageBytes, encoding: encoding, width: width!, height: height!);
+      bytes: imageBytes,
+      encoding: encoding,
+      width: width!,
+      height: height!,
+    );
   }
 }

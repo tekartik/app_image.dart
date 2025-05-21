@@ -1229,5 +1229,5 @@ final Uint8List bytes = Uint8List.fromList([
   0x10,
   0x7f,
   0xff,
-  0xd9
+  0xd9,
 ]);

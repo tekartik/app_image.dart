@@ -26,11 +26,13 @@ Future<ImageData> imageResizeTo(
   // Crop
   var cropRect = options.cropRect;
   if (cropRect != null) {
-    image = impl.copyCrop(image,
-        x: cropRect.left.round(),
-        y: cropRect.top.round(),
-        width: cropRect.width.round(),
-        height: cropRect.height.round());
+    image = impl.copyCrop(
+      image,
+      x: cropRect.left.round(),
+      y: cropRect.top.round(),
+      width: cropRect.width.round(),
+      height: cropRect.height.round(),
+    );
   }
   var dstWidth = options.width ?? cropRect?.width.round() ?? image.width;
   var dstHeight = options.height ?? cropRect?.height.round() ?? image.height;
@@ -46,8 +48,9 @@ Future<ImageData> imageResizeTo(
     imageBytes = asUint8List(impl.encodePng(image));
   }
   return ImageData(
-      bytes: imageBytes,
-      encoding: encoding,
-      width: dstWidth,
-      height: dstHeight);
+    bytes: imageBytes,
+    encoding: encoding,
+    width: dstWidth,
+    height: dstHeight,
+  );
 }

@@ -14,8 +14,12 @@ Future<ImageData> composeImage(ImageComposerData data) async {
   late Rect<double> fullImageDestination;
   void initCanvas() {
     canvas = OffscreenCanvas(width!, height!);
-    fullImageDestination =
-        Rect<double>.fromLTWH(0, 0, width.toDouble(), height.toDouble());
+    fullImageDestination = Rect<double>.fromLTWH(
+      0,
+      0,
+      width.toDouble(),
+      height.toDouble(),
+    );
   }
 
   if (width != null && height != null) {
@@ -25,8 +29,9 @@ Future<ImageData> composeImage(ImageComposerData data) async {
   var encoding = data.encoding;
 
   for (var layer in data.layers) {
-    var layerCanvas =
-        await OffscreenCanvas.fromBytes(await layer.getSourceBytes());
+    var layerCanvas = await OffscreenCanvas.fromBytes(
+      await layer.getSourceBytes(),
+    );
     var src = layer.sourceCropRect;
 
     var ratio = src?.size.ratio ?? (layerCanvas.width / layerCanvas.height);
@@ -45,7 +50,8 @@ Future<ImageData> composeImage(ImageComposerData data) async {
     if (debugComposeImageWeb) {
       // ignore: avoid_print
       print(
-          '/web_compose (${layerCanvas.width}x${layerCanvas.width}) $src -> $dst');
+        '/web_compose (${layerCanvas.width}x${layerCanvas.width}) $src -> $dst',
+      );
     }
     canvas!.drawImageToRect(layerCanvas, dst, sourceRect: src);
   }
@@ -55,7 +61,11 @@ Future<ImageData> composeImage(ImageComposerData data) async {
   var blob = await canvas!.toBlob(data.encoding);
   var bytes = await blobToBytes(blob);
   return ImageData(
-      bytes: bytes, encoding: encoding, width: width!, height: height!);
+    bytes: bytes,
+    encoding: encoding,
+    width: width!,
+    height: height!,
+  );
 
   /*
   var image = Image(data.width, data.height);

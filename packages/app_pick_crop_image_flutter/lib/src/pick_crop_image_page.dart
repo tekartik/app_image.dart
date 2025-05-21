@@ -16,8 +16,12 @@ class PickImageCropPage extends StatefulWidget {
   final PickCropImageOptions options;
   final ConvertPickCropResultCallback? callback;
 
-  const PickImageCropPage(
-      {super.key, required this.options, required this.file, this.callback});
+  const PickImageCropPage({
+    super.key,
+    required this.options,
+    required this.file,
+    this.callback,
+  });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -29,25 +33,29 @@ class ConvertPickCropResultParam {
   final PickCropImageOptions options;
   final CropRect cropRect;
 
-  ConvertPickCropResultParam(
-      {required this.imageSource,
-      required this.options,
-      required this.cropRect});
+  ConvertPickCropResultParam({
+    required this.imageSource,
+    required this.options,
+    required this.cropRect,
+  });
 }
 
-typedef ConvertPickCropResultCallback = Future<ImageData> Function(
-    ConvertPickCropResultParam param);
+typedef ConvertPickCropResultCallback =
+    Future<ImageData> Function(ConvertPickCropResultParam param);
 
 Future<ImageData> _callbackDefault(ConvertPickCropResultParam param) async {
   var convertOptions = PickCropConvertImageOptions(
-      cropRect: param.cropRect,
-      encoding: param.options.encoding,
-      width: param.options.width,
-      height: param.options.height,
-      aspectRatio: param.options.aspectRatio);
+    cropRect: param.cropRect,
+    encoding: param.options.encoding,
+    width: param.options.width,
+    height: param.options.height,
+    aspectRatio: param.options.aspectRatio,
+  );
 
-  var imageData =
-      await pickCropResizeTo(param.imageSource.bytes, options: convertOptions);
+  var imageData = await pickCropResizeTo(
+    param.imageSource.bytes,
+    options: convertOptions,
+  );
   return imageData;
 }
 
@@ -92,35 +100,51 @@ class _PickImageCropPageState extends State<PickImageCropPage> {
                 var image = impl.decodeImage(bytes)!;
                 if (options.aspectRatio != null) {
                   var cropRect = size.sizeDoubleCenteredRectWithRatio(
-                      size.Size<double>(
-                          image.width.toDouble(), image.height.toDouble()),
-                      options.aspectRatio!);
+                    size.Size<double>(
+                      image.width.toDouble(),
+                      image.height.toDouble(),
+                    ),
+                    options.aspectRatio!,
+                  );
 
-                  imageData = await callback(ConvertPickCropResultParam(
+                  imageData = await callback(
+                    ConvertPickCropResultParam(
                       imageSource: ImageSourceData(bytes),
                       options: options,
-                      cropRect: cropRect));
+                      cropRect: cropRect,
+                    ),
+                  );
                 } else {
-                  imageData = await callback(ConvertPickCropResultParam(
+                  imageData = await callback(
+                    ConvertPickCropResultParam(
                       imageSource: ImageSourceData(bytes),
                       options: options,
-                      cropRect: CropRect.fromLTWH(0, 0, image.width.toDouble(),
-                          image.height.toDouble())));
+                      cropRect: CropRect.fromLTWH(
+                        0,
+                        0,
+                        image.width.toDouble(),
+                        image.height.toDouble(),
+                      ),
+                    ),
+                  );
                 }
               } else {
-                var result = await Navigator.of(context)
-                    .push<Object?>(MaterialPageRoute(builder: (_) {
-                  return CropImagePage(
-                    bytes: bytes!,
-                    options: options,
-                  );
-                }));
+                var result = await Navigator.of(context).push<Object?>(
+                  MaterialPageRoute(
+                    builder: (_) {
+                      return CropImagePage(bytes: bytes!, options: options);
+                    },
+                  ),
+                );
                 if (mounted) {
                   if (result is CropImagePageResult) {
-                    imageData = await callback(ConvertPickCropResultParam(
+                    imageData = await callback(
+                      ConvertPickCropResultParam(
                         imageSource: ImageSourceData(bytes),
                         options: options,
-                        cropRect: result.cropRect));
+                        cropRect: result.cropRect,
+                      ),
+                    );
                   }
                 }
               }
@@ -152,11 +176,13 @@ class _PickImageCropPageState extends State<PickImageCropPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-            child: Icon(
-      Icons.hourglass_empty_outlined,
-      size: 32,
-      color: Colors.grey.shade300,
-    )));
+      body: Center(
+        child: Icon(
+          Icons.hourglass_empty_outlined,
+          size: 32,
+          color: Colors.grey.shade300,
+        ),
+      ),
+    );
   }
 }

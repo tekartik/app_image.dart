@@ -26,18 +26,19 @@ Future<XFile?> pickImageWeb({
     }
 
     // First one wins
-    onFocusSubscription =
-        web.EventStreamProviders.focusEvent.forTarget(web.window).listen((e) {
-      // If we get the focus back, return null
-      // it means no files were selected
-      complete(null);
-    });
+    onFocusSubscription = web.EventStreamProviders.focusEvent
+        .forTarget(web.window)
+        .listen((e) {
+          // If we get the focus back, return null
+          // it means no files were selected
+          complete(null);
+        });
     // ignore: unawaited_futures
     _picker
         .pickImage(source: source, preferredCameraDevice: preferredCameraDevice)
         .then((file) {
-      complete(file);
-    });
+          complete(file);
+        });
 
     return await completer.future;
   } finally {

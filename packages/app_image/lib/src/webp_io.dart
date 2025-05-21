@@ -18,8 +18,11 @@ class WebpOptions {
   final int alphaQuality;
 
   /// Default is quality 50
-  WebpOptions(
-      {this.lossless = false, this.quality = 50, this.alphaQuality = 100});
+  WebpOptions({
+    this.lossless = false,
+    this.quality = 50,
+    this.alphaQuality = 100,
+  });
 }
 
 /// Quality medium
@@ -31,12 +34,16 @@ var webpOptionsQuality75 = WebpOptions(quality: 75);
 /// Lossless
 var webpOptionsLossless = WebpOptions(lossless: true);
 
-Future _convertFileToWebp(String src, String dst,
-    {WebpOptions? options}) async {
+Future _convertFileToWebp(
+  String src,
+  String dst, {
+  WebpOptions? options,
+}) async {
   options ??= WebpOptions();
   if (!options.lossless) {
     await run(
-        'cwebp -q ${options.quality} -alpha_q ${options.alphaQuality} ${shellArgument(src)} -o ${shellArgument(dst)}');
+      'cwebp -q ${options.quality} -alpha_q ${options.alphaQuality} ${shellArgument(src)} -o ${shellArgument(dst)}',
+    );
   } else {
     await run('cwebp -lossless ${shellArgument(src)} -o ${shellArgument(dst)}');
   }
@@ -45,11 +52,14 @@ Future _convertFileToWebp(String src, String dst,
 var _tmpDir = Directory.systemTemp.createTempSync('image_io_utils').path;
 
 /// Copy a file, resize and convert to webp
-Future<void> fileCopyToWebp(String src, String dst,
-    {Rect? cropRect,
-    int? resizeWidth,
-    WebpOptions? options,
-    bool? ifNotExists}) async {
+Future<void> fileCopyToWebp(
+  String src,
+  String dst, {
+  Rect? cropRect,
+  int? resizeWidth,
+  WebpOptions? options,
+  bool? ifNotExists,
+}) async {
   ifNotExists ??= false;
   options ??= WebpOptions();
   if (ifNotExists) {
@@ -61,18 +71,22 @@ Future<void> fileCopyToWebp(String src, String dst,
 
   var image = decodeImage(await File(src).readAsBytes())!;
   if (cropRect != null) {
-    image = copyCrop(image,
-        x: cropRect.left,
-        y: cropRect.top,
-        width: cropRect.width,
-        height: cropRect.height);
+    image = copyCrop(
+      image,
+      x: cropRect.left,
+      y: cropRect.top,
+      width: cropRect.width,
+      height: cropRect.height,
+    );
   }
   if (resizeWidth != null) {
     var ratio = image.width / image.height;
-    image = copyResize(image,
-        width: max(1, resizeWidth),
-        height: max(1, (resizeWidth / ratio).round()),
-        interpolation: Interpolation.average);
+    image = copyResize(
+      image,
+      width: max(1, resizeWidth),
+      height: max(1, (resizeWidth / ratio).round()),
+      interpolation: Interpolation.average,
+    );
   }
   var pngTile = join(_tmpDir, '${basenameWithoutExtension(src)}.png');
   await fileWritePng(pngTile, image, force: true);
@@ -92,11 +106,16 @@ class PngOptions {
 
 ///
 /// Write png conditionnally
-Future<void> fileWritePng(String path, Image image,
-    {bool force = false, PngOptions? options}) async {
+Future<void> fileWritePng(
+  String path,
+  Image image, {
+  bool force = false,
+  PngOptions? options,
+}) async {
   var file = File(path);
   if (!file.existsSync() || force) {
-    await file
-        .writeAsBytes(encodePng(image, level: (options ?? PngOptions()).level));
+    await file.writeAsBytes(
+      encodePng(image, level: (options ?? PngOptions()).level),
+    );
   }
 }

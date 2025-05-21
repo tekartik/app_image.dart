@@ -6,14 +6,17 @@ import 'package:tekartik_app_image/app_image.dart';
 final _defaultEncoding = ImageEncodingJpg(quality: 50);
 
 /// Default to jpg 50
-Future<ImageData> imageEncode(img.Image image,
-    {ImageEncoding? encoding}) async {
+Future<ImageData> imageEncode(
+  img.Image image, {
+  ImageEncoding? encoding,
+}) async {
   encoding ??= ImageEncodingJpg(quality: 50);
   late Uint8List imageBytes;
 
   Future<void> decodeJpg(ImageEncodingJpg encoding) async {
-    imageBytes =
-        Uint8List.fromList(img.encodeJpg(image, quality: encoding.quality));
+    imageBytes = Uint8List.fromList(
+      img.encodeJpg(image, quality: encoding.quality),
+    );
   }
 
   if (encoding is ImageEncodingJpg) {
@@ -25,8 +28,9 @@ Future<ImageData> imageEncode(img.Image image,
     await decodeJpg(_defaultEncoding);
   }
   return ImageData(
-      bytes: imageBytes,
-      encoding: encoding,
-      width: image.width,
-      height: image.height);
+    bytes: imageBytes,
+    encoding: encoding,
+    width: image.width,
+    height: image.height,
+  );
 }

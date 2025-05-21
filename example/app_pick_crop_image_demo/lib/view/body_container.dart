@@ -8,10 +8,6 @@ class BodyContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: SizedBox(
-      width: width ?? 640,
-      child: child,
-    ));
+    return Center(child: SizedBox(width: width ?? 640, child: child));
   }
 }

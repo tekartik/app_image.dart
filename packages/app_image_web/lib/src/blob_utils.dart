@@ -8,9 +8,9 @@ import 'package:web/web.dart' as web;
 Future<Uint8List> blobToBytesUsingFileReader(web.Blob value) async {
   var completer = Completer<ByteBuffer>();
   final fileReader = web.FileReader();
-  web.EventStreamProviders.loadEvent
-      .forTarget(fileReader)
-      .listen((web.Event event) {
+  web.EventStreamProviders.loadEvent.forTarget(fileReader).listen((
+    web.Event event,
+  ) {
     var result = fileReader.result as JSArrayBuffer;
     completer.complete(result.toDart);
   });

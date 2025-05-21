@@ -40,7 +40,11 @@ class _CropImagePageState extends State<CropImagePage> {
           children: [
             Padding(
               padding: const EdgeInsets.only(
-                  left: 16, right: 16, top: 32, bottom: 48),
+                left: 16,
+                right: 16,
+                top: 32,
+                bottom: 48,
+              ),
               child: ExtendedImage.memory(
                 widget.bytes,
                 fit: BoxFit.contain,
@@ -49,42 +53,53 @@ class _CropImagePageState extends State<CropImagePage> {
                 initEditorConfigHandler: (state) {
                   if (options.ovalCropMask) {
                     return EditorConfig(
-                        maxScale: 8.0,
-                        cropRectPadding: const EdgeInsets.all(20.0),
-                        hitTestSize: 20.0,
-                        initCropRectType: InitCropRectType.imageRect,
-                        cropAspectRatio: widget.options.aspectRatio?.toDouble(),
-                        cropLayerPainter: _cropLayerPainter,
-                        editActionDetailsIsChanged:
-                            (EditActionDetails? details) {});
+                      maxScale: 8.0,
+                      cropRectPadding: const EdgeInsets.all(20.0),
+                      hitTestSize: 20.0,
+                      initCropRectType: InitCropRectType.imageRect,
+                      cropAspectRatio: widget.options.aspectRatio?.toDouble(),
+                      cropLayerPainter: _cropLayerPainter,
+                      editActionDetailsIsChanged:
+                          (EditActionDetails? details) {},
+                    );
                   }
                   return EditorConfig(
-                      maxScale: 8.0,
-                      //cropRectPadding: const EdgeInsets.all(20.0),
-                      hitTestSize: 20.0,
-                      cropAspectRatio: widget.options.aspectRatio?.toDouble());
+                    maxScale: 8.0,
+                    //cropRectPadding: const EdgeInsets.all(20.0),
+                    hitTestSize: 20.0,
+                    cropAspectRatio: widget.options.aspectRatio?.toDouble(),
+                  );
                 },
               ),
             ),
             IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Padding(
-                  padding: EdgeInsets.only(top: 8.0, left: 8),
-                  child: Icon(Icons.close),
-                )),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Padding(
+                padding: EdgeInsets.only(top: 8.0, left: 8),
+                child: Icon(Icons.close),
+              ),
+            ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            final cropRect = editorKey.currentState!.getCropRect();
-            Navigator.of(context).pop(CropImagePageResult(
-                cropRect: CropRect.fromLTWH(cropRect!.left, cropRect.top,
-                    cropRect.width, cropRect.height)));
-          },
-          child: const Icon(Icons.check)),
+        onPressed: () {
+          final cropRect = editorKey.currentState!.getCropRect();
+          Navigator.of(context).pop(
+            CropImagePageResult(
+              cropRect: CropRect.fromLTWH(
+                cropRect!.left,
+                cropRect.top,
+                cropRect.width,
+                cropRect.height,
+              ),
+            ),
+          );
+        },
+        child: const Icon(Icons.check),
+      ),
     );
   }
 }
