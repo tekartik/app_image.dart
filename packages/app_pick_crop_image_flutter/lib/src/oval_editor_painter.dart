@@ -13,10 +13,9 @@ class OvalEditorCropLayerPainter extends EditorCropLayerPainter {
     Size size,
     ExtendedImageCropLayerPainter painter,
   ) {
-    final paint =
-        Paint()
-          ..color = painter.cornerColor
-          ..style = PaintingStyle.fill;
+    final paint = Paint()
+      ..color = painter.cornerColor
+      ..style = PaintingStyle.fill;
     final cropRect = painter.cropRect;
     const radius = 6.0;
     canvas.drawCircle(Offset(cropRect.left, cropRect.top), radius, paint);

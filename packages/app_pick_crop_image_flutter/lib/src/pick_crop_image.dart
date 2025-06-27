@@ -174,14 +174,12 @@ Future<ImageData?> pickCropImageInternal(
             .preferredCameraDevice;
     // On IOS we need to pick directly!
     file = await pickImage(
-      source:
-          source is PickCropImageSourceCamera
-              ? image_picker.ImageSource.camera
-              : image_picker.ImageSource.gallery,
-      preferredCameraDevice:
-          camera == SourceCameraDevice.front
-              ? image_picker.CameraDevice.front
-              : image_picker.CameraDevice.rear,
+      source: source is PickCropImageSourceCamera
+          ? image_picker.ImageSource.camera
+          : image_picker.ImageSource.gallery,
+      preferredCameraDevice: camera == SourceCameraDevice.front
+          ? image_picker.CameraDevice.front
+          : image_picker.CameraDevice.rear,
     );
   }
   /*
@@ -197,12 +195,11 @@ Future<ImageData?> pickCropImageInternal(
   // ignore: use_build_context_synchronously
   var result = await Navigator.of(context).push<Object?>(
     PageRouteBuilder(
-      pageBuilder:
-          (context, animation1, animation2) => PickImageCropPage(
-            callback: callback,
-            file: file,
-            options: options ?? PickCropImageOptions(),
-          ),
+      pageBuilder: (context, animation1, animation2) => PickImageCropPage(
+        callback: callback,
+        file: file,
+        options: options ?? PickCropImageOptions(),
+      ),
       transitionDuration: Duration.zero,
     ),
   );

@@ -44,10 +44,9 @@ class OffscreenCanvas {
       // OffscreenCanvas.supported) {
       _offScreenCanvas = web.OffscreenCanvas(width, height);
     } else {
-      _canvasElement =
-          web.HTMLCanvasElement()
-            ..width = width
-            ..height = height;
+      _canvasElement = web.HTMLCanvasElement()
+        ..width = width
+        ..height = height;
       _canvasElement!.className = 'gl-canvas';
       final cssWidth = width / web.window.devicePixelRatio;
       final cssHeight = height / web.window.devicePixelRatio;
@@ -186,11 +185,9 @@ class OffscreenCanvas {
 
   /// Returns CanvasRenderContext2D or OffscreenCanvasRenderingContext2D to
   /// paint into.
-  Object? getContext2d() =>
-      _context ??=
-          (_offScreenCanvas != null
-              ? _offScreenCanvas!.getContext('2d')
-              : _canvasElement!.getContext('2d'));
+  Object? getContext2d() => _context ??= (_offScreenCanvas != null
+      ? _offScreenCanvas!.getContext('2d')
+      : _canvasElement!.getContext('2d'));
 
   /// Proxy to `canvas.getContext('2d').save()`.
   void save() {

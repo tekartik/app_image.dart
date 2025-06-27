@@ -16,11 +16,10 @@ Future<void> saveImageFile({
   // prepare
   final blob = web.Blob([bytes.toJS].toJS);
   final url = web.URL.createObjectURL(blob);
-  final anchor =
-      web.document.createElement('a') as web.HTMLAnchorElement
-        ..href = url
-        ..style.display = 'none'
-        ..download = filename;
+  final anchor = web.document.createElement('a') as web.HTMLAnchorElement
+    ..href = url
+    ..style.display = 'none'
+    ..download = filename;
   web.document.body!.children.add(anchor);
 
   // download

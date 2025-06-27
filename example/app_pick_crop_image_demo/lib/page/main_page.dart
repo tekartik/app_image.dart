@@ -307,19 +307,18 @@ class _MainPageState extends State<MainPage> {
                     builder: (context, source, _) {
                       return ListTile(
                         title: const Text('Image source'),
-                        subtitle:
-                            source == AppImageSource.camera
-                                ? ValueListenableBuilder<SourceCameraDevice>(
-                                  valueListenable: _preferredCamera,
-                                  builder: (context, camera, _) {
-                                    return Text(
-                                      'Camera (${camera == SourceCameraDevice.front ? 'front' : 'rear'})',
-                                    );
-                                  },
-                                )
-                                : (source == AppImageSource.memory)
-                                ? const Text('Memory')
-                                : const Text('Gallery'),
+                        subtitle: source == AppImageSource.camera
+                            ? ValueListenableBuilder<SourceCameraDevice>(
+                                valueListenable: _preferredCamera,
+                                builder: (context, camera, _) {
+                                  return Text(
+                                    'Camera (${camera == SourceCameraDevice.front ? 'front' : 'rear'})',
+                                  );
+                                },
+                              )
+                            : (source == AppImageSource.memory)
+                            ? const Text('Memory')
+                            : const Text('Gallery'),
                       );
                     },
                   );
@@ -490,12 +489,11 @@ class _MainPageState extends State<MainPage> {
                                         right: 16,
                                       ),
                                       value: ovalCropInPreview,
-                                      onChanged:
-                                          ovalCropMask
-                                              ? (value) {
-                                                _onOvalCropInPreview(value);
-                                              }
-                                              : null,
+                                      onChanged: ovalCropMask
+                                          ? (value) {
+                                              _onOvalCropInPreview(value);
+                                            }
+                                          : null,
                                       title: const Text(
                                         'Crop in preview result',
                                       ),
