@@ -326,64 +326,62 @@ class _MainPageState extends State<MainPage> {
                 body: ValueListenableBuilder<AppImageSource>(
                   valueListenable: _source,
                   builder: (context, source, _) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        RadioListTile<AppImageSource>(
-                          title: const Text('Gallery'),
-                          value: AppImageSource.gallery,
-                          groupValue: source,
-                          onChanged: _onChangedSource,
-                        ),
-                        RadioListTile<AppImageSource>(
-                          title: const Text('Camera'),
-                          value: AppImageSource.camera,
-                          groupValue: source,
-                          onChanged: _onChangedSource,
-                        ),
-                        ValueListenableBuilder<SourceCameraDevice>(
-                          valueListenable: _preferredCamera,
-                          builder: (context, camera, _) {
-                            return ValueListenableBuilder<SourceCameraDevice>(
-                              valueListenable: _preferredCamera,
-                              builder: (context, camera, _) {
-                                return Column(
-                                  children: [
-                                    RadioListTile<SourceCameraDevice>(
-                                      dense: true,
-                                      contentPadding: const EdgeInsets.only(
-                                        left: 64,
-                                        right: 16,
-                                      ),
-                                      title: const Text('Rear'),
-                                      value: SourceCameraDevice.rear,
-                                      groupValue: camera,
-                                      onChanged: _onChangedPreferredCamera,
+                    return RadioGroup<AppImageSource>(
+                      groupValue: source,
+                      onChanged: _onChangedSource,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const RadioListTile<AppImageSource>(
+                            title: Text('Gallery'),
+                            value: AppImageSource.gallery,
+                          ),
+                          const RadioListTile<AppImageSource>(
+                            title: Text('Camera'),
+                            value: AppImageSource.camera,
+                          ),
+                          ValueListenableBuilder<SourceCameraDevice>(
+                            valueListenable: _preferredCamera,
+                            builder: (context, camera, _) {
+                              return ValueListenableBuilder<SourceCameraDevice>(
+                                valueListenable: _preferredCamera,
+                                builder: (context, camera, _) {
+                                  return RadioGroup<SourceCameraDevice>(
+                                    groupValue: camera,
+                                    onChanged: _onChangedPreferredCamera,
+                                    child: const Column(
+                                      children: [
+                                        RadioListTile<SourceCameraDevice>(
+                                          dense: true,
+                                          contentPadding: EdgeInsets.only(
+                                            left: 64,
+                                            right: 16,
+                                          ),
+                                          title: Text('Rear'),
+                                          value: SourceCameraDevice.rear,
+                                        ),
+                                        RadioListTile<SourceCameraDevice>(
+                                          dense: true,
+                                          contentPadding: EdgeInsets.only(
+                                            left: 64,
+                                            right: 16,
+                                          ),
+                                          title: Text('Front'),
+                                          value: SourceCameraDevice.front,
+                                        ),
+                                      ],
                                     ),
-                                    RadioListTile<SourceCameraDevice>(
-                                      dense: true,
-                                      contentPadding: const EdgeInsets.only(
-                                        left: 64,
-                                        right: 16,
-                                      ),
-                                      title: const Text('Front'),
-                                      value: SourceCameraDevice.front,
-                                      groupValue: camera,
-                                      onChanged: _onChangedPreferredCamera,
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                        ),
-                        RadioListTile<AppImageSource>(
-                          title: const Text('Memory'),
-                          value: AppImageSource.memory,
-                          groupValue: source,
-                          onChanged: _onChangedSource,
-                        ),
-                      ],
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                          const RadioListTile<AppImageSource>(
+                            title: Text('Memory'),
+                            value: AppImageSource.memory,
+                          ),
+                        ],
+                      ),
                     );
                   },
                 ),

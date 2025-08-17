@@ -33,9 +33,10 @@ Future<XFile?> pickImageWeb({
           // it means no files were selected
           complete(null);
         });
-    // ignore: unawaited_futures
+
     _picker
         .pickImage(source: source, preferredCameraDevice: preferredCameraDevice)
+        // ignore: unawaited_futures
         .then((file) {
           complete(file);
         });
