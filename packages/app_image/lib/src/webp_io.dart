@@ -78,6 +78,21 @@ Future<void> fileCopyToWebp(
       width: cropRect.width,
       height: cropRect.height,
     );
+    if (image.width != cropRect.width || image.height != cropRect.height) {
+      var toImage = Image(
+        width: cropRect.width,
+        height: cropRect.height,
+        format: image.format,
+        numChannels: 4,
+      );
+      copyExpandCanvas(
+        image,
+        newWidth: cropRect.width,
+        newHeight: cropRect.height,
+        toImage: toImage,
+      );
+      image = toImage;
+    }
   }
   if (resizeWidth != null) {
     var ratio = image.width / image.height;
