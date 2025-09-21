@@ -14,7 +14,6 @@ dependencies:
     git:
       url: https://github.com/tekartik/app_image.dart
       path: packages/app_image
-      ref: dart3a
     version: '>=0.1.0'
 ...
 
