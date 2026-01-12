@@ -8,6 +8,7 @@ import 'package:tekartik_app_pick_crop_image_flutter/src/pick_image_web.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/src/picked_file.dart';
 import 'package:web/web.dart' as web;
 
+/// Save image file.
 Future<void> saveImageFile({
   required Uint8List bytes,
   required mimeType,
@@ -33,6 +34,7 @@ Future<void> saveImageFile({
 
 final _picker = ImagePicker();
 
+/// Pick image.
 Future<TkPickedFile?> pickImage({
   required ImageSource source,
   CameraDevice preferredCameraDevice = CameraDevice.rear,
@@ -48,6 +50,7 @@ Future<TkPickedFile?> pickImage({
   return TkPickedFileImage(file);
 }
 
+/// Pick image experimental.
 Future<XFile?> pickImageExp({
   required ImageSource source,
   CameraDevice preferredCameraDevice = CameraDevice.rear,
@@ -57,4 +60,5 @@ Future<XFile?> pickImageExp({
 /// Read a file.
 Future<Uint8List> readFile(String path) => throw UnsupportedError('io only');
 
+/// True if canvas kit.
 final isCanvasKit = globalContext.has('flutterCanvasKit');

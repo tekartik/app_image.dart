@@ -11,6 +11,7 @@ Future<void> saveImageFile({
   required String filename,
 }) => throw UnsupportedError('Web or io supported');
 
+/// Pick image.
 Future<TkPickedFile?> pickImage({
   required image_picker.ImageSource source,
   image_picker.CameraDevice preferredCameraDevice =
@@ -20,5 +21,5 @@ Future<TkPickedFile?> pickImage({
 /// Read a file.
 Future<Uint8List> readFile(String path) => throw UnsupportedError('io only');
 
-// ignore: prefer_const_declarations
-final isCanvasKit = true;
+/// True if canvas kit.
+const isCanvasKit = true;

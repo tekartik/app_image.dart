@@ -9,6 +9,7 @@ import 'picked_file.dart';
 
 final _picker = image_picker.ImagePicker();
 
+/// Pick image.
 Future<TkPickedFile?> pickImage({
   required image_picker.ImageSource source,
   image_picker.CameraDevice preferredCameraDevice =
@@ -40,6 +41,7 @@ Future<TkPickedFile?> pickImage({
   return null;
 }
 
+/// Save image file.
 Future<void> saveImageFile({
   required Uint8List bytes,
   required mimeType,
@@ -51,7 +53,8 @@ Future<void> saveImageFile({
   }
 }
 
+/// Read file.
 Future<Uint8List> readFile(String path) => File(path).readAsBytes();
 
-// ignore: prefer_const_declarations
-final isCanvasKit = true;
+/// True if canvas kit.
+const isCanvasKit = true;

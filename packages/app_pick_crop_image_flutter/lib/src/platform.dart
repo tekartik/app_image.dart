@@ -30,6 +30,7 @@ Future<ImageData> _resizeTo(_In data) async {
   return universalResizeTo(data.bytes, options: data.options);
 }
 
+/// Pick crop resize to.
 Future<ImageData> pickCropResizeTo(
   Uint8List bytes, {
   required PickCropConvertImageOptions options,

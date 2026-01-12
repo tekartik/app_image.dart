@@ -6,7 +6,10 @@ import 'package:tekartik_app_image_web/src/offscreen_canvas/src/offscreen_canvas
 // ignore: depend_on_referenced_packages
 import 'package:tekartik_common_utils/size/size.dart';
 
+/// Debug image composer web.
 var debugComposeImageWeb = false; // devWarning(true);
+
+/// Compose image web implementation.
 Future<ImageData> composeImage(ImageComposerData data) async {
   var width = data.width;
   var height = data.height;

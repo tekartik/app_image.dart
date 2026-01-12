@@ -6,6 +6,7 @@ import 'package:tekartik_app_pick_crop_image_flutter/pick_crop_image.dart';
 import 'import.dart';
 
 // Raw implementation
+/// Resize to PNG sync.
 Uint8List resizeToPngSync(Uint8List bytes, int width, int height) {
   var image = impl.decodeImage(bytes)!;
 
@@ -16,6 +17,7 @@ Uint8List resizeToPngSync(Uint8List bytes, int width, int height) {
   return asUint8List(impl.encodePng(image));
 }
 
+/// Image resize to.
 @Deprecated('Old')
 Future<ImageData> imageResizeTo(
   Uint8List bytes, {

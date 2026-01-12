@@ -11,11 +11,18 @@ import 'import_image.dart';
 import 'pick_crop_image.dart';
 import 'picked_file.dart';
 
+/// Pick image crop page.
 class PickImageCropPage extends StatefulWidget {
+  /// File to pick.
   final TkPickedFile? file;
+
+  /// Pick crop image options.
   final PickCropImageOptions options;
+
+  /// Callback to convert the result.
   final ConvertPickCropResultCallback? callback;
 
+  /// Pick image crop page constructor.
   const PickImageCropPage({
     super.key,
     required this.options,
@@ -28,11 +35,18 @@ class PickImageCropPage extends StatefulWidget {
   _PickImageCropPageState createState() => _PickImageCropPageState();
 }
 
+/// Convert pick crop result param.
 class ConvertPickCropResultParam {
+  /// Image source data.
   final ImageSourceData imageSource;
+
+  /// Pick crop image options.
   final PickCropImageOptions options;
+
+  /// Crop rectangle.
   final CropRect cropRect;
 
+  /// Convert pick crop result param constructor.
   ConvertPickCropResultParam({
     required this.imageSource,
     required this.options,
@@ -40,6 +54,7 @@ class ConvertPickCropResultParam {
   });
 }
 
+/// Convert pick crop result callback.
 typedef ConvertPickCropResultCallback =
     Future<ImageData> Function(ConvertPickCropResultParam param);
 

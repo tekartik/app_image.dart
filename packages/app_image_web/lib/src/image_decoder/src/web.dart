@@ -5,7 +5,10 @@ import 'package:tekartik_app_image/image_decoder/image_decoder.dart' as common;
 import 'package:tekartik_app_image_web/src/import.dart';
 import 'package:tekartik_app_image_web/src/offscreen_canvas/src/offscreen_canvas.dart';
 
+/// Debug image decoder.
 var debugDecodeImage = false; // devWarning(true);
+
+/// Get image meta from bytes.
 Future<ImageMeta> getImageMetaFromBytes(Uint8List bytes) async {
   var encoding = common.getImageEncodingFromBytes(bytes);
   var canvas = await OffscreenCanvas.fromBytes(bytes);

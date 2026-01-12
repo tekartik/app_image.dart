@@ -3,14 +3,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tekartik_pick_crop_image_demo/page/main_page.dart';
 import 'package:tekartik_pick_crop_image_demo/src/import.dart';
 
+/// Shared preferences.
 late SharedPreferences prefs;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   prefs = await SharedPreferences.getInstance();
   runApp(const PickCropDemoApp());
 }
 
+/// Pick crop demo app.
 class PickCropDemoApp extends StatelessWidget {
+  /// Pick crop demo app constructor.
   const PickCropDemoApp({super.key});
 
   // This widget is the root of your application.

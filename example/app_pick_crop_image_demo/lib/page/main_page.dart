@@ -7,7 +7,9 @@ import 'package:tekartik_pick_crop_image_demo/src/import.dart';
 import 'package:tekartik_pick_crop_image_demo/view/body_container.dart';
 import 'package:tekartik_pick_crop_image_demo/view/body_padding.dart';
 
+/// Main page.
 class MainPage extends StatefulWidget {
+  /// Main page constructor.
   const MainPage({super.key});
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -23,7 +25,17 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
-enum AppImageSource { camera, gallery, memory }
+/// App image source.
+enum AppImageSource {
+  /// Camera.
+  camera,
+
+  /// Gallery.
+  gallery,
+
+  /// Memory.
+  memory,
+}
 
 class _MainPageState extends State<MainPage> {
   final _isOpenPanels = ValueNotifier<List<bool>>(List<bool>.filled(4, false));

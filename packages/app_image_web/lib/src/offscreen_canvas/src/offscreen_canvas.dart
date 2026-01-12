@@ -97,6 +97,7 @@ class OffscreenCanvas {
     }
   }
 
+  /// Convert canvas to blob.
   Future<web.Blob> canvasToBlob(
     web.HTMLCanvasElement canvas,
     String mimeType,
@@ -117,6 +118,7 @@ class OffscreenCanvas {
   }
 
   // https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas/convertToBlob
+  /// Convert to blob.
   Future<web.Blob> toBlob(ImageEncoding encoding) async {
     if (_offScreenCanvas != null) {
       var blobOptions = web.ImageEncodeOptions();
@@ -143,6 +145,7 @@ class OffscreenCanvas {
     }
   }
 
+  /// Draw image to rect.
   void drawImageToRect(
     OffscreenCanvas offscreenCanvas,
     Rect<double> destRect, {

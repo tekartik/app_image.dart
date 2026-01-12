@@ -7,18 +7,27 @@ import 'package:tekartik_app_pick_crop_image_flutter/src/pick_crop_image.dart';
 
 import 'oval_editor_painter.dart';
 
+/// Crop image page result.
 class CropImagePageResult {
+  /// Crop rectangle.
   final CropRect cropRect;
 
+  /// Crop image page result constructor.
   CropImagePageResult({required this.cropRect});
 
   @override
   String toString() => {'cropRect': cropRect}.toString();
 }
 
+/// Crop image page.
 class CropImagePage extends StatefulWidget {
+  /// Image bytes.
   final Uint8List bytes;
+
+  /// Pick crop image options.
   final PickCropImageOptions options;
+
+  /// Crop image page constructor.
   const CropImagePage({super.key, required this.bytes, required this.options});
 
   @override

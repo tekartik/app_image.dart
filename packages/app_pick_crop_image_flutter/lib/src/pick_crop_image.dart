@@ -8,14 +8,19 @@ import 'import_image.dart';
 import 'pick_crop_image_page.dart';
 import 'picked_file.dart';
 
+/// PNG mime type.
 const mimeTypePng = 'image/png';
+
+/// JPEG mime type.
 const mimeTypeJpg = 'image/jpeg';
 
 /// Image source.
 abstract class PickCropImageSource implements ImageSource {}
 
 /// Pick from the gallery.
+/// Pick from the gallery.
 class PickCropImageSourceGallery implements PickCropImageSource {
+  /// Pick from the gallery constructor.
   const PickCropImageSourceGallery();
 
   @override
@@ -38,9 +43,12 @@ enum SourceCameraDevice {
 }
 
 /// Pick from the camera.
+/// Pick from the camera.
 class PickCropImageSourceCamera implements PickCropImageSource {
+  /// Preferred camera device.
   final SourceCameraDevice preferredCameraDevice;
 
+  /// Pick from the camera constructor.
   const PickCropImageSourceCamera({
     this.preferredCameraDevice = SourceCameraDevice.rear,
   });
@@ -52,9 +60,11 @@ class PickCropImageSourceCamera implements PickCropImageSource {
 /// Memory source.
 class PickCropImageSourceMemory
     implements PickCropImageSource, ImageSourceAsyncData, ImageSourceData {
+  /// The bytes of the image.
   @override
   final Uint8List bytes;
 
+  /// Memory source constructor.
   const PickCropImageSourceMemory({required this.bytes});
 
   @override
@@ -65,9 +75,12 @@ class PickCropImageSourceMemory
 }
 
 /// Asset source.
+/// Asset source.
 class ImageSourceAsset implements PickCropImageSource, ImageSourceAsyncData {
+  /// Asset name.
   final String name;
 
+  /// Asset source constructor.
   ImageSourceAsset({required this.name});
 
   @override
@@ -91,9 +104,11 @@ class PickCropBaseImageOptions {
   final ImageEncoding encoding;
 
   /// Aspect ratio (width and height wins)
+  /// Aspect ratio (width and height wins)
   num? get aspectRatio => _aspectRatio;
   num? _aspectRatio;
 
+  /// Pick crop image options constructor.
   PickCropBaseImageOptions({
     this.encoding = const ImageEncodingPng(),
     this.width,
@@ -108,7 +123,9 @@ class PickCropBaseImageOptions {
 }
 
 /// Pick crop image options.
+/// Pick crop image options.
 class PickCropConvertImageOptions extends PickCropBaseImageOptions {
+  /// Convert pick crop image options constructor.
   PickCropConvertImageOptions({
     this.cropRect,
     super.width,
@@ -133,6 +150,7 @@ class PickCropImageOptions extends PickCropBaseImageOptions {
   /// Auto crop the image (fit, center)
   final bool autoCrop;
 
+  /// Pick crop image options constructor.
   PickCropImageOptions({
     super.width,
     super.height,

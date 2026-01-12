@@ -20,6 +20,7 @@ Future<Uint8List> blobToBytesUsingFileReader(web.Blob value) async {
   return Uint8List.view(byteBuffer);
 }
 
+/// Convert a blog a list of bytes
 Future<Uint8List> blobToBytes(web.Blob value) async {
   try {
     return await blobToBytesUsingArrayBuffer(value);
