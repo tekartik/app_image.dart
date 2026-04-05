@@ -19,7 +19,7 @@ Future<TkPickedFile?> pickImage({
   if ((platformContext.io?.isLinux ?? false) ||
       (platformContext.io?.isWindows ?? false) ||
       (platformContext.io?.isMacOS ?? false)) {
-    var ffpResult = await FilePicker.platform.pickFiles(
+    var ffpResult = await FilePicker.pickFiles(
       type: FileType.image,
       allowMultiple: false,
 
@@ -47,7 +47,7 @@ Future<void> saveImageFile({
   required mimeType,
   required String filename,
 }) async {
-  var path = await FilePicker.platform.saveFile(fileName: filename);
+  var path = await FilePicker.saveFile(fileName: filename);
   if (path != null) {
     await File(path).writeAsBytes(bytes);
   }
