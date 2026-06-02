@@ -4,6 +4,7 @@ import 'dart:js_interop';
 import 'package:web/web.dart' as web;
 
 const bool _supportsDecode = true;
+
 /*
 final bool _supportsDecode = js_util.getProperty<Object?>(
         js_util.getProperty(js_util.getProperty(html.window, 'Image') as Object,
