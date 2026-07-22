@@ -70,6 +70,7 @@ Future<ImageData> composeImage(ImageComposerData data) async {
   var height = data.height;
   impl.Image? image;
   late Rect<double> fullImageDestination;
+
   void initImage() {
     image = impl.Image(
       width: width!,
@@ -105,6 +106,7 @@ Future<ImageData> composeImage(ImageComposerData data) async {
         width = src?.width.round() ?? layerImage.width;
         height = src?.height.round() ?? layerImage.height;
       }
+
       initImage();
     }
 

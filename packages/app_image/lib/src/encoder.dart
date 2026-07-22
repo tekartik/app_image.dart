@@ -25,6 +25,7 @@ Future<ImageData> imageEncode(
     imageBytes = Uint8List.fromList(img.encodePng(image));
   } else {
     encoding = _defaultEncoding;
+
     await decodeJpg(_defaultEncoding);
   }
   return ImageData(

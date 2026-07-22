@@ -104,6 +104,7 @@ Future<void> fileCopyToWebp(
     );
   }
   var pngTile = join(_tmpDir, '${basenameWithoutExtension(src)}.png');
+
   await fileWritePng(pngTile, image, force: true);
   // Ensure parent exists
   File(dst).parent.createSync(recursive: true);
@@ -119,7 +120,6 @@ class PngOptions {
   PngOptions({this.level = 6});
 }
 
-///
 /// Write png conditionnally
 Future<void> fileWritePng(
   String path,

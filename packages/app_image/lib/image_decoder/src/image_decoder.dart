@@ -25,5 +25,6 @@ Future<ImageMeta> getImageMetaFromBytes(Uint8List bytes) async {
   var image = decodeImage(bytes)!;
   var width = image.width;
   var height = image.height;
+
   return ImageMeta(encoding: encoding, width: width, height: height);
 }
