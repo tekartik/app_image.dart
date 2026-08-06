@@ -40,7 +40,7 @@ dependencies:
       url: https://github.com/tekartik/app_image.dart
       path: packages/app_pick_crop_image_flutter
     version: '>=0.1.0'
-  package_info_plus:
+  package_info_plus: 5.0.1
 
 dev_dependencies:
   flutter_test:
