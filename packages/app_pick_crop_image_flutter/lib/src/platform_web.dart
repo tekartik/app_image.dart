@@ -11,7 +11,7 @@ import 'package:web/web.dart' as web;
 /// Save image file.
 Future<void> saveImageFile({
   required Uint8List bytes,
-  required mimeType,
+  required String mimeType,
   required String filename,
 }) async {
   // prepare

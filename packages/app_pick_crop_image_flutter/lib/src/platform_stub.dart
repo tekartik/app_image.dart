@@ -7,7 +7,7 @@ import 'picked_file.dart';
 /// This proposes a save as dialog on Desktop and download it on the Web...
 Future<void> saveImageFile({
   required Uint8List bytes,
-  required mimeType,
+  required String mimeType,
   required String filename,
 }) => throw UnsupportedError('Web or io supported');
 

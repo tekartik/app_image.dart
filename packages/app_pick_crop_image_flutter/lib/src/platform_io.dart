@@ -19,14 +19,13 @@ Future<TkPickedFile?> pickImage({
   if ((platformContext.io?.isLinux ?? false) ||
       (platformContext.io?.isWindows ?? false) ||
       (platformContext.io?.isMacOS ?? false)) {
-    var ffpResult = await FilePicker.pickFiles(
+    var ffpFile = await FilePicker.pickFile(
       type: FileType.image,
-      allowMultiple: false,
 
       //allowedExtensions: ['.jpg', '.JPG', '.png', '.PNG']
     );
-    if (ffpResult != null && ffpResult.count >= 1) {
-      return TkPickedFilePlatform(ffpResult.files.first);
+    if (ffpFile != null) {
+      return TkPickedFilePlatform(ffpFile);
     }
   } else {
     var file = await _picker.pickImage(
@@ -44,13 +43,14 @@ Future<TkPickedFile?> pickImage({
 /// Save image file.
 Future<void> saveImageFile({
   required Uint8List bytes,
-  required mimeType,
+  required String mimeType,
   required String filename,
 }) async {
-  var path = await FilePicker.saveFile(fileName: filename);
-  if (path != null) {
-    await File(path).writeAsBytes(bytes);
-  }
+  await FilePicker.saveFile(
+    fileName: filename,
+    bytes: bytes,
+    mimeType: mimeType,
+  );
 }
 
 /// Read file.

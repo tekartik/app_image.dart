@@ -1,4 +1,13 @@
 # tekartik lints over google lints
+analyzer:
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
 include: package:tekartik_lints/package.yaml
 
 linter:
