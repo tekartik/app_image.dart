@@ -4,13 +4,6 @@ import 'package:image_picker/image_picker.dart' as image_picker;
 
 import 'picked_file.dart';
 
-/// This proposes a save as dialog on Desktop and download it on the Web...
-Future<void> saveImageFile({
-  required Uint8List bytes,
-  required String mimeType,
-  required String filename,
-}) => throw UnsupportedError('Web or io supported');
-
 /// Pick image.
 Future<TkPickedFile?> pickImage({
   required image_picker.ImageSource source,

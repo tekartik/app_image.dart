@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart' as image_picker;
+import 'package:tekaly_file_picker_flutter/file_picker_flutter.dart';
 import 'package:tekartik_app_platform/app_platform.dart';
 
 import 'picked_file.dart';
@@ -19,13 +19,12 @@ Future<TkPickedFile?> pickImage({
   if ((platformContext.io?.isLinux ?? false) ||
       (platformContext.io?.isWindows ?? false) ||
       (platformContext.io?.isMacOS ?? false)) {
-    var ffpFile = await FilePicker.pickFile(
-      type: FileType.image,
-
-      //allowedExtensions: ['.jpg', '.JPG', '.png', '.PNG']
-    );
-    if (ffpFile != null) {
-      return TkPickedFilePlatform(ffpFile);
+    /// The file picker handles the linux (file_selector/gtk) fallback and
+    /// remembers the last directory.
+    var pickedFile = await (tekalyFilePickerOrNull ?? tekalyFilePickerFlutter)
+        .pickImageFile();
+    if (pickedFile != null) {
+      return TkPickedFilePlatform(pickedFile);
     }
   } else {
     var file = await _picker.pickImage(
@@ -38,19 +37,6 @@ Future<TkPickedFile?> pickImage({
     return TkPickedFileImage(file);
   }
   return null;
-}
-
-/// Save image file.
-Future<void> saveImageFile({
-  required Uint8List bytes,
-  required String mimeType,
-  required String filename,
-}) async {
-  await FilePicker.saveFile(
-    fileName: filename,
-    bytes: bytes,
-    mimeType: mimeType,
-  );
 }
 
 /// Read file.

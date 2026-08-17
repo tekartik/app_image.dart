@@ -1,6 +1,6 @@
 name: tekartik_app_pick_crop_image_flutter
 description: Helper to pick and crop an image
-version: 0.2.0
+version: 0.3.0
 homepage:
 publish_to: none
 
@@ -26,7 +26,14 @@ dependencies:
       url: https://github.com/tekartik/app_flutter_utils.dart
       path: app_platform
     version: '>=0.1.0'
-  file_picker: '>=12.0.0'
+  tekaly_file_picker_flutter:
+    git:
+      url: https://github.com/tekartikprj/tekaly
+      path: flutter_packages/file_picker_flutter
+  tekaly_file_download:
+    git:
+      url: https://github.com/tekartikprj/tekaly
+      path: flutter_packages/file_download
 
 dev_dependencies:
   flutter_test:

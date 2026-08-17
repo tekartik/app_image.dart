@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tekaly_file_picker_flutter/file_picker_flutter.dart';
 
 /// Picked file result.
 abstract class TkPickedFile {
@@ -21,14 +21,14 @@ class TkPickedFileImage implements TkPickedFile {
   Future<Uint8List> readAsBytes() => xFile.readAsBytes();
 }
 
-/// Picked file platform.
+/// Picked file platform, from the file picker (desktop).
 class TkPickedFilePlatform implements TkPickedFile {
-  /// Platform file result.
-  final PlatformFile platformFile;
+  /// File picker result.
+  final TekalyPickedFile pickedFile;
 
   /// Picked file platform constructor.
-  TkPickedFilePlatform(this.platformFile);
+  TkPickedFilePlatform(this.pickedFile);
 
   @override
-  Future<Uint8List> readAsBytes() => platformFile.readAsBytes();
+  Future<Uint8List> readAsBytes() => pickedFile.readAsBytes();
 }
