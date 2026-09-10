@@ -83,6 +83,20 @@ void main() {
 `filterType`, `segments`, `pass`. `WebpEncodeOptions.preset(WebpPreset.photo)`
 gives the libwebp presets.
 
+### With the `image` package
+
+`package:tekartik_app_image_webp/image_web.dart` bridges to
+[`package:image`](https://pub.dev/packages/image) images:
+
+```dart
+import 'package:image/image.dart' as img;
+import 'package:tekartik_app_image_webp/image_web.dart';
+
+final img.Image? image = decodeImageWebp(bytes); // null if not a valid WebP
+final Uint8List webp = encodeImageWebp(image!, options: WebpEncodeOptions(quality: 80));
+// Lower level: imageToWebpImage(image) / webpImageToImage(webpImage).
+```
+
 See [example/webp_example.dart](example/webp_example.dart) and
 [example/webp_convert.dart](example/webp_convert.dart) (a small PNG/JPEG
 converter using the `image` package for the other formats).

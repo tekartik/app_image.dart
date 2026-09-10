@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:image/image.dart' as img;
 import 'package:path/path.dart' as p;
+import 'package:tekartik_app_image_webp/image_web.dart' show imageToWebpImage;
 import 'package:tekartik_app_image_webp/webp.dart';
 
 /// Directory of the test data files.
@@ -17,24 +18,6 @@ Uint8List readData(String name) =>
 WebpImage readPng(String name) {
   final im = img.decodePng(readData(name))!;
   return imageToWebpImage(im);
-}
-
-/// Converts an `image` package image to a [WebpImage].
-WebpImage imageToWebpImage(img.Image im) {
-  final w = im.width;
-  final h = im.height;
-  final rgba = Uint8List(w * h * 4);
-  for (var y = 0; y < h; y++) {
-    for (var x = 0; x < w; x++) {
-      final px = im.getPixel(x, y);
-      final i = (y * w + x) * 4;
-      rgba[i] = px.r.toInt();
-      rgba[i + 1] = px.g.toInt();
-      rgba[i + 2] = px.b.toInt();
-      rgba[i + 3] = im.hasAlpha ? px.a.toInt() : 255;
-    }
-  }
-  return WebpImage(w, h, rgba);
 }
 
 /// Decodes WebP [bytes] with the `image` package (reference decoder).
