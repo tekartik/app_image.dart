@@ -5,6 +5,7 @@ Helper for common image usage in app such as selecting and cropping image
 | Package | Description |
 | ---- | --------- |
 | [app_pick_crop_image_flutter](packages/app_pick_crop_image_flutter) | Library to pick and crop an image |
+| [app_image_webp](packages/app_image_webp) | Pure Dart WebP encoder and decoder |
 
 
 | Example | Description |

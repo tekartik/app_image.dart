@@ -6,5 +6,6 @@ workspace:
   - example/app_pick_crop_image_demo
   - packages/app_image
   - packages/app_image_web
+  - packages/app_image_webp
   - packages/app_pick_crop_image_flutter
   - repo_support

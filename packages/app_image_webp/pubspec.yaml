@@ -1,0 +1,19 @@
+name: tekartik_app_image_webp
+description: Pure Dart WebP encoder and decoder (lossy VP8, lossless VP8L, alpha)
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ^3.12.0
+
+dependencies:
+  collection: ">=1.19.1"
+
+dev_dependencies:
+  dev_build: ">=1.1.7+3"
+  image: '>=4.2.0'
+  lints: ">=6.1.0"
+  path: ">=1.9.1"
+  process_run: ">=1.2.1+1"
+  test: ">=1.31.0"
+resolution: workspace
