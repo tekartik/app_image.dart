@@ -1,5 +1,7 @@
 ## 0.1.0
 
+- Add agent skills (`skills/`) for decoding, encoding and codec development.
+
 - Add `image_web.dart` with `decodeImageWebp`, `encodeImageWebp`,
   `imageToWebpImage` and `webpImageToImage` bridging to `package:image`.
 

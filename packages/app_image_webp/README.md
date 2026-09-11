@@ -101,6 +101,13 @@ See [example/webp_example.dart](example/webp_example.dart) and
 [example/webp_convert.dart](example/webp_convert.dart) (a small PNG/JPEG
 converter using the `image` package for the other formats).
 
+## AI agent skills
+
+The package ships [agent skills](https://dart.dev/tools/pub/package-skills)
+in `skills/` (decoding, encoding, and codec development). In a project that
+depends on this package, run `dart pub global activate skills` then
+`dart pub global run skills get` to install them into `.agents/skills/`.
+
 ## Notes
 
 - Decoding is verified bit-exact against `dwebp` on lossy, lossless and
