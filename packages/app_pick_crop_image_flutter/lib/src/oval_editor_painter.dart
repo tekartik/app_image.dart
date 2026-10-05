@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:extended_image/extended_image.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/src/platform.dart';
 
 /// Oval editor crop layer painter.

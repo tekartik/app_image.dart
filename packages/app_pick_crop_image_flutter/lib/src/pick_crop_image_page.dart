@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
 import 'package:image/image.dart' as impl;
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/src/platform.dart';
 
 import 'crop_image_page.dart';
@@ -55,8 +55,9 @@ class ConvertPickCropResultParam {
 }
 
 /// Convert pick crop result callback.
-typedef ConvertPickCropResultCallback =
-    Future<ImageData> Function(ConvertPickCropResultParam param);
+typedef ConvertPickCropResultCallback = Future<ImageData> Function(
+  ConvertPickCropResultParam param,
+);
 
 Future<ImageData> _callbackDefault(ConvertPickCropResultParam param) async {
   var convertOptions = PickCropConvertImageOptions(

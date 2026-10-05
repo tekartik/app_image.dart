@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:extended_image/extended_image.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_image_web/app_image_web.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/src/pick_crop_image.dart';
 
@@ -68,8 +68,9 @@ class _CropImagePageState extends State<CropImagePage> {
                       initCropRectType: InitCropRectType.imageRect,
                       cropAspectRatio: widget.options.aspectRatio?.toDouble(),
                       cropLayerPainter: _cropLayerPainter,
-                      editActionDetailsIsChanged:
-                          (EditActionDetails? details) {},
+                      editActionDetailsIsChanged: (
+                        EditActionDetails? details,
+                      ) {},
                     );
                   }
                   return EditorConfig(

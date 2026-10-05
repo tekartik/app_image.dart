@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart' as image_picker;
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/src/platform.dart';
 
 import 'import.dart';

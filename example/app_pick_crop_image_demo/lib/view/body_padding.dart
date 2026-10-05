@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Horizontal tile padding.
 const horizontalTilePadding = EdgeInsets.symmetric(horizontal: 16);
