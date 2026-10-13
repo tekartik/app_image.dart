@@ -552,13 +552,6 @@ class Vp8Decoder {
     return mode;
   }
 
-  static const _kScan = [
-    0 + 0 * bps, 4 + 0 * bps, 8 + 0 * bps, 12 + 0 * bps, //
-    0 + 4 * bps, 4 + 4 * bps, 8 + 4 * bps, 12 + 4 * bps, //
-    0 + 8 * bps, 4 + 8 * bps, 8 + 8 * bps, 12 + 8 * bps, //
-    0 + 12 * bps, 4 + 12 * bps, 8 + 12 * bps, 12 + 12 * bps, //
-  ];
-
   void _doTransform(
     int bits,
     Int16List src,
@@ -677,7 +670,7 @@ class Vp8Decoder {
           );
         }
         for (var n = 0; n < 16; n++, bits = (bits << 2) & 0xffffffff) {
-          final dst = yOff + _kScan[n];
+          final dst = yOff + scan[n];
           predLuma4(block.imodes[n], yDst, dst, bps);
           _doTransform(bits, coeffs, n * 16, yDst, dst);
         }
@@ -686,7 +679,7 @@ class Vp8Decoder {
         predLuma16(predFunc, yDst, yOff, bps);
         if (bits != 0) {
           for (var n = 0; n < 16; n++, bits = (bits << 2) & 0xffffffff) {
-            _doTransform(bits, coeffs, n * 16, yDst, yOff + _kScan[n]);
+            _doTransform(bits, coeffs, n * 16, yDst, yOff + scan[n]);
           }
         }
       }

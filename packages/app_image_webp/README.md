@@ -112,9 +112,11 @@ depends on this package, run `dart pub global activate skills` then
 
 - Decoding is verified bit-exact against `dwebp` on lossy, lossless and
   alpha files with various encoder settings.
-- The encoder is a port of libwebp's algorithms; it does not aim at
-  producing byte-identical files, but the compression ratio and quality are
-  equivalent (identical at method 0..2, within ~1-3% at higher methods).
+- The encoder is a port of libwebp's algorithms. Lossy encoding takes the
+  same decisions as `cwebp` (identical decoded pixels at methods 0..6 on the
+  reference tests) with sizes within ~1-2%; lossless method 0 produces the
+  same bytes as `cwebp -lossless -m 0`, higher lossless methods are within a
+  few percent.
 - Performance: roughly 5-10x slower than the native libwebp for encoding,
   2-3x for decoding (VM, JIT).
 - All integer arithmetic is written to be safe when compiled to JavaScript

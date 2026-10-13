@@ -121,3 +121,16 @@ WebpImage paletteImage(int width, int height, int numColors, {int seed = 3}) {
   }
   return image;
 }
+
+/// CRC-32 (zlib/PNG polynomial) of [bytes], to compare pixels with a stored
+/// digest.
+int crc32(List<int> bytes) {
+  var crc = 0xffffffff;
+  for (final b in bytes) {
+    crc ^= b;
+    for (var k = 0; k < 8; k++) {
+      crc = (crc & 1) != 0 ? (crc >>> 1) ^ 0xedb88320 : crc >>> 1;
+    }
+  }
+  return crc ^ 0xffffffff;
+}

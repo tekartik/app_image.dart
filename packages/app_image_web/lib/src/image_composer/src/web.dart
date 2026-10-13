@@ -53,7 +53,7 @@ Future<ImageData> composeImage(ImageComposerData data) async {
     if (debugComposeImageWeb) {
       // ignore: avoid_print
       print(
-        '/web_compose (${layerCanvas.width}x${layerCanvas.width}) $src -> $dst',
+        '/web_compose (${layerCanvas.width}x${layerCanvas.height}) $src -> $dst',
       );
     }
     canvas!.drawImageToRect(layerCanvas, dst, sourceRect: src);

@@ -30,5 +30,15 @@ void main() {
       expect(isJpg(bytes), isFalse);
       expect(isPng(bytes), isTrue);
     });
+
+    test('blobToBytes webp', () async {
+      // Chrome encodes webp; a browser that cannot throws (never png bytes).
+      var canvas = OffscreenCanvas(1, 1);
+      var blob = await canvas.toBlob(const ImageEncodingWebp());
+      expect(blob.type, mimeTypeWebp);
+      var bytes = await blobToBytes(blob);
+      expect(isWebp(bytes), isTrue);
+      expect(isPng(bytes), isFalse);
+    });
   });
 }

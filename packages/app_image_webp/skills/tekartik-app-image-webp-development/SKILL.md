@@ -35,6 +35,10 @@ fixes can be cross-checked against the C code.
   `dwebp`, and spot-check new encoder settings with `cwebp` + `dwebp -pam`.
 - Encoder output must decode with `dwebp` without error; compare size and
   PSNR against `cwebp` at the same `-q`/`-m`.
+- `test/libwebp_reference_test.dart` pins the encoder to libwebp: CRC-32 of
+  the `dwebp -pam` pixels of `cwebp` lossy files (methods 0..6) and the bytes
+  of `cwebp -lossless -q 0 -m 0`. Keep it green; only regenerate its digests
+  and files with `cwebp`/`dwebp`.
 - Keep all integer code JavaScript safe:
   - never apply `>>` to a possibly negative value; use `sar(v, n)` from
     `int_utils.dart` (dart2js returns unsigned results for `>>`);

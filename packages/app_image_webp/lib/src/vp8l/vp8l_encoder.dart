@@ -293,6 +293,16 @@ bool _paletteHasNonMonotonousDeltas(Uint32List palette, int numColors) {
   return (signFound & (signFound << 1)) != 0;
 }
 
+/// Default palette order (kSortedDefault): sorted, with a leading
+/// transparent black moved last when it can then be omitted.
+Uint32List _paletteSortDefault(Uint32List paletteSorted) {
+  final numColors = paletteSorted.length;
+  if (paletteSorted[0] == 0 && numColors > 17) {
+    return Uint32List(numColors)..setRange(0, numColors - 1, paletteSorted, 1);
+  }
+  return Uint32List.fromList(paletteSorted);
+}
+
 /// Reorders [paletteSorted] to minimize deltas between consecutive entries.
 Uint32List paletteSortMinimizeDeltas(Uint32List paletteSorted) {
   var numColors = paletteSorted.length;
@@ -809,7 +819,10 @@ void encodeVp8lStream(
   Uint32List argb;
   var currentWidth = width;
   if (doPalette) {
-    final palette = paletteSortMinimizeDeltas(paletteSorted!);
+    // Low effort keeps the sorted palette (kSortedDefault in libwebp).
+    final palette = lowEffort
+        ? _paletteSortDefault(paletteSorted!)
+        : paletteSortMinimizeDeltas(paletteSorted!);
     // Encode palette.
     final encodedPaletteSize =
         (palette[paletteSize - 1] == 0 && paletteSize > 17)
@@ -864,13 +877,10 @@ void encodeVp8lStream(
       argb,
       exact,
     );
-    final bestBits = optimizeSampling(
-      image,
-      currentWidth,
-      height,
-      bits,
-      maxTransformBits,
-    );
+    // Low effort keeps the sampling of its single predictor (as libwebp).
+    final bestBits = lowEffort
+        ? bits
+        : optimizeSampling(image, currentWidth, height, bits, maxTransformBits);
     bw.putBits(1, 1);
     bw.putBits(0, 2); // PREDICTOR_TRANSFORM
     bw.putBits(bestBits - _minTransformBits, 3);

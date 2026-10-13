@@ -99,14 +99,6 @@ const i4ModeOffsets = [
   i4Hu4,
 ];
 
-/// Offsets of the sixteen 4x4 luma blocks in the work buffer.
-const scan = [
-  0 + 0 * bps, 4 + 0 * bps, 8 + 0 * bps, 12 + 0 * bps, //
-  0 + 4 * bps, 4 + 4 * bps, 8 + 4 * bps, 12 + 4 * bps, //
-  0 + 8 * bps, 4 + 8 * bps, 8 + 8 * bps, 12 + 8 * bps, //
-  0 + 12 * bps, 4 + 12 * bps, 8 + 12 * bps, 12 + 12 * bps, //
-];
-
 /// Offsets of the eight 4x4 chroma blocks (U then V) in the work buffer.
 const scanUv = [
   0 + 0 * bps, 4 + 0 * bps, 0 + 4 * bps, 4 + 4 * bps, //

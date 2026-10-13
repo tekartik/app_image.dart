@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:image/image.dart' as impl;
+// ignore: depend_on_referenced_packages, implementation_imports
+import 'package:tekartik_app_image/src/image_encode.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/pick_crop_image.dart';
 
 import 'import.dart';
@@ -43,14 +45,8 @@ Future<ImageData> imageResizeTo(
   image = impl.copyResize(image, width: dstWidth, height: dstHeight);
 
   var encoding = options.encoding;
-  late Uint8List imageBytes;
-  if (encoding is ImageEncodingJpg) {
-    imageBytes = asUint8List(impl.encodeJpg(image, quality: encoding.quality));
-  } else {
-    imageBytes = asUint8List(impl.encodePng(image));
-  }
   return ImageData(
-    bytes: imageBytes,
+    bytes: imageEncodeBytes(image, encoding),
     encoding: encoding,
     width: dstWidth,
     height: dstHeight,

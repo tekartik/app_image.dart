@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:image/image.dart' as impl;
 import 'package:tekartik_app_image/app_image.dart';
-import 'package:tekartik_common_utils/byte_utils.dart';
+import 'package:tekartik_app_image/src/image_encode.dart';
 import 'package:tekartik_common_utils/common_utils_import.dart';
 import 'package:tekartik_common_utils/size/size.dart';
 
@@ -112,7 +112,7 @@ Future<ImageData> composeImage(ImageComposerData data) async {
 
     var dst = layer.destination ?? fullImageDestination;
     if (debugComposeImage) {
-      log('/compose (${layerImage.width}x${layerImage.width}) $src -> $dst');
+      log('/compose (${layerImage.width}x${layerImage.height}) $src -> $dst');
     }
 
     impl.compositeImage(
@@ -136,14 +136,7 @@ Future<ImageData> composeImage(ImageComposerData data) async {
     );
   } else {
     var encoding = data.encoding;
-    late Uint8List imageBytes;
-    if (encoding is ImageEncodingJpg) {
-      imageBytes = asUint8List(
-        impl.encodeJpg(image!, quality: encoding.quality),
-      );
-    } else {
-      imageBytes = asUint8List(impl.encodePng(image!));
-    }
+    var imageBytes = imageEncodeBytes(image!, encoding);
     return ImageData(
       bytes: imageBytes,
       encoding: encoding,

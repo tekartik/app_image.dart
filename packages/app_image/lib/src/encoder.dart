@@ -1,35 +1,19 @@
-import 'dart:typed_data';
 import 'package:image/image.dart' as img;
 
 import 'package:tekartik_app_image/app_image.dart';
 
-final _defaultEncoding = ImageEncodingJpg(quality: 50);
+import 'image_encode.dart';
 
 /// Default to jpg 50
+///
+/// Throws an [UnsupportedError] for an encoding other than jpg, png or webp.
 Future<ImageData> imageEncode(
   img.Image image, {
   ImageEncoding? encoding,
 }) async {
   encoding ??= ImageEncodingJpg(quality: 50);
-  late Uint8List imageBytes;
-
-  Future<void> decodeJpg(ImageEncodingJpg encoding) async {
-    imageBytes = Uint8List.fromList(
-      img.encodeJpg(image, quality: encoding.quality),
-    );
-  }
-
-  if (encoding is ImageEncodingJpg) {
-    await decodeJpg(encoding);
-  } else if (encoding is ImageEncodingPng) {
-    imageBytes = Uint8List.fromList(img.encodePng(image));
-  } else {
-    encoding = _defaultEncoding;
-
-    await decodeJpg(_defaultEncoding);
-  }
   return ImageData(
-    bytes: imageBytes,
+    bytes: imageEncodeBytes(image, encoding),
     encoding: encoding,
     width: image.width,
     height: image.height,

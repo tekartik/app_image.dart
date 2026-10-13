@@ -12,6 +12,11 @@ dependencies:
       url: https://github.com/tekartik/common_utils.dart
     version: '>=0.13.2'
   image: '>=4.2.0'
+  tekartik_app_image_webp:
+    git:
+      url: https://github.com/tekartik/app_image.dart
+      path: packages/app_image_webp
+    version: '>=0.1.0'
   collection: ">=1.19.1"
   dev_build: ">=1.1.8+2"
   path: ">=1.9.1"

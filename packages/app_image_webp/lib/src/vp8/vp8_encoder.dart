@@ -7,9 +7,10 @@ import 'dart:typed_data';
 import '../int_utils.dart';
 import 'bool_writer.dart';
 import 'cost.dart';
-import 'dsp.dart' show bps;
+import 'dsp.dart' show bps, scan, transformWht;
 import 'enc_dsp.dart';
 import 'tables.dart';
+import 'tokens.dart';
 import 'yuv.dart';
 
 /// Configuration of the lossy encoder (mirrors libwebp's `WebPConfig`).
@@ -939,7 +940,7 @@ class Vp8Encoder {
       }
     }
     // Transform back.
-    _transformWhtToDc(_dcTmp16, tmp);
+    transformWht(_dcTmp16, 0, tmp, 0);
     for (var n = 0; n < 16; n += 2) {
       iTransform(
         it.yuvP,
@@ -952,33 +953,6 @@ class Vp8Encoder {
       );
     }
     return nz;
-  }
-
-  static void _transformWhtToDc(Int16List input, Int16List out) {
-    final tmp = Int32List(16);
-    for (var i = 0; i < 4; i++) {
-      final a0 = input[i] + input[12 + i];
-      final a1 = input[4 + i] + input[8 + i];
-      final a2 = input[4 + i] - input[8 + i];
-      final a3 = input[i] - input[12 + i];
-      tmp[i] = a0 + a1;
-      tmp[8 + i] = a0 - a1;
-      tmp[4 + i] = a3 + a2;
-      tmp[12 + i] = a3 - a2;
-    }
-    var o = 0;
-    for (var i = 0; i < 4; i++) {
-      final dc = tmp[i * 4] + 3;
-      final a0 = dc + tmp[3 + i * 4];
-      final a1 = tmp[1 + i * 4] + tmp[2 + i * 4];
-      final a2 = tmp[1 + i * 4] - tmp[2 + i * 4];
-      final a3 = dc - tmp[3 + i * 4];
-      out[o] = sar(a0 + a1, 3);
-      out[o + 16] = sar(a3 + a2, 3);
-      out[o + 32] = sar(a0 - a1, 3);
-      out[o + 48] = sar(a3 - a2, 3);
-      o += 64;
-    }
   }
 
   final _tmp4 = Int16List(16);
@@ -1786,6 +1760,52 @@ class Vp8Encoder {
     it.bytesToNz();
   }
 
+  /// Records the tokens of the macroblock (RecordTokens in frame_enc.c).
+  void _recordTokens(_Iterator it, _ModeScore rd, Vp8TokenBuffer tokens) {
+    final res = _res;
+    it.nzToBytes();
+    if (it.mb.type == 1) {
+      res.first = 0;
+      res.coeffType = 1;
+      res.setCoeffs(rd.yDcLevels, 0);
+      it.topNz[8] = it.leftNz[8] = recordCoeffTokens(
+        proba,
+        tokens,
+        it.topNz[8] + it.leftNz[8],
+        res,
+      );
+      res.first = 1;
+      res.coeffType = 0;
+    } else {
+      res.first = 0;
+      res.coeffType = 3;
+    }
+    for (var y = 0; y < 4; y++) {
+      for (var x = 0; x < 4; x++) {
+        final ctx = it.topNz[x] + it.leftNz[y];
+        res.setCoeffs(rd.yAcLevels, (x + y * 4) * 16);
+        it.topNz[x] = it.leftNz[y] = recordCoeffTokens(proba, tokens, ctx, res);
+      }
+    }
+    res.first = 0;
+    res.coeffType = 2;
+    for (var ch = 0; ch <= 2; ch += 2) {
+      for (var y = 0; y < 2; y++) {
+        for (var x = 0; x < 2; x++) {
+          final ctx = it.topNz[4 + ch + x] + it.leftNz[4 + ch + y];
+          res.setCoeffs(rd.uvLevels, (ch * 2 + x + y * 2) * 16);
+          it.topNz[4 + ch + x] = it.leftNz[4 + ch + y] = recordCoeffTokens(
+            proba,
+            tokens,
+            ctx,
+            res,
+          );
+        }
+      }
+    }
+    it.bytesToNz();
+  }
+
   //----------------------------------------------------------------------------
   // Probabilities
 
@@ -1910,9 +1930,7 @@ class Vp8Encoder {
   void _statLoop() {
     final method = _method;
     final fastProbe = method == 0 || method == 3;
-    // Methods >= 3 refine the probabilities with an extra statistics pass
-    // (libwebp's token loop refreshes them continuously).
-    var numPassLeft = config.pass.clamp(1, 10) + (method >= 3 ? 1 : 0);
+    var numPassLeft = config.pass.clamp(1, 10);
     final rdOpt = method >= 3 ? _RdOpt.basic : _RdOpt.none;
     var nbMbs = mbW * mbH;
     proba.stats.fillRange(0, proba.stats.length, 0);
@@ -1923,11 +1941,10 @@ class Vp8Encoder {
         nbMbs = nbMbs > 200 ? nbMbs >> 2 : 50;
       }
     }
-    const partition0SizeLimit = ((1 << 19) - 2048) << 11;
     while (numPassLeft-- > 0) {
       final isLastPass = numPassLeft == 0 || _maxI4HeaderBits == 0;
       final sizeP0 = _oneStatPass(rdOpt, nbMbs, config.quality);
-      if (_maxI4HeaderBits > 0 && sizeP0 > partition0SizeLimit) {
+      if (_maxI4HeaderBits > 0 && sizeP0 > _kPartition0SizeLimit) {
         numPassLeft++;
         _maxI4HeaderBits >>= 1;
         continue;
@@ -1955,7 +1972,17 @@ class Vp8Encoder {
 
   static const _kAverageBytesPerMb = [50, 24, 16, 9, 7, 5, 3, 2];
 
+  /// Partition 0 size limit, in 1/256 bits (PARTITION0_SIZE_LIMIT).
+  static const _kPartition0SizeLimit = ((1 << 19) - 2048) << 11;
+
+  /// Methods >= 3 code through a token buffer (VP8EncTokenLoop), the others
+  /// collect statistics first (StatLoop + VP8EncLoop).
   void _encLoop() {
+    if (_rdOptLevel != _RdOpt.none) {
+      _tokenLoop();
+      _adjustFilterStrength();
+      return;
+    }
     _statLoop();
     final averageBytesPerMb = _kAverageBytesPerMb[_baseQuant >> 4];
     _part = Vp8BoolWriter(mbW * mbH * averageBytesPerMb);
@@ -1973,6 +2000,57 @@ class Vp8Encoder {
       it.saveBoundary();
     } while (it.next());
     _adjustFilterStrength();
+  }
+
+  final _tokens = Vp8TokenBuffer();
+
+  /// Coding loop through the token buffer (VP8EncTokenLoop): each pass
+  /// refreshes the probabilities about eight times, the statistics of the
+  /// last pass (reset at its start) give the final ones, used to code its
+  /// tokens.
+  void _tokenLoop() {
+    const minCount = 96;
+    var maxCount = (mbW * mbH) >> 3;
+    if (maxCount < minCount) maxCount = minCount;
+    var numPassLeft = config.pass.clamp(1, 10);
+    final it = _it;
+    final tokens = _tokens;
+    // The skip probability is not used with tokens.
+    proba.useSkipProba = false;
+    while (numPassLeft-- > 0) {
+      final isLastPass = numPassLeft == 0 || _maxI4HeaderBits == 0;
+      var sizeP0 = 0;
+      var cnt = maxCount;
+      it.reset();
+      _setLoopParams(config.quality);
+      if (isLastPass) {
+        proba.stats.fillRange(0, proba.stats.length, 0);
+      }
+      tokens.clear();
+      do {
+        final info = _info;
+        it.import(null);
+        if (--cnt < 0) {
+          _finalizeTokenProbas();
+          proba.calculateLevelCosts();
+          cnt = maxCount;
+        }
+        _decimate(it, info, _rdOptLevel);
+        _recordTokens(it, info, tokens);
+        sizeP0 += info.h;
+        it.saveBoundary();
+      } while (it.next());
+      sizeP0 += _segmentHdrSize;
+      if (_maxI4HeaderBits > 0 && sizeP0 > _kPartition0SizeLimit) {
+        numPassLeft++;
+        _maxI4HeaderBits >>= 1;
+        continue;
+      }
+      if (isLastPass) break;
+    }
+    _finalizeTokenProbas();
+    _part = Vp8BoolWriter(mbW * mbH * _kAverageBytesPerMb[_baseQuant >> 4]);
+    tokens.emit(_part, proba.coeffs);
   }
 
   //----------------------------------------------------------------------------

@@ -119,30 +119,37 @@ class OffscreenCanvas {
 
   // https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas/convertToBlob
   /// Convert to blob.
+  ///
+  /// Throws an [UnsupportedError] if the browser cannot encode [encoding]
+  /// (webp in Safari): the blob always matches the encoding mime type.
   Future<web.Blob> toBlob(ImageEncoding encoding) async {
+    if (encoding is! ImageEncodingJpg &&
+        encoding is! ImageEncodingPng &&
+        encoding is! ImageEncodingWebp) {
+      throw UnsupportedError('Unsupported image encoding $encoding');
+    }
+    web.Blob blob;
     if (_offScreenCanvas != null) {
       var blobOptions = web.ImageEncodeOptions();
       blobOptions.type = encoding.mimeType;
       if (encoding is ImageEncodingJpg) {
         blobOptions.quality = encoding.quality / 100;
-      } else if (encoding is ImageEncodingPng) {
-      } else {
-        throw UnsupportedError('$encoding');
       }
-      return await _offScreenCanvas!.convertToBlob(blobOptions).toDart;
+      blob = await _offScreenCanvas!.convertToBlob(blobOptions).toDart;
     } else {
-      if (encoding is ImageEncodingJpg) {
-        return await canvasToBlob(
-          _canvasElement!,
-          encoding.mimeType,
-          encoding.quality.round(),
-        );
-      } else if (encoding is ImageEncodingPng) {
-        return await canvasToBlob(_canvasElement!, encoding.mimeType, null);
-      } else {
-        throw UnsupportedError('$encoding');
-      }
+      blob = await canvasToBlob(
+        _canvasElement!,
+        encoding.mimeType,
+        encoding is ImageEncodingJpg ? encoding.quality.round() : null,
+      );
     }
+    // A browser that cannot encode a type silently falls back to png.
+    if (blob.type != encoding.mimeType) {
+      throw UnsupportedError(
+        'This browser cannot encode $encoding (it produced ${blob.type})',
+      );
+    }
+    return blob;
   }
 
   /// Draw image to rect.
