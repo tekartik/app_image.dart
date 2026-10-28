@@ -15,7 +15,13 @@ Uint8List imageEncodeBytes(img.Image image, ImageEncoding encoding) {
   } else if (encoding is ImageEncodingPng) {
     return asUint8List(img.encodePng(image));
   } else if (encoding is ImageEncodingWebp) {
-    return encodeImageWebp(image);
+    var quality = encoding.quality == imageEncodingWebpQualityUnknown
+        ? imageEncodingWebpQualityDefault
+        : encoding.quality;
+    return encodeImageWebp(
+      image,
+      options: WebpEncodeOptions(quality: quality.toDouble()),
+    );
   }
   throw UnsupportedError('Unsupported image encoding $encoding');
 }

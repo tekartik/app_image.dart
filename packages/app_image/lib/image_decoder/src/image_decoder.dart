@@ -12,7 +12,9 @@ ImageEncoding getImageEncodingFromBytes(Uint8List bytes) {
   } else if (isPng(bytes)) {
     encoding = const ImageEncodingPng();
   } else if (isWebp(bytes)) {
-    encoding = const ImageEncodingWebp();
+    encoding = const ImageEncodingWebp(
+      quality: imageEncodingWebpQualityUnknown,
+    );
   } else {
     throw UnsupportedError('Unsupported image type');
   }

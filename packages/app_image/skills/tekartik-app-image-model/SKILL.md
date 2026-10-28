@@ -45,10 +45,13 @@ and in `package:image`.
     `CropRect`.
   * `package:tekartik_app_image/app_color.dart` — `argbToColorUint32`.
 * `ImageEncoding` is the abstract type with `mimeType` and `extension`.
-  Use `const ImageEncodingPng()` and `const ImageEncodingWebp()` (both const
-  constructors) and `ImageEncodingJpg(quality: 0..100)`. A quality outside
-  `-1..100` throws `ArgumentError`; `imageEncodingJpgQualityUnknown` (`-1`)
-  means "jpeg, quality unknown" and is what a decoder reports.
+  Use `const ImageEncodingPng()`, `ImageEncodingJpg(quality: 0..100)` and
+  `const ImageEncodingWebp(quality: 0..100)` (const, `quality` defaults to
+  `imageEncodingWebpQualityDefault`, 75). A jpg quality outside `-1..100`
+  throws `ArgumentError` (webp only asserts, its constructor is const);
+  `imageEncodingJpgQualityUnknown` / `imageEncodingWebpQualityUnknown` (`-1`)
+  mean "quality unknown" and are what a decoder reports. An unknown webp
+  quality encodes with the default one.
 * Switch on the encoding with `is` (`if (encoding is ImageEncodingJpg)`), never
   by comparing `mimeType` strings by hand. Use `encoding.extension` to name
   output files so the extension always matches the bytes.
@@ -70,7 +73,8 @@ and in `package:image`.
   still returns true.
 * `getImageEncodingFromBytes(bytes)` maps those checks to an `ImageEncoding`
   and throws `UnsupportedError` for anything else (gif, bmp, tiff...). A jpeg
-  detected this way has `quality == imageEncodingJpgQualityUnknown`.
+  detected this way has `quality == imageEncodingJpgQualityUnknown`, a webp
+  `quality == imageEncodingWebpQualityUnknown`.
 * `getImageMetaFromBytes(bytes)` is async and **fully decodes** the image with
   `package:image` to get `width`/`height`. Call it only when the size is
   really needed, and not in a tight loop; use `getImageEncodingFromBytes` when

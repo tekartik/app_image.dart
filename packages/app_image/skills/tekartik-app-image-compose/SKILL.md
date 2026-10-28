@@ -54,10 +54,10 @@ out to `cwebp`. All of them return or write jpg/png/webp bytes described by an
   to the whole output image.
 * `ImageEncodingJpg` (honours `quality`), `ImageEncodingPng` and
   `ImageEncodingWebp` (pure Dart lossy encoder of `tekartik_app_image_webp`,
-  default options, quality 75) are encoded; any other encoding throws
+  honours `quality`, default options otherwise) are encoded; any other encoding throws
   `UnsupportedError`. The bytes always match the encoding. The canvas based
-  composer of `tekartik_app_image_web` lets the browser encode and throws
-  `UnsupportedError` when it cannot produce webp (Safari).
+  composer of `tekartik_app_image_web` lets the browser encode and falls back
+  to the same pure Dart webp encoder when it cannot produce webp (Safari).
 * This implementation is pure Dart (`package:image`) and therefore CPU bound:
   fine for small images and for the VM, slow for big photos. On the web (and
   in Flutter web), prefer the canvas based `composeImage`/`resizeTo` of

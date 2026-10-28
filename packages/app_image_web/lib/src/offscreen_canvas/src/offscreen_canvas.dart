@@ -8,6 +8,7 @@ import 'dart:typed_data';
 
 import 'package:tekartik_app_image/app_image.dart';
 import 'package:tekartik_app_image_web/src/import.dart';
+import 'package:tekartik_app_image_webp/webp.dart';
 // ignore: depend_on_referenced_packages
 import 'package:tekartik_common_utils/size/size.dart';
 import 'package:web/web.dart' as web;
@@ -117,34 +118,70 @@ class OffscreenCanvas {
     return completer.future;
   }
 
+  /// Encodes the canvas pixels as webp with the pure Dart encoder
+  /// (`tekartik_app_image_webp`, lossy, quality 75 by default).
+  ///
+  /// Synchronous and CPU bound: [toBlob] only uses it when the browser
+  /// cannot encode webp itself (Safari).
+  Uint8List toWebpBytes({
+    WebpEncodeOptions options = const WebpEncodeOptions(),
+  }) {
+    final imageData = _canvasElement != null
+        ? _canvasElement!.context2D.getImageData(0, 0, width, height)
+        : offscreenCanvasRenderingContext2D!.getImageData(0, 0, width, height);
+    final rgba = Uint8List.sublistView(imageData.data.toDart);
+    return encodeWebp(WebpImage(width, height, rgba), options: options);
+  }
+
+  web.Blob _toWebpBlobDart(int quality) => web.Blob(
+    [
+      toWebpBytes(options: WebpEncodeOptions(quality: quality.toDouble())).toJS,
+    ].toJS,
+    web.BlobPropertyBag(type: mimeTypeWebp),
+  );
+
+  /// False once the browser returned another format for webp.
+  static bool? _browserWebpSupported;
+
   // https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas/convertToBlob
   /// Convert to blob.
   ///
-  /// Throws an [UnsupportedError] if the browser cannot encode [encoding]
-  /// (webp in Safari): the blob always matches the encoding mime type.
+  /// Webp falls back to the pure Dart encoder ([toWebpBytes]) when the browser
+  /// cannot encode it (Safari): the blob always matches the encoding mime type.
   Future<web.Blob> toBlob(ImageEncoding encoding) async {
     if (encoding is! ImageEncodingJpg &&
         encoding is! ImageEncodingPng &&
         encoding is! ImageEncodingWebp) {
       throw UnsupportedError('Unsupported image encoding $encoding');
     }
+    int? quality;
+    if (encoding is ImageEncodingJpg) {
+      quality = encoding.quality;
+    } else if (encoding is ImageEncodingWebp) {
+      quality = encoding.quality == imageEncodingWebpQualityUnknown
+          ? imageEncodingWebpQualityDefault
+          : encoding.quality;
+      if (_browserWebpSupported == false) {
+        return _toWebpBlobDart(quality);
+      }
+    }
     web.Blob blob;
     if (_offScreenCanvas != null) {
       var blobOptions = web.ImageEncodeOptions();
       blobOptions.type = encoding.mimeType;
-      if (encoding is ImageEncodingJpg) {
-        blobOptions.quality = encoding.quality / 100;
+      if (quality != null) {
+        blobOptions.quality = quality / 100;
       }
       blob = await _offScreenCanvas!.convertToBlob(blobOptions).toDart;
     } else {
-      blob = await canvasToBlob(
-        _canvasElement!,
-        encoding.mimeType,
-        encoding is ImageEncodingJpg ? encoding.quality.round() : null,
-      );
+      blob = await canvasToBlob(_canvasElement!, encoding.mimeType, quality);
     }
     // A browser that cannot encode a type silently falls back to png.
     if (blob.type != encoding.mimeType) {
+      if (encoding is ImageEncodingWebp) {
+        _browserWebpSupported = false;
+        return _toWebpBlobDart(quality!);
+      }
       throw UnsupportedError(
         'This browser cannot encode $encoding (it produced ${blob.type})',
       );

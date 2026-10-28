@@ -38,8 +38,9 @@ call site works everywhere.
     `ResizeOptions` and `CropRect` re-exported from `tekartik_app_image`.
   * `package:tekartik_app_image_web/image_decoder.dart` —
     `getImageMetaFromBytes`.
-  Encodings (`ImageEncodingJpg`, `ImageEncodingPng`), `ImageData` and
-  `ImageMeta` come from `package:tekartik_app_image/app_image.dart`.
+  Encodings (`ImageEncodingJpg`, `ImageEncodingPng`, `ImageEncodingWebp`),
+  `ImageData` and `ImageMeta` come from
+  `package:tekartik_app_image/app_image.dart`.
 * `resizeTo(Uint8List bytes, {required ResizeOptions options})` returns a
   `Future<ImageData>`: bytes plus the final `width`, `height` and `encoding`.
   It always re-encodes, even when nothing is resized.
@@ -54,10 +55,13 @@ call site works everywhere.
   source to take. Give it the rectangle produced by your crop UI (that is what
   `tekartik_app_pick_crop_image_flutter` does).
 * `encoding` defaults to `const ImageEncodingPng()`. Use
-  `ImageEncodingJpg(quality: 0..100)` for photos. Do **not** pass
-  `ImageEncodingWebp`: the canvas path throws `UnsupportedError` and the VM
-  fallback silently returns png bytes. Encode webp with the
-  `tekartik_app_image_webp` package instead.
+  `ImageEncodingJpg(quality: 0..100)` for photos.
+  `ImageEncodingWebp(quality: 0..100)` (default 75) is encoded by the browser
+  canvas when it can (Chrome, Firefox); otherwise (Safari) the canvas pixels
+  go through the pure Dart encoder of `tekartik_app_image_webp` (lossy, same
+  quality scale, both are libwebp), which is synchronous: about
+  0.2 s for 640x480, 1.3 s for 1920x1440 in Chrome. The VM uses the same pure
+  Dart encoder. The bytes always match the encoding.
 * `getImageMetaFromBytes(bytes)` returns a `Future<ImageMeta>` (width, height,
   encoding). On the web it loads the bytes into an image element (no pixel
   decoding in Dart, so it is fast and supports whatever the browser supports);

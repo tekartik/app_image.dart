@@ -11,6 +11,13 @@ import 'package:test/test.dart';
 void main() {
   img.Image redImage() =>
       img.Image(width: 6, height: 4)..clear(img.ColorRgb8(255, 0, 0));
+  img.Image noiseImage() {
+    var image = img.Image(width: 32, height: 32);
+    for (final p in image) {
+      p.setRgb((p.x * 37) % 256, (p.y * 91) % 256, (p.x * p.y * 13) % 256);
+    }
+    return image;
+  }
 
   group('image encode', () {
     test('imageEncode webp', () async {
@@ -22,6 +29,18 @@ void main() {
       expect(isWebp(data.bytes), isTrue);
       var decoded = decodeImageWebp(data.bytes)!;
       expect([decoded.width, decoded.height], [6, 4]);
+    });
+    test('imageEncode webp quality', () async {
+      Future<int> size(int quality) async => (await imageEncode(
+        noiseImage(),
+        encoding: ImageEncodingWebp(quality: quality),
+      )).bytes.length;
+      expect(await size(10), lessThan(await size(95)));
+      // Unknown (decoded) quality encodes with the default one.
+      expect(
+        await size(imageEncodingWebpQualityUnknown),
+        await size(imageEncodingWebpQualityDefault),
+      );
     });
     test('imageEncode png/jpg', () async {
       var data = await imageEncode(

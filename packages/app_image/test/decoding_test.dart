@@ -26,6 +26,10 @@ void main() {
       var encoding = getImageEncodingFromBytes(bytes);
 
       expect(encoding, isA<ImageEncodingWebp>());
+      expect(
+        (encoding as ImageEncodingWebp).quality,
+        imageEncodingWebpQualityUnknown,
+      );
       expect(encoding.mimeType, 'image/webp');
       expect(encoding.extension, '.webp');
     });

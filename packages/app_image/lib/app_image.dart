@@ -16,7 +16,9 @@ export 'src/encoding.dart'
         ImageEncodingJpg,
         ImageEncodingPng,
         ImageEncodingWebp,
-        imageEncodingJpgQualityUnknown;
+        imageEncodingJpgQualityUnknown,
+        imageEncodingWebpQualityUnknown,
+        imageEncodingWebpQualityDefault;
 export 'src/image_result.dart' show ImageData, ImageMeta;
 export 'src/image_source.dart'
     show ImageSourceData, ImageSourceAsyncData, ImageSource;
