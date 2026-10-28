@@ -33,5 +33,11 @@ void main() {
       expect(encoding.mimeType, 'image/webp');
       expect(encoding.extension, '.webp');
     });
+    test('webp meta', () async {
+      var bytes = await File(join('data', 'white_1x1.webp')).readAsBytes();
+      var meta = await getImageMetaFromBytes(bytes);
+      expect(meta.encoding, isA<ImageEncodingWebp>());
+      expect([meta.width, meta.height], [1, 1]);
+    });
   });
 }

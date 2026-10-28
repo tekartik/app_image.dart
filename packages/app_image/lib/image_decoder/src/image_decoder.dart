@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
-import 'package:image/image.dart';
 import 'package:tekartik_app_image/app_image.dart';
 import 'package:tekartik_app_image/src/image_bytes_utils.dart';
+import 'package:tekartik_app_image/src/image_encode.dart';
 
 /// Get image encoding from bytes
 ImageEncoding getImageEncodingFromBytes(Uint8List bytes) {
@@ -24,7 +24,7 @@ ImageEncoding getImageEncodingFromBytes(Uint8List bytes) {
 /// Get image meta from bytes
 Future<ImageMeta> getImageMetaFromBytes(Uint8List bytes) async {
   var encoding = getImageEncodingFromBytes(bytes);
-  var image = decodeImage(bytes)!;
+  var image = imageDecodeBytes(bytes);
   var width = image.width;
   var height = image.height;
 

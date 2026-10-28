@@ -94,7 +94,7 @@ Future<ImageData> composeImage(ImageComposerData data) async {
     initImage();
   }
   for (var layer in data.layers) {
-    var layerImage = impl.decodeImage(await layer.getSourceBytes())!;
+    var layerImage = imageDecodeBytes(await layer.getSourceBytes());
     var src = layer.sourceCropRect;
     var ratio = src?.size.ratio ?? (layerImage.width / layerImage.height);
     if (image == null) {

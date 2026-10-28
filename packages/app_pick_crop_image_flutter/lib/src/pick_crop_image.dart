@@ -150,6 +150,18 @@ class PickCropImageOptions extends PickCropBaseImageOptions {
   /// Auto crop the image (fit, center)
   final bool autoCrop;
 
+  /// The title of the crop page (`Crop the thumbnail`); with one, the page
+  /// has an app bar (close, the title, [confirmLabel]) instead of the
+  /// floating buttons.
+  final String? title;
+
+  /// One line under the image (`Drag and zoom to frame the square`).
+  final String? hint;
+
+  /// The label of the confirm button of the app bar, a check icon only by
+  /// default.
+  final String? confirmLabel;
+
   /// Pick crop image options constructor.
   PickCropImageOptions({
     super.width,
@@ -159,6 +171,9 @@ class PickCropImageOptions extends PickCropBaseImageOptions {
     this.ovalCropMask = false,
     this.autoCrop = false,
     this.source = const PickCropImageSourceGallery(),
+    this.title,
+    this.hint,
+    this.confirmLabel,
   });
 }
 

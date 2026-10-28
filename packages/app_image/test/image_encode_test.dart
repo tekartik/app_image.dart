@@ -5,7 +5,9 @@ import 'package:tekartik_app_image/app_image.dart';
 import 'package:tekartik_app_image/app_image_bytes_utils.dart';
 import 'package:tekartik_app_image/image_composer/image_composer.dart';
 import 'package:tekartik_app_image/src/encoder.dart';
+import 'package:tekartik_app_image/src/image_encode.dart';
 import 'package:tekartik_app_image_webp/image_web.dart';
+import 'package:tekartik_common_utils/size/size.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -71,6 +73,41 @@ void main() {
       var decoded = decodeImageWebp(data.bytes)!;
       expect([decoded.width, decoded.height], [6, 4]);
       expect([data.width, data.height], [6, 4]);
+    });
+    test('composeImage webp source cropped', () async {
+      // A webp source (decoded by the webp decoder) cropped to a square, as
+      // a thumbnail cropped from a webp cover.
+      var source = ImageSource.bytes(
+        encodeImageWebp(
+          noiseImage(),
+          options: const WebpEncodeOptions(quality: 90),
+        ),
+      );
+      var data = await composeImage(
+        ImageComposerData(
+          layers: [
+            ImageLayerData(
+              source: source,
+              sourceCropRect: Rect<double>.fromLTWH(8, 4, 16, 16),
+            ),
+          ],
+          width: 8,
+          height: 8,
+          encoding: const ImageEncodingPng(),
+        ),
+      );
+      expect(isPng(data.bytes), isTrue);
+      expect([data.width, data.height], [8, 8]);
+    });
+    test('imageDecodeBytes', () {
+      var webp = encodeImageWebp(redImage());
+      expect(imageDecodeBytes(webp).width, 6);
+      var png = Uint8List.fromList(img.encodePng(redImage()));
+      expect(imageDecodeBytes(png).height, 4);
+      expect(
+        () => imageDecodeBytes(Uint8List.fromList([1, 2, 3])),
+        throwsFormatException,
+      );
     });
   });
 }
