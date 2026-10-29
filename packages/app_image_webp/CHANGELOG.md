@@ -1,5 +1,7 @@
 ## 0.1.0
 
+- Export `AlphaFiltering` (the type of `WebpEncodeOptions.alphaFiltering`).
+
 - Add agent skills (`skills/`) for decoding, encoding and codec development.
 
 - Add `image_web.dart` with `decodeImageWebp`, `encodeImageWebp`,

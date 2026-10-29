@@ -1,0 +1,37 @@
+name: tekartik_app_image_webp_web_worker
+description: >-
+  WebP encoding off the main thread: the pure Dart encoder of
+  tekartik_app_image_webp in a web worker (an isolate on io), and the setup
+  step building the worker script of an app.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ^3.12.0
+
+dependencies:
+  tekartik_app_image_webp:
+    git:
+      url: https://github.com/tekartik/app_image.dart
+      path: packages/app_image_webp
+    version: '>=0.1.0'
+  tekartik_web_worker_build:
+    git:
+      url: https://github.com/tekartik/app_build.dart
+      path: packages/web_worker_build
+    version: '>=0.1.0'
+  web: ">=1.1.0"
+
+dev_dependencies:
+  # run_ci runs the browser tests of the packages depending on it.
+  build_web_compilers: ">=4.7.0"
+  lints: ">=6.1.0"
+  tekartik_lints:
+    git:
+      url: https://github.com/tekartik/common.dart
+      path: packages/lints
+  test: ">=1.31.0"
+
+executables:
+  setup:
+resolution: workspace

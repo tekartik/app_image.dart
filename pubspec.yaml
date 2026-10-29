@@ -7,5 +7,6 @@ workspace:
   - packages/app_image
   - packages/app_image_web
   - packages/app_image_webp
+  - packages/app_image_webp_web_worker
   - packages/app_pick_crop_image_flutter
   - repo_support

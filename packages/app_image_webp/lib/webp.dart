@@ -14,5 +14,6 @@ library;
 
 export 'src/decoder.dart' show decodeWebp, webpInfo;
 export 'src/encoder.dart' show encodeWebp, WebpEncodeOptions, WebpPreset;
+export 'src/vp8/alpha.dart' show AlphaFiltering;
 export 'src/webp_image.dart'
     show WebpFormat, WebpFormatException, WebpImage, WebpInfo;

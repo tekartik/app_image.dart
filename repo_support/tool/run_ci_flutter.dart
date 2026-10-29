@@ -6,6 +6,7 @@ Future main() async {
     'app_image',
     'app_image_web',
     'app_image_webp',
+    'app_image_webp_web_worker',
     'app_pick_crop_image_flutter',
   ]) {
     await packageRunCi(join('..', 'packages', dir));
