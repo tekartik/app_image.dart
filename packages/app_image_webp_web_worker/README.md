@@ -7,10 +7,22 @@ runs in an isolate.
 
 The main user is Safari: it cannot encode WebP from a canvas, and the pure
 Dart encoder takes ~0.2 s for 640x480 and ~1.3 s for 1920x1440 with dart2js,
-which freezes the page when it runs on the main thread.
-`tekartik_app_image_web` (`OffscreenCanvas.toBlob`) encodes with
-`webpWorker` when the browser cannot. Without the script, it falls back to
-encoding on the main thread.
+which freezes the page when it runs on the main thread (4.4 s for a
+4000x2250 crop in the demo, against a 0.2 s longest task with the worker).
+
+The encoder is not in `main.dart.js`: `webp_worker.js` (240 KB, 81 KB gzip)
+is loaded on the first encoding, and the main thread fallback (when the
+script is missing) loads the encoder as a deferred library.
+
+With `tekartik_app_image_web`, use the worker when the browser cannot encode
+webp (see `example/app_pick_crop_image_demo/lib/main.dart`):
+
+```dart
+if (!browserEncodesWebp) {
+  appImageWebpEncoder = (image, options) =>
+      webpWorker.encode(image, options: options, transfer: true);
+}
+```
 
 ## Setup
 

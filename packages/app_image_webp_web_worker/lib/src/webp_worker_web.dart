@@ -3,6 +3,8 @@ import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:tekartik_app_image_webp/webp.dart';
+// The encoder of the fallback, loaded on demand: not in main.dart.js.
+import 'package:tekartik_app_image_webp/webp.dart' deferred as webp_codec;
 import 'package:web/web.dart' as web;
 
 import 'js_message.dart';
@@ -139,7 +141,8 @@ class _WebpWorkerWeb implements WebpWorker {
       if (!fallback) {
         throw StateError('$url not started ($_setupCommand builds it)');
       }
-      return encodeWebp(image, options: options);
+      await webp_codec.loadLibrary();
+      return webp_codec.encodeWebp(image, options: options);
     }
     var completer = Completer<Uint8List>();
     var id = ++_lastId;

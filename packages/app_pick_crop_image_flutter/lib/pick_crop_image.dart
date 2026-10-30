@@ -3,11 +3,14 @@ export 'src/import_image.dart'
     show
         ImageEncodingPng,
         ImageEncodingJpg,
+        ImageEncodingWebp,
         ImageEncoding,
         mimeTypeJpg,
         mimeTypePng,
+        mimeTypeWebp,
         extensionJpg,
         extensionPng,
+        extensionWebp,
         ImageData;
 export 'src/pick_crop_image.dart'
     show

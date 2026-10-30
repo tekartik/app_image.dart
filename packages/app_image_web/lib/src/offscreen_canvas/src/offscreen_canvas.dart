@@ -8,8 +8,9 @@ import 'dart:typed_data';
 
 import 'package:tekartik_app_image/app_image.dart';
 import 'package:tekartik_app_image_web/src/import.dart';
+import 'package:tekartik_app_image_web/src/webp_codec_deferred.dart';
+import 'package:tekartik_app_image_web/src/webp_encoder.dart';
 import 'package:tekartik_app_image_webp/webp.dart';
-import 'package:tekartik_app_image_webp_web_worker/webp_worker.dart';
 // ignore: depend_on_referenced_packages
 import 'package:tekartik_common_utils/size/size.dart';
 import 'package:web/web.dart' as web;
@@ -122,9 +123,8 @@ class OffscreenCanvas {
   /// Encodes the canvas pixels as webp with the pure Dart encoder
   /// (`tekartik_app_image_webp`, lossy, quality 75 by default).
   ///
-  /// Synchronous and CPU bound, on the calling thread: when the browser
-  /// cannot encode webp itself (Safari), [toBlob] encodes in a web worker
-  /// instead.
+  /// Synchronous and CPU bound, on the calling thread; calling it puts the
+  /// encoder in `main.dart.js` ([toBlob] loads it on demand).
   Uint8List toWebpBytes({
     WebpEncodeOptions options = const WebpEncodeOptions(),
   }) => encodeWebp(_webpImage(), options: options);
@@ -138,16 +138,13 @@ class OffscreenCanvas {
     return WebpImage(width, height, rgba);
   }
 
-  /// [toWebpBytes] off the main thread, in [webpWorker]: the web worker
-  /// `webp_worker.js` next to the page (built by
-  /// `dart run tekartik_app_image_webp_web_worker:setup`), on the main
-  /// thread when missing.
+  /// Webp encoded by [appImageWebpEncoder], else by the pure Dart encoder
+  /// loaded on demand (main thread).
   Future<web.Blob> _toWebpBlobDart(int quality) async {
-    final bytes = await webpWorker.encode(
+    final encoder = appImageWebpEncoder ?? encodeWebpDeferred;
+    final bytes = await encoder(
       _webpImage(),
-      options: WebpEncodeOptions(quality: quality.toDouble()),
-      // getImageData pixels, used once.
-      transfer: true,
+      WebpEncodeOptions(quality: quality.toDouble()),
     );
     return web.Blob([bytes.toJS].toJS, web.BlobPropertyBag(type: mimeTypeWebp));
   }
@@ -158,10 +155,10 @@ class OffscreenCanvas {
   // https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas/convertToBlob
   /// Convert to blob.
   ///
-  /// Webp falls back to the pure Dart encoder when the browser cannot encode
-  /// it (Safari), in a web worker when the app has `webp_worker.js` (see
-  /// tekartik_app_image_webp_web_worker): the blob always matches the
-  /// encoding mime type.
+  /// Webp is encoded by [appImageWebpEncoder] when set. Otherwise the
+  /// browser encodes it, falling back to the pure Dart encoder (loaded on
+  /// demand) when it cannot (Safari): the blob always matches the encoding
+  /// mime type.
   Future<web.Blob> toBlob(ImageEncoding encoding) async {
     if (encoding is! ImageEncodingJpg &&
         encoding is! ImageEncodingPng &&
@@ -175,7 +172,7 @@ class OffscreenCanvas {
       quality = encoding.quality == imageEncodingWebpQualityUnknown
           ? imageEncodingWebpQualityDefault
           : encoding.quality;
-      if (_browserWebpSupported == false) {
+      if (appImageWebpEncoder != null || _browserWebpSupported == false) {
         return await _toWebpBlobDart(quality);
       }
     }

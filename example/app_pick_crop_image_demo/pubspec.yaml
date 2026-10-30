@@ -43,6 +43,26 @@ dependencies:
   package_info_plus:
 
   material_ui: ">=1.5.0"
+  web: ">=1.1.0"
+
+  # WebP: the encoder of app_image_web (main.dart, main_webp_direct.dart),
+  # the pure Dart encoder (main_webp_direct.dart), the web worker (main.dart,
+  # web/webp_worker.js built by tool/dev_build_setup.dart).
+  tekartik_app_image_web:
+    git:
+      url: https://github.com/tekartik/app_image.dart
+      path: packages/app_image_web
+    version: '>=0.1.0'
+  tekartik_app_image_webp:
+    git:
+      url: https://github.com/tekartik/app_image.dart
+      path: packages/app_image_webp
+    version: '>=0.1.0'
+  tekartik_app_image_webp_web_worker:
+    git:
+      url: https://github.com/tekartik/app_image.dart
+      path: packages/app_image_webp_web_worker
+    version: '>=0.1.0'
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -52,12 +72,6 @@ dev_dependencies:
       path: packages/lints_flutter
     version: '>=0.1.0'
   dev_build: ">=1.1.8+2"
-  # tool/dev_build_setup.dart builds web/webp_worker.js.
-  tekartik_app_image_webp_web_worker:
-    git:
-      url: https://github.com/tekartik/app_image.dart
-      path: packages/app_image_webp_web_worker
-    version: '>=0.1.0'
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

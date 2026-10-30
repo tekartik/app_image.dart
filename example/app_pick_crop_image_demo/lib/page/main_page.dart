@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/pick_crop_image.dart';
-import 'package:tekartik_pick_crop_image_demo/main.dart';
+import 'package:tekartik_pick_crop_image_demo/app.dart';
 import 'package:tekartik_pick_crop_image_demo/src/import.dart';
 import 'package:tekartik_pick_crop_image_demo/view/body_container.dart';
 import 'package:tekartik_pick_crop_image_demo/view/body_padding.dart';
@@ -47,6 +47,9 @@ class _MainPageState extends State<MainPage> {
     prefs.getBool('ovalCropInPreview') ?? true,
   );
   final _width = ValueNotifier<int?>(prefs.getInt('width'));
+
+  /// png, jpg or webp.
+  final _encoding = ValueNotifier<String>(prefs.getString('encoding') ?? 'png');
   final _height = ValueNotifier<int?>(prefs.getInt('height'));
 
   final _source = ValueNotifier<AppImageSource>(() {
@@ -79,6 +82,7 @@ class _MainPageState extends State<MainPage> {
     _heightController.dispose();
     _width.dispose();
     _height.dispose();
+    _encoding.dispose();
     super.dispose();
   }
 
@@ -124,6 +128,19 @@ class _MainPageState extends State<MainPage> {
     _ovalCropInPreview.value = ovalCropInPreview;
     prefs.setBool('ovalCropInPreview', ovalCropInPreview);
   }
+
+  void _onChangedEncoding(String? encoding) {
+    if (encoding != null) {
+      _encoding.value = encoding;
+      prefs.setString('encoding', encoding);
+    }
+  }
+
+  ImageEncoding get _imageEncoding => switch (_encoding.value) {
+    'jpg' => ImageEncodingJpg(quality: 75),
+    'webp' => const ImageEncodingWebp(),
+    _ => const ImageEncodingPng(),
+  };
 
   void _setIntPrefs(String key, int? value) {
     if (value == null) {
@@ -291,6 +308,7 @@ class _MainPageState extends State<MainPage> {
         height: height,
         source: imageSource,
         ovalCropMask: ovalCropMask,
+        encoding: _imageEncoding,
       ),
     );
     // print('result: $result');
@@ -515,6 +533,51 @@ class _MainPageState extends State<MainPage> {
                           },
                         ),
                       ],
+                    );
+                  },
+                ),
+                isExpanded: _isOpenPanels.value[index++],
+              ),
+              ExpansionPanel(
+                headerBuilder: (BuildContext context, bool isExpanded) {
+                  return ValueListenableBuilder<String>(
+                    valueListenable: _encoding,
+                    builder: (context, encoding, _) {
+                      return ListTile(
+                        title: const Text('Encoding'),
+                        subtitle: Text(switch (encoding) {
+                          'jpg' => 'JPEG',
+                          'webp' => 'WebP ($webpEncoderLabel)',
+                          _ => 'PNG',
+                        }),
+                      );
+                    },
+                  );
+                },
+                body: ValueListenableBuilder<String>(
+                  valueListenable: _encoding,
+                  builder: (context, encoding, _) {
+                    return RadioGroup<String>(
+                      groupValue: encoding,
+                      onChanged: _onChangedEncoding,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const RadioListTile<String>(
+                            title: Text('PNG'),
+                            value: 'png',
+                          ),
+                          const RadioListTile<String>(
+                            title: Text('JPEG'),
+                            value: 'jpg',
+                          ),
+                          RadioListTile<String>(
+                            title: const Text('WebP'),
+                            subtitle: Text(webpEncoderLabel),
+                            value: 'webp',
+                          ),
+                        ],
+                      ),
                     );
                   },
                 ),

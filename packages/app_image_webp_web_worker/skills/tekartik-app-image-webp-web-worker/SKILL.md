@@ -5,8 +5,8 @@ description: >-
   page (Safari has no canvas webp encoding) with
   package:tekartik_app_image_webp_web_worker: WebpWorker (encode in a web
   worker, isolate on io, main thread fallback, transfer, ready, close),
-  webpWorker (the default one, used by tekartik_app_image_web's
-  OffscreenCanvas.toBlob), WebpWorkerException, and the setup step building
+  webpWorker (the default one, plugged into tekartik_app_image_web with
+  appImageWebpEncoder when the browser cannot), WebpWorkerException, and the setup step building
   web/webp_worker.js (setupWebpWorker in tool/dev_build_setup.dart, dart run
   tekartik_app_image_webp_web_worker:setup).
 license: BSD-2-Clause
@@ -56,9 +56,14 @@ Future<void> main() => setupWebpWorker(); // writes web/webp_worker.js
   error on io). `close()` fails pending encodings, and later calls throw.
 - On io, each encoding runs in an `Isolate.run`. `url` and `fallback` are
   ignored there.
-- `tekartik_app_image_web` `OffscreenCanvas.toBlob(ImageEncodingWebp())`
-  already uses `webpWorker` when the browser returns png (Safari). The app
-  only needs the setup step.
+- The encoder stays out of `main.dart.js`: `webp_worker.js` loads on the
+  first encoding, and the main thread fallback loads the encoder through a
+  deferred import.
+- With tekartik_app_image_web, plug the worker in when the browser cannot
+  encode webp (canvas `toDataURL('image/webp')` gives png in Safari):
+  `appImageWebpEncoder = (image, options) => webpWorker.encode(image,
+  options: options, transfer: true);`. Without it, app_image_web encodes
+  on the main thread (deferred encoder).
 - Browser tests: `setupWebpWorker(dir: 'test')` in the tool and in a VM
   test. `WebpWorker()` then loads `test/webp_worker.js` relative to the test
   page. The package needs `build_web_compilers` as a dev dependency for

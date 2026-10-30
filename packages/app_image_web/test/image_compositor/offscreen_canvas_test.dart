@@ -5,8 +5,10 @@ import 'dart:js_interop';
 
 import 'package:tekartik_app_image/app_image.dart';
 import 'package:tekartik_app_image/src/image_bytes_utils.dart';
+import 'package:tekartik_app_image_web/app_image_web.dart';
 import 'package:tekartik_app_image_web/src/blob_utils.dart';
 import 'package:tekartik_app_image_web/src/offscreen_canvas/src/offscreen_canvas.dart';
+import 'package:tekartik_app_image_web/src/webp_codec_deferred.dart';
 import 'package:tekartik_app_image_webp/webp.dart';
 import 'package:test/test.dart';
 
@@ -55,6 +57,34 @@ void main() {
       Future<int> size(int quality) async =>
           (await canvas.toBlob(ImageEncodingWebp(quality: quality))).size;
       expect(await size(10), lessThan(await size(95)));
+    });
+
+    test('appImageWebpEncoder', () async {
+      // Used instead of the browser.
+      var calls = <(int, int, double)>[];
+      appImageWebpEncoder = (image, options) async {
+        calls.add((image.width, image.height, options.quality));
+        return encodeWebp(image, options: options);
+      };
+      try {
+        var canvas = OffscreenCanvas(3, 2);
+        var blob = await canvas.toBlob(const ImageEncodingWebp(quality: 42));
+        expect(blob.type, mimeTypeWebp);
+        expect(isWebp(await blobToBytes(blob)), isTrue);
+        expect(calls, [(3, 2, 42.0)]);
+      } finally {
+        appImageWebpEncoder = null;
+      }
+    });
+
+    test('encodeWebpDeferred', () async {
+      // The Safari fallback, loaded on demand.
+      var image = WebpImage.blank(5, 4);
+      var bytes = await encodeWebpDeferred(
+        image,
+        const WebpEncodeOptions(lossless: true),
+      );
+      expect(decodeWebp(bytes).rgba, image.rgba);
     });
 
     test('toWebpBytes pure dart', () async {

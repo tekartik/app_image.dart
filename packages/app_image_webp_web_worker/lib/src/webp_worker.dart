@@ -15,8 +15,9 @@ abstract class WebpWorker {
   ///
   /// When the script cannot start (missing, not answering within
   /// [startTimeout], built for another protocol version), the images are
-  /// encoded on the main thread, unless [fallback] is false: [encode] throws
-  /// a [StateError] then. [url], [fallback] and [startTimeout] are ignored on
+  /// encoded on the main thread (the encoder loaded on demand, a deferred
+  /// library), unless [fallback] is false: [encode] throws a [StateError]
+  /// then. [url], [fallback] and [startTimeout] are ignored on
   /// io.
   factory WebpWorker({
     String url = webpWorkerJsFilename,
@@ -50,6 +51,9 @@ abstract class WebpWorker {
 }
 
 /// The worker loading `webp_worker.js` next to the page, falling back on the
-/// main thread when missing; tekartik_app_image_web encodes with it when the
-/// browser cannot (Safari). Can be replaced.
+/// main thread when missing. Can be replaced.
+///
+/// For tekartik_app_image_web when the browser cannot encode webp (Safari):
+/// `appImageWebpEncoder = (image, options) => webpWorker.encode(image,
+/// options: options, transfer: true)`.
 WebpWorker webpWorker = WebpWorker();
