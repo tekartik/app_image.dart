@@ -51,7 +51,9 @@ and in `package:image`.
   throws `ArgumentError` (webp only asserts, its constructor is const);
   `imageEncodingJpgQualityUnknown` / `imageEncodingWebpQualityUnknown` (`-1`)
   mean "quality unknown" and are what a decoder reports. An unknown webp
-  quality encodes with the default one.
+  quality encodes with the default one, an unknown jpg quality with quality 1
+  (`package:image` clamps it): set a quality before re-encoding a decoded
+  jpeg.
 * Switch on the encoding with `is` (`if (encoding is ImageEncodingJpg)`), never
   by comparing `mimeType` strings by hand. Use `encoding.extension` to name
   output files so the extension always matches the bytes.
@@ -86,10 +88,9 @@ and in `package:image`.
   `package:tekartik_common_utils/size/size.dart`, in source pixels:
   `CropRect.fromLTWH(left, top, width, height)`. The resizing itself is done
   by `tekartik_app_image_web` (`resizeTo`) or by the picker package.
-* `argbToColorUint32(a, r, g, b)` packs to `0xAABBGGRR` (red in the low byte),
-  which is *not* the `0xAARRGGBB` order read back by
-  `generatePlaceholderImage(color:)`. Pass a literal such as `0xFFFF0000`
-  (opaque red) when you want a predictable colour.
+* `argbToColorUint32(a, r, g, b)` packs to `0xAARRGGBB` (a positive int, the
+  web included), the layout `generatePlaceholderImage(color:)` reads:
+  `argbToColorUint32(255, 255, 0, 0)` and `0xFFFF0000` are both opaque red.
 * Everything here is pure Dart with no `dart:io`/`dart:ui` dependency, so it
   works on the VM, in Flutter and on the web, and it is trivially unit
   testable: build `ImageData` values in tests instead of mocking.

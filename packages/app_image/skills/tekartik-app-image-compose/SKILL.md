@@ -73,10 +73,9 @@ out to `cwebp`. All of them return or write jpg/png/webp bytes described by an
 * `generatePlaceholderImage({encoding, width, height, color})` is async and
   returns `ImageData`. Defaults: 256x256, `ImageEncodingJpg(quality: 50)`,
   and no fill (a zero filled, i.e. black, image) when `color` is `null`.
-* `color` is an `int` read as `0xAARRGGBB`. Note that
-  `argbToColorUint32(a, r, g, b)` builds the opposite byte order
-  (`0xAABBGGRR`), so it swaps red and blue here: pass `0xFFFF0000` for an
-  opaque red placeholder.
+* `color` is an `int` read as `0xAARRGGBB`: `0xFFFF0000` or
+  `argbToColorUint32(255, 255, 0, 0)` for opaque red. The image has no alpha
+  channel: a translucent color is blended over black and comes out opaque.
 * Use it for tests and for missing-image fallbacks; it never touches the
   filesystem, it just returns bytes.
 
