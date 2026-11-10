@@ -23,17 +23,19 @@ class OffscreenCanvas {
   static Future<OffscreenCanvas> fromBytes(Uint8List bytes) async {
     var result = Completer<OffscreenCanvas>();
     var image = web.HTMLImageElement();
+    var srcBlob = web.Blob([bytes.toJS].toJS);
+    var srcUrl = web.URL.createObjectURL(srcBlob);
+    // The object url keeps the source bytes alive until revoked.
     image.onLoad.listen((_) {
       var canvas = OffscreenCanvas(image.naturalWidth, image.naturalHeight);
       canvas._canvasElement!.context2D.drawImage(image, 0, 0);
+      web.URL.revokeObjectURL(srcUrl);
       result.complete(canvas);
     });
     image.onError.listen((Object event) {
+      web.URL.revokeObjectURL(srcUrl);
       result.completeError(event);
     });
-    var srcBlob = web.Blob([bytes.toJS].toJS);
-
-    var srcUrl = web.URL.createObjectURL(srcBlob);
     // ignore: unsafe_html
     image.src = srcUrl;
     return result.future;
@@ -101,14 +103,26 @@ class OffscreenCanvas {
   }
 
   /// Convert canvas to blob.
+  ///
+  /// Throws a [StateError] when the browser gives no blob (a canvas with a
+  /// zero width or height, or one too big to encode).
   Future<web.Blob> canvasToBlob(
     web.HTMLCanvasElement canvas,
     String mimeType,
     int? quality,
   ) {
     var completer = Completer<web.Blob>();
-    void callback(web.Blob blob) {
-      completer.complete(blob);
+    void callback(web.Blob? blob) {
+      if (blob == null) {
+        completer.completeError(
+          StateError(
+            'Cannot encode a ${canvas.width}x${canvas.height} canvas as '
+            '$mimeType',
+          ),
+        );
+      } else {
+        completer.complete(blob);
+      }
     }
 
     if (quality != null) {
