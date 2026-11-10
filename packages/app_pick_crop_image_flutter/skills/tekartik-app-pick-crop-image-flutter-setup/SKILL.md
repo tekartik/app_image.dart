@@ -42,14 +42,19 @@ cancelled. Works on Android, iOS, desktop and web.
   ```
 
   It re-exports what you need for the result: `ImageData`, `ImageEncoding`,
-  `ImageEncodingJpg`, `ImageEncodingPng`, `mimeTypeJpg`, `mimeTypePng`,
-  `extensionJpg`, `extensionPng`.
+  `ImageEncodingJpg`, `ImageEncodingPng`, `ImageEncodingWebp`,
+  `mimeTypeJpg`, `mimeTypePng`, `mimeTypeWebp`, `extensionJpg`,
+  `extensionPng`, `extensionWebp`.
+* Its pages are built on `package:material_ui`: the app imports
+  `package:material_ui/material_ui.dart` (its `MaterialApp`), not
+  `package:flutter/material.dart` (the two Material libraries do not mix:
+  `No MaterialLocalizations found`).
 * `Future<ImageData?> pickCropImage(BuildContext context, {PickCropImageOptions? options})`
   pushes its own routes, so call it from a widget callback with a `Navigator`
   in scope, and check `mounted` / `context.mounted` after awaiting it before
   touching the context. `null` means cancelled (pick or crop errors are caught
   internally and also yield `null`).
-* `PickCropImageOptions({source, width, height, aspectRatio, encoding, ovalCropMask, autoCrop})`:
+* `PickCropImageOptions({source, width, height, aspectRatio, encoding, ovalCropMask, autoCrop, title, hint, confirmLabel})`:
   * `source` defaults to `const PickCropImageSourceGallery()`. Others:
     `PickCropImageSourceCamera(preferredCameraDevice: SourceCameraDevice.rear|front)`,
     `PickCropImageSourceMemory(bytes: uint8List)` and
@@ -60,12 +65,18 @@ cancelled. Works on Android, iOS, desktop and web.
     constrains the crop without forcing an output size; leaving everything
     `null` keeps the cropped size.
   * `encoding` defaults to `const ImageEncodingPng()`; use
-    `ImageEncodingJpg(quality: 0..100)` for photos. Webp is not supported here.
+    `ImageEncodingJpg(quality: 0..100)` for photos, or
+    `ImageEncodingWebp(quality: 0..100)` (pure Dart encoder, slower).
   * `ovalCropMask: true` draws a round mask over the crop editor — the
     produced image is still a rectangle, clip it at display time
     (`ClipOval`).
   * `autoCrop: true` skips the interactive crop page: the image is cropped
-    centered to `aspectRatio` when there is one, otherwise kept whole.
+    centered to `aspectRatio` when there is one, otherwise kept whole. It
+    decodes the whole picture on the UI thread to read its size: a big
+    photo freezes the screen (the web page) a moment.
+  * `title` gives the crop page an app bar (close, the title, a check icon
+    or a `confirmLabel` button) and `hint` a line under the image; without
+    a title, floating close and check buttons (no hint).
 * The result is an `ImageData`: display with `Image.memory(data.bytes)`, size
   with `data.width`/`data.height`, and use `data.encoding.mimeType` /
   `data.encoding.extension` to name or upload it — never re-sniff the bytes.
@@ -95,7 +106,7 @@ cancelled. Works on Android, iOS, desktop and web.
 Pick from the gallery, crop to a 1024x1024 jpeg and show it:
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/pick_crop_image.dart';
 
 class PickImageBody extends StatefulWidget {
@@ -142,7 +153,7 @@ class _PickImageBodyState extends State<PickImageBody> {
 Front camera avatar with a round mask, and a banner cropped automatically:
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/pick_crop_image.dart';
 
 /// Square jpeg, oval mask in the editor (clip it with ClipOval at display).
@@ -177,7 +188,7 @@ Crop an asset or bytes you already have, then export the result:
 ```dart
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:tekartik_app_pick_crop_image_flutter/pick_crop_image.dart';
 
 /// Straight to the crop page, no picker.
